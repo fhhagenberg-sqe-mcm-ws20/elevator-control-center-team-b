@@ -1,5 +1,7 @@
 package at.fhhagenberg.elevator;
 
+import java.util.Arrays;
+
 /**
  * Elevator example class
  * <p>
@@ -14,7 +16,7 @@ public class MockElevator implements IElevator {
 
     private Direction_State direction;
     private int acceleration;
-    private int[] buttons;
+    private boolean[] buttons;
     private Door_State doorState;
     private int nearestFloor;
     private int positionFromGround;
@@ -33,7 +35,7 @@ public class MockElevator implements IElevator {
     public MockElevator(int floors, int weight, int capacity) {
         this.direction = Direction_State.uncommitted;
         this.acceleration = 0;
-        this.buttons = new int[floors];
+        this.buttons = new boolean[floors];
         this.doorState = Door_State.closed;
         this.nearestFloor = 0;
         this.positionFromGround = 0;
@@ -41,6 +43,7 @@ public class MockElevator implements IElevator {
         this.weight = weight;
         this.capacity = capacity;
         this.floorServices = new boolean[floors];
+        Arrays.fill(floorServices, true);
         this.floorTarget = 0;
     }
 
@@ -58,7 +61,7 @@ public class MockElevator implements IElevator {
      * @param floorServices Floors that the elevator stops at
      * @param floorTarget Current active target the elevator will go to
      */
-    public MockElevator(Direction_State direction, int acceleration, int[] buttons, Door_State doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, boolean[] floorServices, int floorTarget) {
+    public MockElevator(Direction_State direction, int acceleration, boolean[] buttons, Door_State doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, boolean[] floorServices, int floorTarget) {
         this.direction = direction;
         this.acceleration = acceleration;
         this.buttons = buttons;
@@ -84,7 +87,7 @@ public class MockElevator implements IElevator {
     }
 
     @Override
-    public int getButtonStatus(int floor) {
+    public boolean getButtonStatus(int floor) {
         return buttons[floor];
     }
 
@@ -158,7 +161,7 @@ public class MockElevator implements IElevator {
         this.acceleration = acceleration;
     }
 
-    public void setButtons(int[] buttons) {
+    public void setButtons(boolean[] buttons) {
         this.buttons = buttons;
     }
 

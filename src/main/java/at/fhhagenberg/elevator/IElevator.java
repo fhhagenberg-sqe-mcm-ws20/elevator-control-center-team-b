@@ -69,7 +69,7 @@ public interface IElevator {
 
     int getCommittedDirection();
     int getAccel();
-    int getButtonStatus(int floor);
+    boolean getButtonStatus(int floor);
     int getDoorStatus();
     int getCurrentFloor();
     int getPosition();
