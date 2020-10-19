@@ -10,7 +10,7 @@ package at.fhhagenberg.elevator;
  * - door closed
  * - all floors are serviced
  */
-public class Elevator implements IElevator {
+public class MockElevator implements IElevator {
 
     private Direction_State direction;
     private int acceleration;
@@ -24,7 +24,7 @@ public class Elevator implements IElevator {
     private boolean[] floorServices;
     private int floorTarget;
 
-    public Elevator(int floors, int weight, int capacity) {
+    public MockElevator(int floors, int weight, int capacity) {
         this.direction = Direction_State.uncommitted;
         this.acceleration = 0;
         this.buttons = new int[floors];
