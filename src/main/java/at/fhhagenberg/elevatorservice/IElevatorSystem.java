@@ -73,7 +73,7 @@ package at.fhhagenberg.elevatorservice;
  * @version 0.1
  */
 
-public interface IElevator extends java.rmi.Remote {
+public interface IElevatorSystem extends java.rmi.Remote {
 	
 	/** State variable for elevator doors open.	 */
 	public final static int ELEVATOR_DOORS_OPEN = 1;	
