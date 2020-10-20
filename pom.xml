@@ -91,6 +91,8 @@
                 </executions>
                 <configuration>
                     <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+                    <failOnWarnings>false</failOnWarnings>
+                    <doclint>all,-missing</doclint>
                 </configuration>
             </plugin>
         </plugins>
