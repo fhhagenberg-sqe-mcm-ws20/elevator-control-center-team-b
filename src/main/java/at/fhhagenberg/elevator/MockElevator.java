@@ -28,8 +28,9 @@ public class MockElevator implements IElevator {
 
     /**
      * Default constructor where no specific state is used
-     * @param floors Amount of floors the elevator serves
-     * @param weight Weight of the elevator
+     *
+     * @param floors   Amount of floors the elevator serves
+     * @param weight   Weight of the elevator
      * @param capacity Capacity of the elevator
      */
     public MockElevator(int floors, int weight, int capacity) {
@@ -49,17 +50,18 @@ public class MockElevator implements IElevator {
 
     /**
      * Constructor to set a specific elevator state
-     * @param direction Current direction of the elevator
-     * @param acceleration Acceleration of the elevator
-     * @param buttons Active buttons
-     * @param doorState Door state of the elevator
-     * @param nearestFloor Floor that is closest to the elevator in feet
+     *
+     * @param direction          Current direction of the elevator
+     * @param acceleration       Acceleration of the elevator
+     * @param buttons            Active buttons
+     * @param doorState          Door state of the elevator
+     * @param nearestFloor       Floor that is closest to the elevator in feet
      * @param positionFromGround Position of the elevator from ground in feet
-     * @param speed Current speed of the elevator
-     * @param weight Overall weight of the elevator with no passengers
-     * @param capacity Capacity of the elevator (amount of people)
-     * @param floorServices Floors that the elevator stops at
-     * @param floorTarget Current active target the elevator will go to
+     * @param speed              Current speed of the elevator
+     * @param weight             Overall weight of the elevator with no passengers
+     * @param capacity           Capacity of the elevator (amount of people)
+     * @param floorServices      Floors that the elevator stops at
+     * @param floorTarget        Current active target the elevator will go to
      */
     public MockElevator(Direction_State direction, int acceleration, boolean[] buttons, Door_State doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, boolean[] floorServices, int floorTarget) {
         this.direction = direction;

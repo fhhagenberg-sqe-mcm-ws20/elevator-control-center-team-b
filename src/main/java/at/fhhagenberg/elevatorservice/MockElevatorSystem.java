@@ -2,6 +2,8 @@ package at.fhhagenberg.elevatorservice;
 
 import at.fhhagenberg.elevator.IElevator;
 import at.fhhagenberg.elevator.MockElevator;
+import at.fhhagenberg.floor.IFloor;
+import at.fhhagenberg.floor.MockFloor;
 
 import java.rmi.RemoteException;
 import java.util.Arrays;
@@ -17,7 +19,8 @@ public class MockElevatorSystem implements IElevatorSystem {
     private static final int FLOOR_COUNT = 5;
     private static final long TICK = 100L;
 
-    private MockElevator[] elevators;
+    private IElevator[] elevators;
+    private IFloor[] floors;
 
     public MockElevatorSystem() {
         boolean[] temp = new boolean[FLOOR_COUNT];
@@ -25,13 +28,21 @@ public class MockElevatorSystem implements IElevatorSystem {
         Arrays.fill(temp, true);
         tempButton[0] = true;
 
+        floors = new IFloor[5];
+        floors[0] = new MockFloor(false, true);
+        floors[1] = new MockFloor(false, false);
+        floors[2] = new MockFloor(false, false);
+        floors[3] = new MockFloor(false, false);
+        floors[4] = new MockFloor(false, false);
+
         this.elevators = new MockElevator[ELEVATOR_COUNT];
         this.elevators[0] = new MockElevator(FLOOR_COUNT, 200, 10);
         this.elevators[1] = new MockElevator(IElevator.Direction_State.down, 2, tempButton, IElevator.Door_State.closed, 3, 30, 2, 1500, 10, temp, 0);
         this.elevators[2] = new MockElevator(IElevator.Direction_State.uncommitted, 2, new boolean[FLOOR_COUNT], IElevator.Door_State.open, 1, 10, 0, 1500, 10, temp, 0);
     }
 
-    public MockElevator getElevator(int elevatorNumber){
+    @Override
+    public IElevator getElevator(int elevatorNumber) {
         return elevators[elevatorNumber];
     }
 
@@ -87,18 +98,12 @@ public class MockElevatorSystem implements IElevatorSystem {
 
     @Override
     public boolean getFloorButtonDown(int floor) throws RemoteException {
-        return Arrays.stream(elevators).anyMatch(
-                e -> e.getCommittedDirection() == IElevator.Direction_State.down.value()
-                        && e.getTarget() == floor
-        );
+        return floors[floor].downButtonActive();
     }
 
     @Override
     public boolean getFloorButtonUp(int floor) throws RemoteException {
-        return Arrays.stream(elevators).anyMatch(
-                e -> e.getCommittedDirection() == IElevator.Direction_State.up.value()
-                        && e.getTarget() == floor
-        );
+        return floors[floor].upButtonActive();
     }
 
     @Override
