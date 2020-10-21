@@ -1,6 +1,6 @@
 package at.fhhagenberg.elevatorservice;
 
-import at.fhhagenberg.elevator.ElevatorConstants;
+import at.fhhagenberg.elevator.IElevator;
 import at.fhhagenberg.elevator.MockElevator;
 import at.fhhagenberg.floor.IFloor;
 import at.fhhagenberg.floor.MockFloor;
@@ -14,27 +14,23 @@ import java.util.Arrays;
  * Mock class for elevator system
  * Has 3 elevators, 5 floors, 1 active, 2 inactive
  */
-public class MockElevatorSystem {
+public class MockElevatorSystem implements IElevatorSystem{
 
     @Getter
-    private static final int ELEVATOR_COUNT = 3;
+    private final int elevatorCount = 3;
     @Getter
-    private static final int FLOOR_HEIGHT = 10;
+    private final int floorHeight = 10;
     @Getter
-    private static final int FLOOR_COUNT = 5;
+    private final int floorCount = 5;
     @Getter
-    private static final long TICK = 100L;
+    private final long clockTick = 100L;
 
-    @Getter
-    @Setter
-    private MockElevator[] elevators;
-    @Getter
-    @Setter
+    private IElevator[] elevators;
     private IFloor[] floors;
 
     public MockElevatorSystem() {
-        boolean[] temp = new boolean[FLOOR_COUNT];
-        boolean[] tempButton = new boolean[FLOOR_COUNT];
+        boolean[] temp = new boolean[floorCount];
+        boolean[] tempButton = new boolean[floorCount];
         Arrays.fill(temp, true);
         tempButton[0] = true;
 
@@ -45,9 +41,24 @@ public class MockElevatorSystem {
         floors[3] = new MockFloor(false, false);
         floors[4] = new MockFloor(false, false);
 
-        this.elevators = new MockElevator[ELEVATOR_COUNT];
-        this.elevators[0] = new MockElevator(FLOOR_COUNT, 200, 10);
-        this.elevators[1] = new MockElevator(ElevatorConstants.Direction_State.down, 2, tempButton, ElevatorConstants.Door_State.closed, 3, 30, 2, 1500, 10, temp, 0);
-        this.elevators[2] = new MockElevator(ElevatorConstants.Direction_State.uncommitted, 2, new boolean[FLOOR_COUNT], ElevatorConstants.Door_State.open, 1, 10, 0, 1500, 10, temp, 0);
+        this.elevators = new MockElevator[elevatorCount];
+        this.elevators[0] = new MockElevator(floorCount, 200, 10);
+        this.elevators[1] = new MockElevator(IElevator.Direction_State.down.value(), 2, tempButton, IElevator.Door_State.closed.value(), 3, 30, 2, 1500, 10, temp, 0);
+        this.elevators[2] = new MockElevator(IElevator.Direction_State.uncommitted.value(), 2, new boolean[floorCount], IElevator.Door_State.open.value(), 1, 10, 0, 1500, 10, temp, 0);
+    }
+
+    @Override
+    public IElevator getElevator(int elevatorNumber) {
+        return elevators[elevatorNumber];
+    }
+
+    @Override
+    public boolean getFloorButtonUp(int floor) {
+        return floors[floor].upButtonActive();
+    }
+
+    @Override
+    public boolean getFloorButtonDown(int floor) {
+        return floors[floor].downButtonActive();
     }
 }

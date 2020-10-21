@@ -47,6 +47,13 @@
             <artifactId>mockito-core</artifactId>
             <version>3.5.13</version>
         </dependency>
+        <!-- Project Lombok to reduce boilerplate code -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

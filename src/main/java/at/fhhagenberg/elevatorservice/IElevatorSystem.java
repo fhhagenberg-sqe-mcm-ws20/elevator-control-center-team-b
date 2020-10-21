@@ -1,6 +1,8 @@
 package at.fhhagenberg.elevatorservice;
 
-import at.fhhagenberg.elevator.ElevatorConstants;
+import at.fhhagenberg.elevator.IElevator;
+import at.fhhagenberg.floor.IFloor;
+import lombok.Getter;
 
 /**
  * High-level interface to access and control the elevator system.
@@ -75,7 +77,7 @@ import at.fhhagenberg.elevator.ElevatorConstants;
  * @version 0.1
  */
 
-public class ElevatorSystemConstants implements java.rmi.Remote {
+public interface IElevatorSystem extends java.rmi.Remote {
 
     /**
      * State variable for elevator doors open.
@@ -106,4 +108,51 @@ public class ElevatorSystemConstants implements java.rmi.Remote {
      * State variables for elevator status stopped and uncommitted.
      */
     public final static int ELEVATOR_DIRECTION_UNCOMMITTED = 2;
+
+    IElevator getElevator(int elevatorNumber);
+
+    /**
+     * Provides the status of the Down button on specified floor (on/off).
+     *
+     * @param floor - floor number whose Down button status is being retrieved
+     * @return returns boolean to indicate if button is active (true) or not (false)
+     */
+    boolean getFloorButtonDown(int floor) throws java.rmi.RemoteException;
+
+    /**
+     * Provides the status of the Up button on specified floor (on/off).
+     *
+     * @param floor - floor number whose Up button status is being retrieved
+     * @return returns boolean to indicate if button is active (true) or not (false)
+     */
+    boolean getFloorButtonUp(int floor) throws java.rmi.RemoteException;
+
+    /**
+     * Retrieves the current clock tick of the elevator control system.
+     *
+     * @return clock tick
+     */
+    long getClockTick() throws java.rmi.RemoteException;
+
+    /**
+     * Retrieves the current elevator count of the elevator control system.
+     *
+     * @return elevator count
+     */
+    int getElevatorCount();
+
+    /**
+     * Retrieves the current floor height of the elevator control system.
+     *
+     * @return floor height
+     */
+    int getFloorHeight();
+
+    /**
+     * Retrieves the current floor count of the elevator control system.
+     *
+     * @return floor count
+     */
+    int getFloorCount();
+
 }
