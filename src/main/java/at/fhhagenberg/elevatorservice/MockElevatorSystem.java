@@ -27,8 +27,12 @@ public class MockElevatorSystem implements IElevatorSystem {
 
         this.elevators = new MockElevator[ELEVATOR_COUNT];
         this.elevators[0] = new MockElevator(FLOOR_COUNT, 200, 10);
-        this.elevators[0] = new MockElevator(IElevator.Direction_State.down, 2, tempButton, IElevator.Door_State.closed, 3, 30, 2, 1500, 10, temp, 0);
-        this.elevators[0] = new MockElevator(IElevator.Direction_State.uncommitted, 2, new boolean[FLOOR_COUNT], IElevator.Door_State.open, 1, 10, 0, 1500, 10, temp, 0);
+        this.elevators[1] = new MockElevator(IElevator.Direction_State.down, 2, tempButton, IElevator.Door_State.closed, 3, 30, 2, 1500, 10, temp, 0);
+        this.elevators[2] = new MockElevator(IElevator.Direction_State.uncommitted, 2, new boolean[FLOOR_COUNT], IElevator.Door_State.open, 1, 10, 0, 1500, 10, temp, 0);
+    }
+
+    public MockElevator getElevator(int elevatorNumber){
+        return elevators[elevatorNumber];
     }
 
     @Override

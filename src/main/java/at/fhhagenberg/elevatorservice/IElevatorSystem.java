@@ -1,5 +1,7 @@
 package at.fhhagenberg.elevatorservice;
 
+import at.fhhagenberg.elevator.MockElevator;
+
 /**
  * High-level interface to access and control the elevator system.
  * 
@@ -89,7 +91,9 @@ public interface IElevatorSystem extends java.rmi.Remote {
 	/** State variable for elevator status when going down. */
 	public final static int ELEVATOR_DIRECTION_DOWN = 1;			
 	/** State variables for elevator status stopped and uncommitted. */
-	public final static int ELEVATOR_DIRECTION_UNCOMMITTED = 2;		
+	public final static int ELEVATOR_DIRECTION_UNCOMMITTED = 2;
+
+	public MockElevator getElevator(int elevatorNumber);
 	
 	/**
 	 * Retrieves the committed direction of the specified elevator (up / down / uncommitted). 
