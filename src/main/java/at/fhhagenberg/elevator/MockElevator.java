@@ -1,5 +1,8 @@
 package at.fhhagenberg.elevator;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Arrays;
 
 /**
@@ -12,18 +15,39 @@ import java.util.Arrays;
  * - door closed
  * - all floors are serviced
  */
-public class MockElevator implements IElevator {
+public class MockElevator {
 
-    private Direction_State direction;
+    @Getter
+    private ElevatorConstants.Direction_State direction;
+    @Getter
+    @Setter
     private int acceleration;
+    @Getter
+    @Setter
     private boolean[] buttons;
-    private Door_State doorState;
+    @Getter
+    @Setter
+    private ElevatorConstants.Door_State doorState;
+    @Getter
+    @Setter
     private int nearestFloor;
+    @Getter
+    @Setter
     private int positionFromGround;
+    @Getter
+    @Setter
     private int speed;
+    @Getter
+    @Setter
     private int weight;
+    @Getter
+    @Setter
     private int capacity;
+    @Getter
+    @Setter
     private boolean[] floorServices;
+    @Getter
+    @Setter
     private int floorTarget;
 
     /**
@@ -34,10 +58,10 @@ public class MockElevator implements IElevator {
      * @param capacity Capacity of the elevator
      */
     public MockElevator(int floors, int weight, int capacity) {
-        this.direction = Direction_State.uncommitted;
+        this.direction = ElevatorConstants.Direction_State.uncommitted;
         this.acceleration = 0;
         this.buttons = new boolean[floors];
-        this.doorState = Door_State.closed;
+        this.doorState = ElevatorConstants.Door_State.closed;
         this.nearestFloor = 0;
         this.positionFromGround = 0;
         this.speed = 0;
@@ -63,7 +87,7 @@ public class MockElevator implements IElevator {
      * @param floorServices      Floors that the elevator stops at
      * @param floorTarget        Current active target the elevator will go to
      */
-    public MockElevator(Direction_State direction, int acceleration, boolean[] buttons, Door_State doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, boolean[] floorServices, int floorTarget) {
+    public MockElevator(ElevatorConstants.Direction_State direction, int acceleration, boolean[] buttons, ElevatorConstants.Door_State doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, boolean[] floorServices, int floorTarget) {
         this.direction = direction;
         this.acceleration = acceleration;
         this.buttons = buttons;
@@ -77,122 +101,31 @@ public class MockElevator implements IElevator {
         this.floorTarget = floorTarget;
     }
 
-    //region ElevatorAPI
-    @Override
-    public int getCommittedDirection() {
-        return direction.value();
-    }
-
-    @Override
-    public int getAccel() {
-        return acceleration;
-    }
-
-    @Override
-    public boolean getButtonStatus(int floor) {
-        return buttons[floor];
-    }
-
-    @Override
-    public int getDoorStatus() {
-        return doorState.value();
-    }
-
-    @Override
-    public int getCurrentFloor() {
-        return nearestFloor;
-    }
-
-    @Override
-    public int getPosition() {
-        return positionFromGround;
-    }
-
-    @Override
-    public int getSpeed() {
-        return speed;
-    }
-
-    @Override
-    public int getWeight() {
-        return weight;
-    }
-
-    @Override
-    public int getCapacity() {
-        return capacity;
-    }
-
-    @Override
-    public boolean servesFloor(int floor) {
-        return floorServices[floor];
-    }
-
-    @Override
-    public int getTarget() {
-        return floorTarget;
-    }
-
-    @Override
-    public void setDirection(int direction) {
-        if (direction < Direction_State.up.value() || direction > Direction_State.uncommitted.value())
-            this.direction = Direction_State.uncommitted;
-            //throw new IllegalArgumentException("[Elevator] State was not inside Door_State range");
+    public void setDirection(ElevatorConstants.Direction_State direction) {
+        if (direction.value() < ElevatorConstants.Direction_State.up.value() || direction.value() > ElevatorConstants.Direction_State.uncommitted.value())
+            this.direction = ElevatorConstants.Direction_State.uncommitted;
         else
-            this.direction = this.direction.createFromValue(direction);
+            this.direction = direction;
     }
 
-    @Override
+
+    /**
+     * Set if an elevator serves a particular floor
+     *
+     * @param floor   floor number
+     * @param service service
+     */
     public void setServicesFloor(int floor, boolean service) {
         floorServices[floor] = service;
     }
 
-    @Override
-    public void setTarget(int floor) {
-        floorTarget = floor;
+    /**
+     * Check if elevator serves floor
+     *
+     * @param floor floor number
+     * @return true | false
+     */
+    public boolean servesFloor(int floor) {
+        return floorServices[floor];
     }
-    //endregion
-
-
-    //region Mock
-    public void setDirection(Direction_State direction) {
-        this.direction = direction;
-    }
-
-    public void setAcceleration(int acceleration) {
-        this.acceleration = acceleration;
-    }
-
-    public void setButtons(boolean[] buttons) {
-        this.buttons = buttons;
-    }
-
-    public void setDoorState(Door_State doorState) {
-        this.doorState = doorState;
-    }
-
-    public void setNearestFloor(int nearestFloor) {
-        this.nearestFloor = nearestFloor;
-    }
-
-    public void setPositionFromGround(int positionFromGround) {
-        this.positionFromGround = positionFromGround;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
-
-    public void setFloorServices(boolean[] floorServices) {
-        this.floorServices = floorServices;
-    }
-    //endregion
 }

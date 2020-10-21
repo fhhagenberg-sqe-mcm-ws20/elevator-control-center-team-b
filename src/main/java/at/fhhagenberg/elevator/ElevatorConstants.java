@@ -3,12 +3,12 @@ package at.fhhagenberg.elevator;
 /**
  * Elevator interface
  */
-public interface IElevator {
+public class ElevatorConstants {
 
     /**
      * Enum for state of elevator doors
      */
-    enum Door_State {
+    public enum Door_State {
         /**
          * Open door state
          */
@@ -52,7 +52,7 @@ public interface IElevator {
          * @param value door state value
          * @return door state or default value
          */
-        public Door_State setValue(int value) {
+        public static Door_State setValue(int value) {
             switch (value) {
                 case 1:
                     return Door_State.open;
@@ -71,7 +71,7 @@ public interface IElevator {
     /**
      * Enum state for direction of the elevator
      */
-    enum Direction_State {
+    public enum Direction_State {
         /**
          * Up direction state of the elevator
          */
@@ -111,7 +111,7 @@ public interface IElevator {
          * @param value direction state value
          * @return direction state or default value
          */
-        public Direction_State createFromValue(int value) {
+        public static Direction_State createFromValue(int value) {
             switch (value) {
                 case 0:
                     return Direction_State.up;
@@ -120,109 +120,7 @@ public interface IElevator {
                 case 2:
                     return Direction_State.uncommitted;
             }
-
             return Direction_State.uncommitted;
         }
     }
-
-    /**
-     * Direction of the elevator
-     *
-     * @return direction state
-     */
-    int getCommittedDirection();
-
-    /**
-     * Acceleration of the elevator
-     *
-     * @return acceleration
-     */
-    int getAccel();
-
-    /**
-     * Status of a button for a certain floor
-     *
-     * @param floor requested floor
-     * @return state
-     */
-    boolean getButtonStatus(int floor);
-
-    /**
-     * Door status of the elevator
-     *
-     * @return door status
-     */
-    int getDoorStatus();
-
-    /**
-     * Nearest floor to the elevator
-     *
-     * @return nearest floor
-     */
-    int getCurrentFloor();
-
-    /**
-     * Position of the elevator from ground in feet
-     *
-     * @return position
-     */
-    int getPosition();
-
-    /**
-     * Current speed of the elevator
-     *
-     * @return speed
-     */
-    int getSpeed();
-
-    /**
-     * Weight of the elevator
-     *
-     * @return weight
-     */
-    int getWeight();
-
-    /**
-     * Allowed capacity of the elevator
-     *
-     * @return capacity
-     */
-    int getCapacity();
-
-    /**
-     * Check if elevator serves floor
-     *
-     * @param floor floor number
-     * @return true | false
-     */
-    boolean servesFloor(int floor);
-
-    /**
-     * Returns the current target of the elevator
-     *
-     * @return target
-     */
-    int getTarget();
-
-    /**
-     * Set the direction of the elevator
-     *
-     * @param direction direction state
-     */
-    void setDirection(int direction);
-
-    /**
-     * Set if an elevator serves a particular floor
-     *
-     * @param floor   floor number
-     * @param service service
-     */
-    void setServicesFloor(int floor, boolean service);
-
-    /**
-     * Sets target of the elevator
-     *
-     * @param floor floor
-     */
-    void setTarget(int floor);
 }
