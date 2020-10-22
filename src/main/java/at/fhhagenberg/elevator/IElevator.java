@@ -161,7 +161,7 @@ public interface IElevator {
     /**
      * Position of the elevator from ground in feet
      *
-     * @return position
+     * @return position from ground
      */
     int getPositionFromGround();
 

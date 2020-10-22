@@ -1,25 +1,20 @@
 package at.fhhagenberg.floor;
 
+import lombok.Getter;
+
 /**
  * Mock class for floor
  */
 public class MockFloor implements IFloor {
-    private boolean downButton = false;
-    private boolean upButton = false;
+
+    @Getter
+    private boolean downButton;
+    @Getter
+    private boolean upButton;
 
     public MockFloor(boolean downButton, boolean upButton) {
         this.downButton = downButton;
         this.upButton = upButton;
-    }
-
-    @Override
-    public boolean downButtonActive() {
-        return downButton;
-    }
-
-    @Override
-    public boolean upButtonActive() {
-        return upButton;
     }
 
     @Override

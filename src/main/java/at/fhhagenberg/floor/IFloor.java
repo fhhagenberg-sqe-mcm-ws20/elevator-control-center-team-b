@@ -1,8 +1,9 @@
 package at.fhhagenberg.floor;
 
 public interface IFloor {
-    boolean downButtonActive();
-    boolean upButtonActive();
+
+    boolean isDownButton();
+    boolean isUpButton();
 
     IFloor setDownButton(boolean active);
     IFloor setUpButton(boolean active);

@@ -5,9 +5,7 @@ import at.fhhagenberg.elevator.MockElevator;
 import at.fhhagenberg.floor.IFloor;
 import at.fhhagenberg.floor.MockFloor;
 import lombok.Getter;
-import lombok.Setter;
 
-import java.rmi.RemoteException;
 import java.util.Arrays;
 
 /**
@@ -54,11 +52,11 @@ public class MockElevatorSystem implements IElevatorSystem{
 
     @Override
     public boolean getFloorButtonUp(int floor) {
-        return floors[floor].upButtonActive();
+        return floors[floor].isUpButton();
     }
 
     @Override
     public boolean getFloorButtonDown(int floor) {
-        return floors[floor].downButtonActive();
+        return floors[floor].isDownButton();
     }
 }

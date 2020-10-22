@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ElevatorServiceTest {
 
-    private IElevatorSystem system = new MockElevatorSystem();
+    private final IElevatorSystem system = new MockElevatorSystem();
 
     @Test
     public void testGetCommittedDirection() {
-        int commitedDirection = system.getElevator(1).getDirection();
-        assertEquals(1, commitedDirection);
+        int elevatorDirection = system.getElevator(1).getDirection();
+        assertEquals(1, elevatorDirection);
     }
 
     @Test

@@ -109,22 +109,10 @@ public class MockElevator implements IElevator {
     }
 
 
-    /**
-     * Set if an elevator serves a particular floor
-     *
-     * @param floor   floor number
-     * @param service service
-     */
     public void setServicesFloor(int floor, boolean service) {
         floorServices[floor] = service;
     }
 
-    /**
-     * Check if elevator serves floor
-     *
-     * @param floor floor number
-     * @return true | false
-     */
     public boolean servesFloor(int floor) {
         return floorServices[floor];
     }
