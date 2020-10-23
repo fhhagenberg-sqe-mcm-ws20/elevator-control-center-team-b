@@ -1,13 +1,13 @@
 package at.fhhagenberg.sqe;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 public class SystemInfoTest {
     @Test
     public void testJavaVersion() {
-        assertEquals("15", SystemInfo.javaVersion());
+        assertTrue(SystemInfo.javaVersion().contains("15."));
     }
 
     @Test
