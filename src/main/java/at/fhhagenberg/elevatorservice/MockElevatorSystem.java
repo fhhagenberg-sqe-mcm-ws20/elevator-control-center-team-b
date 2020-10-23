@@ -6,6 +6,7 @@ import at.fhhagenberg.floor.IFloor;
 import at.fhhagenberg.floor.MockFloor;
 import lombok.Getter;
 
+import java.rmi.RemoteException;
 import java.util.Arrays;
 
 /**
@@ -53,6 +54,26 @@ public class MockElevatorSystem implements IElevatorSystem{
     @Override
     public boolean getFloorButtonUp(int floor) {
         return floors[floor].isUpButton();
+    }
+
+    @Override
+    public long getClockTick() throws RemoteException {
+        return clockTick;
+    }
+
+    @Override
+    public int getElevatorCount() {
+        return elevatorCount;
+    }
+
+    @Override
+    public int getFloorHeight() {
+        return floorHeight;
+    }
+
+    @Override
+    public int getFloorCount() {
+        return floorCount;
     }
 
     @Override
