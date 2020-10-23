@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class SystemInfoTest {
     @Test
     public void testJavaVersion() {
-        assertTrue(SystemInfo.javaVersion().contains("15."));
+        assertTrue(SystemInfo.javaVersion().contains("15"));
     }
 
     @Test
