@@ -1,18 +1,19 @@
-package at.fhhagenberg.floor;
+package at.fhhagenberg.model;
 
 import lombok.Getter;
 
 /**
- * Mock class for floor
+ *  Floor of a building
+ *  contains information about pressed buttons
  */
-public class MockFloor implements IFloor {
+public class Floor implements IFloor {
 
     @Getter
     private boolean downButton;
     @Getter
     private boolean upButton;
 
-    public MockFloor(boolean downButton, boolean upButton) {
+    public Floor(boolean downButton, boolean upButton) {
         this.downButton = downButton;
         this.upButton = upButton;
     }

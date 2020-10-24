@@ -14,11 +14,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        var javaVersion = SystemInfo.javaVersion();
-        var javafxVersion = SystemInfo.javafxVersion();
-
-        var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        var layout = new BorderPane(label);
+        var layout = new BorderPane();
         var button = new Button("Click me!");
         button.setOnAction(evt -> button.setText("Clicked!"));
         layout.setBottom(button);

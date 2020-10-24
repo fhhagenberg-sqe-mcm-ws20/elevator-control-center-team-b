@@ -1,6 +1,6 @@
-package at.fhhagenberg.elevator;
+package at.fhhagenberg.model;
 
-public interface IElevator {
+public interface IBuildingElevator {
 
     /**
      * Enum for state of elevator doors

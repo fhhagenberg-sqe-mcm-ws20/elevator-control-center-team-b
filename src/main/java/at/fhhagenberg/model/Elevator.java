@@ -1,4 +1,4 @@
-package at.fhhagenberg.elevator;
+package at.fhhagenberg.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import java.util.Arrays;
  * - door closed
  * - all floors are serviced
  */
-public class MockElevator implements IElevator {
+public class Elevator implements IBuildingElevator {
 
     @Getter
     private int direction;
@@ -57,7 +57,7 @@ public class MockElevator implements IElevator {
      * @param weight   Weight of the elevator
      * @param capacity Capacity of the elevator
      */
-    public MockElevator(int floors, int weight, int capacity) {
+    public Elevator(int floors, int weight, int capacity) {
         this.direction = Direction_State.uncommitted.value();
         this.acceleration = 0;
         this.buttons = new boolean[floors];
@@ -87,7 +87,7 @@ public class MockElevator implements IElevator {
      * @param floorServices      Floors that the elevator stops at
      * @param floorTarget        Current active target the elevator will go to
      */
-    public MockElevator(int direction, int acceleration, boolean[] buttons, int doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, boolean[] floorServices, int floorTarget) {
+    public Elevator(int direction, int acceleration, boolean[] buttons, int doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, boolean[] floorServices, int floorTarget) {
         this.direction = direction;
         this.acceleration = acceleration;
         this.buttons = buttons;

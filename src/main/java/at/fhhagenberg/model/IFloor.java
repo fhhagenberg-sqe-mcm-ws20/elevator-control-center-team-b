@@ -1,4 +1,4 @@
-package at.fhhagenberg.floor;
+package at.fhhagenberg.model;
 
 public interface IFloor {
 
