@@ -1,11 +1,13 @@
 package at.fhhagenberg.sqe;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+
+import java.net.URL;
+import java.nio.file.Paths;
 
 /**
  * JavaFX App
@@ -13,20 +15,18 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     @Override
-    public void start(Stage stage) {
-        var layout = new BorderPane();
-        var button = new Button("Click me!");
-        button.setOnAction(evt -> button.setText("Clicked!"));
-        layout.setBottom(button);
-
-        var scene = new Scene(layout, 640, 480);
-
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) throws Exception {
+        URL url = Paths.get("./src/main/java/at/fhhagenberg/view/main.fxml").toUri().toURL();
+        Parent root = FXMLLoader.load(url);
+        primaryStage.setTitle("Elevator System");
+        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setWidth(800);
+        primaryStage.setHeight(600);
+        primaryStage.show();
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 
 }
