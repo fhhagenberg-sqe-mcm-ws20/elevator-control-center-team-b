@@ -2,6 +2,7 @@ package at.fhhagenberg.elevator;
 
 import at.fhhagenberg.model.*;
 import at.fhhagenberg.sqe.IElevator;
+import com.sun.javafx.scene.traversal.Direction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,12 +14,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ElevatorServiceTest {
 
     private IElevator system;
-
+    private IBuildingElevator[] elevators;
+    private IFloor[] floors;
     @BeforeEach
     public void Init() {
-        IBuildingElevator[] elevators;
-        IFloor[] floors;
-
         boolean[] temp = new boolean[5];
         boolean[] tempButton = new boolean[5];
         Arrays.fill(temp, true);
@@ -160,5 +159,19 @@ public class ElevatorServiceTest {
     public void testGetClockTick() throws RemoteException {
         long clockTick = system.getClockTick();
         assertEquals(100L, clockTick);
+    }
+
+    @Test
+    public void testCreateStateFromValue(){
+        IBuildingElevator.Direction_State new_state = IBuildingElevator.Direction_State.up;
+        new_state= new_state.createFromValue(1);
+        assertEquals(IBuildingElevator.Direction_State.down, new_state);
+    }
+
+    @Test
+    public void testSetValue(){
+       IBuildingElevator.Door_State new_state = IBuildingElevator.Door_State.open;
+       new_state = new_state.setValue(2);
+       assertEquals(IBuildingElevator.Door_State.closed, new_state);
     }
 }
