@@ -1,5 +1,6 @@
 package at.fhhagenberg.model;
 
+import at.fhhagenberg.sqe.IElevator;
 import lombok.Getter;
 
 import java.rmi.RemoteException;

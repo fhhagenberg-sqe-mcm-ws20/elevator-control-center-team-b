@@ -1,4 +1,4 @@
-package at.fhhagenberg.sqe;
+package at.fhhagenberg;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

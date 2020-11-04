@@ -1,6 +1,7 @@
 package at.fhhagenberg.elevator;
 
 import at.fhhagenberg.model.*;
+import at.fhhagenberg.sqe.IElevator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
