@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/javafx-base.iml" filepath="$PROJECT_DIR$/javafx-base.iml" />
+      <module fileurl="file://$PROJECT_DIR$/elevator-control-center-team-b.iml" filepath="$PROJECT_DIR$/elevator-control-center-team-b.iml" />
     </modules>
   </component>
 </project>
