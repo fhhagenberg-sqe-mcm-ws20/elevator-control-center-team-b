@@ -20,31 +20,22 @@ public class Elevator implements IBuildingElevator {
     @Getter
     private int direction;
     @Getter
-    @Setter
     private int acceleration;
     @Getter
-    @Setter
     private boolean[] buttons;
     @Getter
-    @Setter
     private int doorState;
     @Getter
-    @Setter
     private int nearestFloor;
     @Getter
-    @Setter
     private int positionFromGround;
     @Getter
-    @Setter
     private int speed;
     @Getter
-    @Setter
     private int weight;
     @Getter
-    @Setter
     private int capacity;
     @Getter
-    @Setter
     private boolean[] floorServices;
     @Getter
     @Setter
