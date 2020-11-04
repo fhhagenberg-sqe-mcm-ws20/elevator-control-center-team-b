@@ -3,7 +3,7 @@
 
     <groupId>at.fhhagenberg.sqe</groupId>
     <artifactId>elevator-control-center-team-b</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -12,6 +12,7 @@
         <sonar.projectKey>fhhagenberg-sqe-mcm-ws20_elevator-control-center-team-b</sonar.projectKey>
         <sonar.organization>fhhagenberg-sqe-mcm-ws20</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.projectName>elevator-control-center-team-b</sonar.projectName>
     </properties>
 
     <dependencies>
