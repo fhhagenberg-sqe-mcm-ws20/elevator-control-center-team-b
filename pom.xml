@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>at.fhhagenberg.sqe</groupId>
-    <artifactId>javafx-base</artifactId>
+    <artifactId>elevator-control-center-team-b</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
