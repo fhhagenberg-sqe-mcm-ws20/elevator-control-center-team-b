@@ -9,19 +9,19 @@ public interface IBuildingElevator {
         /**
          * Open door state
          */
-        open(1),
+        OPEN(1),
         /**
          * Closed door state
          */
-        closed(2),
+        CLOSED(2),
         /**
          * Door is opening state
          */
-        opening(3),
+        OPENING(3),
         /**
          * Door is closing state
          */
-        closing(4);
+        CLOSING(4);
 
         private final int state;
 
@@ -52,16 +52,16 @@ public interface IBuildingElevator {
         public Door_State setValue(int value) {
             switch (value) {
                 case 1:
-                    return Door_State.open;
+                    return Door_State.OPEN;
                 case 2:
-                    return Door_State.closed;
+                    return Door_State.CLOSED;
                 case 3:
-                    return Door_State.opening;
+                    return Door_State.OPENING;
                 case 4:
-                    return Door_State.closing;
+                    return Door_State.CLOSING;
+                default:
+                    return Door_State.CLOSED;
             }
-
-            return Door_State.closed;
         }
     }
 
@@ -72,15 +72,15 @@ public interface IBuildingElevator {
         /**
          * Up direction state of the elevator
          */
-        up(0),
+        UP(0),
         /**
          * Down state of the elevator
          */
-        down(1),
+        DOWN(1),
         /**
          * Uncommitted state of the elevator
          */
-        uncommitted(2);
+        UNCOMMITTED(2);
 
         private final int state;
 
@@ -111,14 +111,14 @@ public interface IBuildingElevator {
         public Direction_State createFromValue(int value) {
             switch (value) {
                 case 0:
-                    return Direction_State.up;
+                    return Direction_State.UP;
                 case 1:
-                    return Direction_State.down;
+                    return Direction_State.DOWN;
                 case 2:
-                    return Direction_State.uncommitted;
+                    return Direction_State.UNCOMMITTED;
+                default:
+                    return Direction_State.UNCOMMITTED;
             }
-
-            return Direction_State.uncommitted;
         }
     }
 
