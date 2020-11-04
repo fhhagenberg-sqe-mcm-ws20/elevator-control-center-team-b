@@ -49,10 +49,10 @@ public class Elevator implements IBuildingElevator {
      * @param capacity Capacity of the elevator
      */
     public Elevator(int floors, int weight, int capacity) {
-        this.direction = Direction_State.uncommitted.value();
+        this.direction = Direction_State.UNCOMMITTED.value();
         this.acceleration = 0;
         this.buttons = new boolean[floors];
-        this.doorState = Door_State.closed.value();
+        this.doorState = Door_State.CLOSED.value();
         this.nearestFloor = 0;
         this.positionFromGround = 0;
         this.speed = 0;
@@ -93,8 +93,8 @@ public class Elevator implements IBuildingElevator {
     }
 
     public void setDirection(int direction) {
-        if (direction < Direction_State.up.value() || direction > Direction_State.uncommitted.value())
-            this.direction = Direction_State.uncommitted.value();
+        if (direction < Direction_State.UP.value() || direction > Direction_State.UNCOMMITTED.value())
+            this.direction = Direction_State.UNCOMMITTED.value();
         else
             this.direction = direction;
     }

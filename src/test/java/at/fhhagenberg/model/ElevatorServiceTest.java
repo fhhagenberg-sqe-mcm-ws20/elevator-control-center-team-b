@@ -1,6 +1,5 @@
-package at.fhhagenberg.elevator;
+package at.fhhagenberg.model;
 
-import at.fhhagenberg.model.*;
 import at.fhhagenberg.sqe.IElevator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ElevatorServiceTest {
+class ElevatorServiceTest {
 
     private IElevator system;
     private IBuildingElevator[] elevators;
@@ -32,8 +31,8 @@ public class ElevatorServiceTest {
 
         elevators = new Elevator[3];
         elevators[0] = new Elevator(5, 200, 10);
-        elevators[1] = new Elevator(IBuildingElevator.Direction_State.down.value(), 2, tempButton, IBuildingElevator.Door_State.closed.value(), 3, 30, 2, 1500, 10, temp, 0);
-        elevators[2] = new Elevator(IBuildingElevator.Direction_State.uncommitted.value(), 2, new boolean[5], IBuildingElevator.Door_State.open.value(), 1, 10, 0, 1500, 10, temp, 0);
+        elevators[1] = new Elevator(IBuildingElevator.Direction_State.DOWN.value(), 2, tempButton, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, temp, 0);
+        elevators[2] = new Elevator(IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, new boolean[5], IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 1500, 10, temp, 0);
 
         Building mockBuilding = new Building(3, 10, 5, elevators, floors);
         system = new ElevatorSystem(mockBuilding, 100L);
@@ -163,15 +162,15 @@ public class ElevatorServiceTest {
 
     @Test
     void testCreateStateFromValue() {
-        IBuildingElevator.Direction_State new_state = IBuildingElevator.Direction_State.up;
+        IBuildingElevator.Direction_State new_state = IBuildingElevator.Direction_State.UP;
         new_state = new_state.createFromValue(1);
-        assertEquals(IBuildingElevator.Direction_State.down, new_state);
+        assertEquals(IBuildingElevator.Direction_State.DOWN, new_state);
     }
 
     @Test
     void testSetValue() {
-        IBuildingElevator.Door_State new_state = IBuildingElevator.Door_State.open;
+        IBuildingElevator.Door_State new_state = IBuildingElevator.Door_State.OPEN;
         new_state = new_state.setValue(2);
-        assertEquals(IBuildingElevator.Door_State.closed, new_state);
+        assertEquals(IBuildingElevator.Door_State.CLOSED, new_state);
     }
 }
