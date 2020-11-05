@@ -5,6 +5,6 @@ public interface IFloor {
     boolean isDownButton();
     boolean isUpButton();
 
-    IFloor setDownButton(boolean active);
-    IFloor setUpButton(boolean active);
+    void setDownButton(boolean active);
+    void setUpButton(boolean active);
 }

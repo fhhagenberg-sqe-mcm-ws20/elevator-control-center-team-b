@@ -24,4 +24,9 @@ public class Building {
         this.elevators = elevators;
         this.floors = floors;
     }
+
+    public IBuildingElevator getElevator(int elevatorNumber) {
+        if (elevatorNumber > elevatorCount - 1 || elevatorNumber < 0) return null;
+        return elevators[elevatorNumber];
+    }
 }

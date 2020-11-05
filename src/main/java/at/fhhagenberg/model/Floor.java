@@ -19,14 +19,12 @@ public class Floor implements IFloor {
     }
 
     @Override
-    public IFloor setDownButton(boolean active) {
+    public void setDownButton(boolean active) {
         this.downButton = active;
-        return this;
     }
 
     @Override
-    public IFloor setUpButton(boolean active) {
+    public void setUpButton(boolean active) {
         this.upButton = active;
-        return this;
     }
 }

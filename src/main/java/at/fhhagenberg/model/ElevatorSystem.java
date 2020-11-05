@@ -1,6 +1,7 @@
 package at.fhhagenberg.model;
 
 import at.fhhagenberg.sqe.IElevator;
+import lombok.Generated;
 import lombok.Getter;
 
 import java.rmi.RemoteException;
@@ -11,6 +12,7 @@ import java.rmi.RemoteException;
  */
 public class ElevatorSystem implements IElevator {
 
+    @Generated
     @Getter
     private final Building building;
 
@@ -23,7 +25,7 @@ public class ElevatorSystem implements IElevator {
     }
 
     public IBuildingElevator getElevator(int elevatorNumber) {
-        return building.getElevators()[elevatorNumber];
+        return building.getElevator(elevatorNumber);
     }
 
     @Override

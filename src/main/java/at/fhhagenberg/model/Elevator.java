@@ -98,8 +98,7 @@ public class Elevator implements IBuildingElevator {
         else
             this.direction = direction;
     }
-
-
+    
     public void setServicesFloor(int floor, boolean service) {
         floorServices[floor] = service;
     }

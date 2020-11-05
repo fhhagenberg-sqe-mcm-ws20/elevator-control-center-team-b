@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.Generated;
 
 import java.net.URL;
 import java.nio.file.Paths;
@@ -25,8 +26,8 @@ public class App extends Application {
         primaryStage.show();
     }
 
+    @Generated
     public static void main(String[] args) {
         launch(args);
     }
-
 }
