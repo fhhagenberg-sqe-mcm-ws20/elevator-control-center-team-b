@@ -65,7 +65,9 @@ public class ElevatorTest {
     @Test
     void testNullElevator() {
         var elevator = building.getElevator(-1);
+        var elevator2 = building.getElevator(10);
         assertNull(elevator);
+        assertNull(elevator2);
     }
 
     @Test
@@ -94,8 +96,11 @@ public class ElevatorTest {
     void testSetWrongDirection() {
         building.getElevator(1).setDirection(-1);
         var direction = building.getElevator(1).getDirection();
-
         assertEquals(IBuildingElevator.Direction_State.UNCOMMITTED.value(), direction);
+
+        building.getElevator(1).setDirection(10);
+        var direction2 = building.getElevator(1).getDirection();
+        assertEquals(IBuildingElevator.Direction_State.UNCOMMITTED.value(), direction2);
     }
 
     @Test
