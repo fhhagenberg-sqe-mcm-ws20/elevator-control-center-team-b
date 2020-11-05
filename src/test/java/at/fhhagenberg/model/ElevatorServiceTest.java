@@ -134,7 +134,6 @@ class ElevatorServiceTest {
         assertEquals(4, system.getTarget(2));
     }
 
-
     @Test
     void setCommittedDirection() throws RemoteException {
         system.setCommittedDirection(1, 1);
@@ -146,7 +145,6 @@ class ElevatorServiceTest {
         system.setServicesFloors(2, 3, false);
         assertFalse(system.getServicesFloors(2, 3));
     }
-
 
     @Test
     void testSetTarget() throws RemoteException {
@@ -161,30 +159,15 @@ class ElevatorServiceTest {
     }
 
     @Test
-    void testCreateStateFromValue() {
-        IBuildingElevator.Direction_State new_state = IBuildingElevator.Direction_State.UP;
-        new_state = new_state.createFromValue(0);
-        assertEquals(IBuildingElevator.Direction_State.UP, new_state);
-        new_state = new_state.createFromValue(1);
-        assertEquals(IBuildingElevator.Direction_State.DOWN, new_state);
-        new_state = new_state.createFromValue(2);
-        assertEquals(IBuildingElevator.Direction_State.UNCOMMITTED, new_state);
-        new_state = new_state.createFromValue(10);
-        assertEquals(IBuildingElevator.Direction_State.UNCOMMITTED, new_state);
+    void testElevatorCount() throws RemoteException {
+        assertEquals(3, system.getElevatorNum());
     }
 
     @Test
-    void testSetValue() {
-        IBuildingElevator.Door_State new_state = IBuildingElevator.Door_State.OPEN;
-        new_state = new_state.setValue(1);
-        assertEquals(IBuildingElevator.Door_State.OPEN, new_state);
-        new_state = new_state.setValue(2);
-        assertEquals(IBuildingElevator.Door_State.CLOSED, new_state);
-        new_state = new_state.setValue(3);
-        assertEquals(IBuildingElevator.Door_State.OPENING, new_state);
-        new_state = new_state.setValue(4);
-        assertEquals(IBuildingElevator.Door_State.CLOSING, new_state);
-        new_state = new_state.setValue(10);
-        assertEquals(IBuildingElevator.Door_State.CLOSED, new_state);
+    void testGetElevator() {
+        if (system instanceof ElevatorSystem) {
+            var elevator = ((ElevatorSystem) system).getElevator(0);
+            assertNotNull(elevator);
+        }
     }
 }
