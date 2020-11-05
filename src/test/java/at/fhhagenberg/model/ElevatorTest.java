@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ElevatorTest {
+class ElevatorTest {
     private IBuildingElevator[] elevators;
     private IFloor[] floors;
     private Building building;
