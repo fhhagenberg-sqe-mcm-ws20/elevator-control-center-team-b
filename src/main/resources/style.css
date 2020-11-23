@@ -1,0 +1,29 @@
+.left-bar-info {
+    -fx-max-width: Infinity;
+    -fx-wrap-text: true;
+    -fx-content-display: left;
+    -fx-padding: 5px;
+}
+
+.jfx-toggle-button {
+    -toggle-display: left;
+    -fx-text-alignment: left;
+}
+
+.warning {
+    -fx-border-color: #eea236;
+    -fx-text-fill: white;
+    -fx-background-color: #f0ad4e;
+    -fx-fill: #f0ad4e;
+}
+
+.danger {
+    -fx-background-color: #d9534f;
+    -fx-fill: #d9534f;
+    -fx-border-color: #d43f3a;
+    -fx-text-fill: white;
+}
+
+.glyph-icon {
+    -glyph-size: 20px;
+}

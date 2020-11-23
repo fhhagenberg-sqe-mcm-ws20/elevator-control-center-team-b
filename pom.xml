@@ -63,6 +63,24 @@
             <version>1.18.16</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Fontawesome icons -->
+        <dependency>
+            <groupId>de.jensd</groupId>
+            <artifactId>fontawesomefx-fontawesome</artifactId>
+            <version>4.7.0-9.1.2</version>
+        </dependency>
+        <!-- Theme -->
+        <dependency>
+            <groupId>org.jfxtras</groupId>
+            <artifactId>jmetro</artifactId>
+            <version>11.6.12</version>
+        </dependency>
+        <!-- FX controls -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.0.3</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -92,6 +110,18 @@
                     <launcher>launcher</launcher>
                     <mainClass>at.fhhagenberg.App</mainClass>
                 </configuration>
+                <executions>
+                    <!-- Debug execution -->
+                    <execution>
+                        <id>debug</id>
+                        <configuration>
+                            <mainClass>at.fhhagenberg.App</mainClass>
+                            <options>
+                                <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:8000</option>
+                            </options>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

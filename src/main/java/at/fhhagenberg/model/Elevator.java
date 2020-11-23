@@ -1,9 +1,11 @@
 package at.fhhagenberg.model;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Elevator example class
@@ -38,8 +40,22 @@ public class Elevator implements IBuildingElevator {
     @Getter
     private boolean[] floorServices;
     @Getter
-    @Setter
     private int floorTarget;
+
+    // Properties for GUI
+    @Getter
+    public SimpleIntegerProperty directionProperty;
+    @Getter
+    public SimpleIntegerProperty floorTargetProperty;
+    @Getter
+    public SimpleIntegerProperty speedProperty;
+    @Getter
+    public SimpleStringProperty doorStateProperty;
+    @Getter
+    public SimpleIntegerProperty payloadProperty;
+    @Getter
+    public SimpleIntegerProperty nearestFloorProperty;
+
 
     /**
      * Default constructor where no specific state is used
@@ -61,6 +77,7 @@ public class Elevator implements IBuildingElevator {
         this.floorServices = new boolean[floors];
         Arrays.fill(floorServices, true);
         this.floorTarget = 0;
+        setGuiProperties();
     }
 
     /**
@@ -90,6 +107,25 @@ public class Elevator implements IBuildingElevator {
         this.capacity = capacity;
         this.floorServices = floorServices;
         this.floorTarget = floorTarget;
+        setGuiProperties();
+    }
+
+    public void setGuiProperties() {
+        directionProperty = new SimpleIntegerProperty(direction);
+        floorTargetProperty = new SimpleIntegerProperty(floorTarget);
+        floorTargetProperty.addListener((observableValue, oldValue, newValue) -> {
+
+            // TODO: This lines are only for testing, remove them!
+            int firstRandomValue = new Random().nextInt(4);
+            this.nearestFloor = firstRandomValue;
+            nearestFloorProperty.setValue(firstRandomValue);
+
+            setFloorTarget(newValue.intValue());
+        });
+        speedProperty = new SimpleIntegerProperty(speed);
+        doorStateProperty = new SimpleStringProperty(IBuildingElevator.Door_State.getDoorStateString(doorState));
+        payloadProperty = new SimpleIntegerProperty(weight);
+        nearestFloorProperty = new SimpleIntegerProperty(nearestFloor);
     }
 
     public void setDirection(int direction) {
@@ -97,8 +133,9 @@ public class Elevator implements IBuildingElevator {
             this.direction = Direction_State.UNCOMMITTED.value();
         else
             this.direction = direction;
+        directionProperty.set(this.direction);
     }
-    
+
     public void setServicesFloor(int floor, boolean service) {
         floorServices[floor] = service;
     }
@@ -109,5 +146,23 @@ public class Elevator implements IBuildingElevator {
 
     public boolean getButtonStatus(int floor) {
         return buttons[floor];
+    }
+
+    public void setFloorTarget(int floor) {
+        int direction = nearestFloor - floor;
+        this.floorTarget = floor;
+        floorTargetProperty.set(this.floorTarget);
+        if (direction == 0) {
+            setDirection(Direction_State.UNCOMMITTED.value());
+        } else if (direction < 0) {
+            setDirection(Direction_State.UP.value());
+        } else {
+            setDirection(Direction_State.DOWN.value());
+        }
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+        payloadProperty.setValue(weight);
     }
 }
