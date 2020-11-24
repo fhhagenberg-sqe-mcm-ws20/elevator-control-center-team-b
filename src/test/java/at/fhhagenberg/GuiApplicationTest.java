@@ -119,7 +119,7 @@ class GuiApplicationTest {
         // Given
         JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#target_field").queryAs(JFXComboBox.class);
         Assertions.assertThat(firstElevator.isDisabled());
-        assertEquals(firstElevator.getValue().intValue(), 2);
+        assertEquals(2, firstElevator.getValue().intValue());
 
         //When
         Platform.runLater(() -> robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(false));
@@ -129,9 +129,9 @@ class GuiApplicationTest {
         robot.clickOn(firstElevator);
         robot.sleep(100);
         // Click on the first entry
-        robot.clickOn(robot.offset(firstElevator, new Point2D(0, 20)));
+        robot.clickOn(robot.offset(firstElevator, new Point2D(0, 40)));
         robot.sleep(100);
-        assertEquals(firstElevator.getValue().intValue(), 0);
+        assertEquals(0, firstElevator.getValue().intValue());
     }
 
     /**
