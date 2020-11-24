@@ -8,6 +8,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -27,8 +28,13 @@ public class ElevatorController {
     public Label door_status_field;
     public Label payload_field;
     private Elevator buildingElevator;
-    private VBox leftMenu;
     private int ID;
+
+    // Left Menu and ID's of info boxes
+    private VBox leftMenu;
+    private final String WARNING_BOX_ID = "#warning_box";
+    private final String ERROR_BOX_ID = "#error_box";
+
 
     // Warning and Error type
     private final String WARNING = "WARNING";
@@ -196,12 +202,23 @@ public class ElevatorController {
             newInfoLabel.getStyleClass().addAll(LEFT_BAR_LABEL_STYLE_CLASS,
                     style);
             newInfoLabel.setGraphic(labelIcon);
-            leftMenu.getChildren().add(newInfoLabel);
+            VBox infoBox;
+            if (infoType.equals(WARNING)) {
+                infoBox = (VBox) leftMenu.lookup(WARNING_BOX_ID);
+            } else {
+                infoBox = (VBox) leftMenu.lookup(ERROR_BOX_ID);
+            }
+            infoBox.getChildren().add(newInfoLabel);
         } else {
             if (!infoLabel.getStyleClass().contains(style)) {
+                VBox infoBox;
                 if (infoType.equals(ERROR)) {
+                    infoBox = (VBox) leftMenu.lookup(ERROR_BOX_ID);
+                    infoBox.getChildren().add(infoLabel);
                     infoLabel.getStyleClass().remove(WARNING_STYLE_CLASS);
                 } else {
+                    infoBox = (VBox) leftMenu.lookup(WARNING_BOX_ID);
+                    infoBox.getChildren().add(infoLabel);
                     infoLabel.getStyleClass().remove(ERROR_STYLE_CLASS);
                 }
                 infoLabel.getStyleClass().add(style);
@@ -255,7 +272,8 @@ public class ElevatorController {
         } else {
             info_pane.getChildren().clear();
         }
-        leftMenu.getChildren().remove(leftMenu.lookup("#" + infoId));
+        VBox parent = (VBox) leftMenu.lookup("#" + infoId).getParent();
+        parent.getChildren().remove(leftMenu.lookup("#" + infoId));
     }
 
     /**
@@ -272,7 +290,9 @@ public class ElevatorController {
             warningList.remove(payloadInfoId);
             createInfo(ERROR, payloadInfoId, String.format("Elevator %d: Error payload too high.", ID));
         } else {
-            deleteWarningOrError(payloadInfoId);
+            if (!warningList.isEmpty() || !errorList.isEmpty()) {
+                deleteWarningOrError(payloadInfoId);
+            }
         }
     }
 }

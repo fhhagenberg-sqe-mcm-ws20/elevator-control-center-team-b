@@ -133,7 +133,6 @@ class GuiApplicationTest {
         robot.clickOn(firstElevator);
         robot.sleep(100);
         // Click on the first entry
-        //robot.clickOn(robot.offset(firstElevator, new Point2D(0, 40)));
         robot.press(KeyCode.UP);
         robot.release(KeyCode.UP);
         robot.press(KeyCode.UP);

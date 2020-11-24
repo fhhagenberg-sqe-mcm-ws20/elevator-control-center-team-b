@@ -18,6 +18,8 @@ public class MainController {
     public JFXToggleButton mode_button;
     public JFXMasonryPane elevator_view;
     public VBox left_menu;
+    public VBox warning_box;
+    public VBox error_box;
 
     private ElevatorSystem elevatorSystem;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
