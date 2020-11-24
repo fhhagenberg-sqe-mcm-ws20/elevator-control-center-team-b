@@ -122,7 +122,7 @@ class GuiApplicationTest {
         assertEquals(firstElevator.getValue().intValue(), 2);
 
         //When
-        robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(false);
+        Platform.runLater(() -> robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(false));
         Assertions.assertThat(!firstElevator.isDisabled());
 
         //Then
