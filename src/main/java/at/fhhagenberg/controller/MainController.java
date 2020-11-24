@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import org.controlsfx.control.ToggleSwitch;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 public class MainController {
     public Label status_label;
     public JFXToggleButton mode_button;
-    public ToggleSwitch mode_button_test;
     public JFXMasonryPane elevator_view;
     public VBox left_menu;
 
@@ -26,20 +24,16 @@ public class MainController {
 
     public void initialize() {
         mode_button.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+            if(newValue){
+                mode_button.setText("Auto");
+            }else{
+                mode_button.setText("Manual");
+            }
             if (!elevatorControllers.isEmpty()) {
                 for (ElevatorController elevatorController : elevatorControllers) {
                     elevatorController.setAutoMode(newValue);
                 }
             }
-            mode_button_test.setSelected(newValue);
-        }));
-        mode_button_test.selectedProperty().addListener(((observable, oldValue, newValue) -> {
-            if (!elevatorControllers.isEmpty()) {
-                for (ElevatorController elevatorController : elevatorControllers) {
-                    elevatorController.setAutoMode(newValue);
-                }
-            }
-            mode_button.setSelected(newValue);
         }));
     }
 

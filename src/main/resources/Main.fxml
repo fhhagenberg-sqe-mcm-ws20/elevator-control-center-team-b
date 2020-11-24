@@ -12,16 +12,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
-<?import org.controlsfx.control.ToggleSwitch?>
 
 <JFXToolbar xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhhagenberg.controller.MainController">
     <left>
         <VBox fx:id="left_menu" prefWidth="150.0" spacing="5.0">
          <JFXToggleButton fx:id="mode_button" maxWidth="1.7976931348623157E308" selected="true" text="Auto" />
-            <ToggleSwitch fx:id="mode_button_test" maxWidth="1.7976931348623157E308" selected="true" styleClass="jfx-toggle-button" text="Auto">
-            <VBox.margin>
-               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-            </VBox.margin></ToggleSwitch>
          <opaqueInsets>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </opaqueInsets>
@@ -44,7 +39,7 @@
     </top>
     <center>
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
-            <JFXMasonryPane fx:id="elevator_view" />
+            <JFXMasonryPane fx:id="elevator_view" HSpacing="10.0" VSpacing="10.0" />
         </ScrollPane>
     </center>
 </JFXToolbar>
