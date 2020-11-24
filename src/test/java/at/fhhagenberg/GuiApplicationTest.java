@@ -119,6 +119,7 @@ class GuiApplicationTest {
         // Given
         JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#target_field").queryAs(JFXComboBox.class);
         Assertions.assertThat(firstElevator.isDisabled());
+        robot.sleep(100);
         assertEquals(2, firstElevator.getValue().intValue());
 
         //When
