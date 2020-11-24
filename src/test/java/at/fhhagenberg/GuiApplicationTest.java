@@ -12,6 +12,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,7 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.service.query.EmptyNodeQueryException;
 
+import java.awt.event.KeyEvent;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -125,12 +127,18 @@ class GuiApplicationTest {
         //When
         Platform.runLater(() -> robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(false));
         Assertions.assertThat(!firstElevator.isDisabled());
+        robot.sleep(200);
 
         //Then
         robot.clickOn(firstElevator);
         robot.sleep(100);
         // Click on the first entry
-        robot.clickOn(robot.offset(firstElevator, new Point2D(0, 40)));
+        //robot.clickOn(robot.offset(firstElevator, new Point2D(0, 40)));
+        robot.press(KeyCode.UP);
+        robot.release(KeyCode.UP);
+        robot.press(KeyCode.UP);
+        robot.release(KeyCode.UP);
+        robot.press(KeyCode.ENTER);
         robot.sleep(100);
         assertEquals(0, firstElevator.getValue().intValue());
     }
