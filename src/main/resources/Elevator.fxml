@@ -11,12 +11,12 @@
 <AnchorPane fx:id="root" style="-fx-background-color: GHOSTWHITE;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhhagenberg.controller.ElevatorController">
    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <AnchorPane>
-         <Label fx:id="elevator_id" style="-fx-border-style: solid; -fx-border-color: lightgrey;" text="Label" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <Label fx:id="elevatorId" style="-fx-border-style: solid; -fx-border-color: lightgrey;" text="Label" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
             <padding>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding></Label>
-         <StackPane fx:id="info_pane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="10.0" />
-         <StackPane fx:id="direction_pane" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+         <StackPane fx:id="infoPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="10.0" />
+         <StackPane fx:id="directionPane" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
       </AnchorPane>
       <HBox>
          <opaqueInsets>
@@ -54,22 +54,22 @@
             <HBox.margin>
                <Insets right="10.0" />
             </HBox.margin>
-            <JFXComboBox fx:id="target_field" disable="true" prefHeight="30.0" promptText="Target Floor">
+            <JFXComboBox fx:id="targetField" disable="true" prefHeight="30.0" promptText="Target Floor">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
             </JFXComboBox>
-            <Label fx:id="speed_field" text="Label">
+            <Label fx:id="speedField" text="Label">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
             </Label>
-            <Label fx:id="door_status_field" text="Label">
+            <Label fx:id="doorStatusField" text="Label">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
             </Label>
-            <Label fx:id="payload_field" text="Label">
+            <Label fx:id="payloadField" text="Label">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -77,7 +77,7 @@
          </VBox>
       </HBox>
       <AnchorPane>
-         <Label fx:id="nearest_floor" style="-fx-border-style: solid; -fx-border-color: lightgrey;" text="Label" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <Label fx:id="nearestFloor" style="-fx-border-style: solid; -fx-border-color: lightgrey;" text="Label" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <padding>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </padding>

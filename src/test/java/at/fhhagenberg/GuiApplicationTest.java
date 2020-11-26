@@ -126,7 +126,7 @@ class GuiApplicationTest {
     @Test
     void testManualModeWork(FxRobot robot) {
         // Given
-        JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#target_field").queryAs(JFXComboBox.class);
+        JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
         Assertions.assertThat(firstElevator.isDisabled());
         robot.sleep(100);
         assertEquals(2, firstElevator.getValue().intValue());

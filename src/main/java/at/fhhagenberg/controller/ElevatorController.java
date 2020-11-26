@@ -17,33 +17,31 @@ import java.util.ArrayList;
 
 public class ElevatorController {
 
-    public Label elevator_id;
-    public Label nearest_floor;
+    public Label elevatorId;
+    public Label nearestFloor;
     public AnchorPane root;
-    public StackPane info_pane;
-    public StackPane direction_pane;
-    public JFXComboBox<Integer> target_field;
-    public Label speed_field;
-    public Label door_status_field;
-    public Label payload_field;
+    public StackPane infoPane;
+    public StackPane directionPane;
+    public JFXComboBox<Integer> targetField;
+    public Label speedField;
+    public Label doorStatusField;
+    public Label payloadField;
     private Elevator buildingElevator;
-    private int ID;
+    private int id;
 
     // Left Menu and ID's of info boxes
     private VBox leftMenu;
-    private final String WARNING_BOX_ID = "#warning_box";
-    private final String ERROR_BOX_ID = "#error_box";
-
+    private static final String WARNING_BOX_ID = "#warning_box";
+    private static final String ERROR_BOX_ID = "#error_box";
 
     // Warning and Error type
-    private final String WARNING = "WARNING";
-    private final String ERROR = "ERROR";
+    private static final String WARNING = "WARNING";
+    private static final String ERROR = "ERROR";
 
     // Style classes
-    private final String WARNING_STYLE_CLASS = "warning";
-    private final String ERROR_STYLE_CLASS = "danger";
-    private final String LEFT_BAR_LABEL_STYLE_CLASS = "left-bar-info";
-
+    private static final String WARNING_STYLE_CLASS = "warning";
+    private static final String ERROR_STYLE_CLASS = "danger";
+    private static final String LEFT_BAR_LABEL_STYLE_CLASS = "left-bar-info";
 
     // Info ID's
     private String payloadInfoId;
@@ -66,25 +64,25 @@ public class ElevatorController {
         }
         this.buildingElevator = (Elevator) buildingElevator;
         this.leftMenu = leftMenu;
-        this.ID = id;
+        this.id = id;
         setupIds();
 
         // Set id component
-        elevator_id.setText("ID: " + id);
+        elevatorId.setText("ID: " + id);
 
         // Set nearest floor component
         String floorFormat = "Current floor: %d";
-        nearest_floor.textProperty().bind(this.buildingElevator.nearestFloorProperty.asString(floorFormat));
+        nearestFloor.textProperty().bind(this.buildingElevator.nearestFloorProperty.asString(floorFormat));
         // TODO: This line is only for testing, remove it!
-        nearest_floor.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(350));
+        nearestFloor.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(350));
 
         // Set target component
         ObservableList<Integer> elevatorFloors = FXCollections.observableArrayList();
         for (int i = 0; i < floorCount; i++) {
             elevatorFloors.add(i);
         }
-        target_field.getItems().addAll(elevatorFloors);
-        target_field.valueProperty().bindBidirectional((Property) this.buildingElevator.getFloorTargetProperty());
+        targetField.getItems().addAll(elevatorFloors);
+        targetField.valueProperty().bindBidirectional((Property) this.buildingElevator.getFloorTargetProperty());
 
         // Set direction component
         setDirectionArrow(this.buildingElevator.getDirection());
@@ -92,22 +90,22 @@ public class ElevatorController {
                 -> setDirectionArrow(newValue.intValue()));
 
         // Set door state component
-        door_status_field.textProperty().bind(this.buildingElevator.doorStateProperty);
+        doorStatusField.textProperty().bind(this.buildingElevator.doorStateProperty);
         // TODO: This line is only for testing, remove it!
-        door_status_field.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(250));
+        doorStatusField.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(250));
 
 
         // Set speed component
         String speedFormat = "%d m/s";
-        speed_field.textProperty().bind(this.buildingElevator.speedProperty.asString(speedFormat));
+        speedField.textProperty().bind(this.buildingElevator.speedProperty.asString(speedFormat));
         // TODO: This line is only for testing, remove it!
-        speed_field.setOnMouseClicked(mouseEvent -> createInfo(WARNING, "test" + ID, "Elevator " + ID + ": Hey"));
+        speedField.setOnMouseClicked(mouseEvent -> createInfo(WARNING, "test" + this.id, "Elevator " + this.id + ": Hey"));
 
         // Set payload component
         String weightFormat = "%d kg";
-        payload_field.textProperty().bind(this.buildingElevator.payloadProperty.asString(weightFormat));
+        payloadField.textProperty().bind(this.buildingElevator.payloadProperty.asString(weightFormat));
         // TODO: This line is only for testing, remove it!
-        payload_field.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(450));
+        payloadField.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(450));
 
         checkPayload(this.buildingElevator.getPayloadProperty().getValue());
         this.buildingElevator.payloadProperty.addListener((observableValue, oldValue, newValue) -> {
@@ -121,7 +119,7 @@ public class ElevatorController {
      * Method to setup ID's for labels so that we can operate on them later on.
      */
     private void setupIds() {
-        payloadInfoId = "PAYLOAD" + ID;
+        payloadInfoId = "PAYLOAD" + id;
     }
 
     /**
@@ -130,7 +128,7 @@ public class ElevatorController {
      * @param isAutoMode receives if auto mode is turned on
      */
     public void setAutoMode(boolean isAutoMode) {
-        target_field.setDisable(isAutoMode);
+        targetField.setDisable(isAutoMode);
     }
 
     /**
@@ -139,7 +137,7 @@ public class ElevatorController {
      * @param direction current direction of the elevator
      */
     private void setDirectionArrow(int direction) {
-        direction_pane.getChildren().clear();
+        directionPane.getChildren().clear();
         FontAwesomeIconView directionIcon;
         switch (direction) {
             case 0:
@@ -152,7 +150,7 @@ public class ElevatorController {
                 directionIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROWS_V);
                 break;
         }
-        direction_pane.getChildren().add(directionIcon);
+        directionPane.getChildren().add(directionIcon);
     }
 
     /**
@@ -219,11 +217,11 @@ public class ElevatorController {
      */
     public void updateTopIcon(String warningType) {
         if (warningType.equals(ERROR)) {
-            info_pane.getChildren().clear();
-            info_pane.getChildren().add(createIcon(ERROR_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION));
+            infoPane.getChildren().clear();
+            infoPane.getChildren().add(createIcon(ERROR_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION));
         } else {
-            info_pane.getChildren().clear();
-            info_pane.getChildren().add(createIcon(WARNING_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION_TRIANGLE));
+            infoPane.getChildren().clear();
+            infoPane.getChildren().add(createIcon(WARNING_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION_TRIANGLE));
         }
     }
 
@@ -252,7 +250,7 @@ public class ElevatorController {
         } else if (!warningList.isEmpty()) {
             updateTopIcon(WARNING);
         } else {
-            info_pane.getChildren().clear();
+            infoPane.getChildren().clear();
         }
         VBox parent = (VBox) leftMenu.lookup("#" + infoId).getParent();
         parent.getChildren().remove(leftMenu.lookup("#" + infoId));
@@ -267,10 +265,10 @@ public class ElevatorController {
         int payloadCheck = this.buildingElevator.getCapacity() - payload;
         if (payloadCheck < 0 && payloadCheck > -150) {
             errorList.remove(payloadInfoId);
-            createInfo(WARNING, payloadInfoId, String.format("Elevator %d: Warning payload on a high level.", ID));
+            createInfo(WARNING, payloadInfoId, String.format("Elevator %d: Warning payload on a high level.", id));
         } else if (payloadCheck <= -150) {
             warningList.remove(payloadInfoId);
-            createInfo(ERROR, payloadInfoId, String.format("Elevator %d: Error payload too high.", ID));
+            createInfo(ERROR, payloadInfoId, String.format("Elevator %d: Error payload too high.", id));
         } else {
             if (!warningList.isEmpty() || !errorList.isEmpty()) {
                 deleteInfo(payloadInfoId);
