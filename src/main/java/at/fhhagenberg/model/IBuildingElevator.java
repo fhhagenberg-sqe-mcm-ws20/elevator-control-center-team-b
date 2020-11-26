@@ -53,14 +53,24 @@ public interface IBuildingElevator {
             switch (value) {
                 case 1:
                     return Door_State.OPEN;
-                case 2:
-                    return Door_State.CLOSED;
                 case 3:
                     return Door_State.OPENING;
                 case 4:
                     return Door_State.CLOSING;
                 default:
                     return Door_State.CLOSED;
+            }
+        }
+        public static String getDoorStateString(int value) {
+            switch (value) {
+                case 1:
+                    return "Open";
+                case 3:
+                    return "Opening";
+                case 4:
+                    return "Closing";
+                default:
+                    return "Closed";
             }
         }
     }
@@ -114,8 +124,6 @@ public interface IBuildingElevator {
                     return Direction_State.UP;
                 case 1:
                     return Direction_State.DOWN;
-                case 2:
-                    return Direction_State.UNCOMMITTED;
                 default:
                     return Direction_State.UNCOMMITTED;
             }

@@ -3,7 +3,7 @@
 
     <groupId>at.fhhagenberg.sqe</groupId>
     <artifactId>elevator-control-center-team-b</artifactId>
-    <version>0.4.2-SNAPSHOT</version>
+    <version>0.4.3-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -13,6 +13,7 @@
         <sonar.organization>fhhagenberg-sqe-mcm-ws20</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectName>elevator-control-center-team-b</sonar.projectName>
+        <sonar.coverage.exclusions>**/at/fhhagenberg/App.java</sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
@@ -63,6 +64,12 @@
             <version>1.18.16</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Fontawesome icons -->
+        <dependency>
+            <groupId>de.jensd</groupId>
+            <artifactId>fontawesomefx-fontawesome</artifactId>
+            <version>4.7.0-9.1.2</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -92,6 +99,18 @@
                     <launcher>launcher</launcher>
                     <mainClass>at.fhhagenberg.App</mainClass>
                 </configuration>
+                <executions>
+                    <!-- Debug execution -->
+                    <execution>
+                        <id>debug</id>
+                        <configuration>
+                            <mainClass>at.fhhagenberg.App</mainClass>
+                            <options>
+                                <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:8000</option>
+                            </options>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -115,6 +134,11 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.6</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/at/fhhagenberg/App.class</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>default-prepare-agent</id>

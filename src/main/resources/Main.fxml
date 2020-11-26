@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXMasonryPane?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import com.jfoenix.controls.JFXToolbar?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<JFXToolbar xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhhagenberg.controller.MainController">
+    <left>
+        <VBox fx:id="left_menu" prefWidth="150.0">
+            <JFXToggleButton fx:id="mode_button" maxWidth="1.7976931348623157E308" selected="true" text="Auto" />
+             <VBox>
+                 <TitledPane collapsible="false" text="Errors">
+                     <VBox fx:id="error_box" spacing="5.0" />
+                 </TitledPane>
+                 <TitledPane text="Warnings">
+                     <VBox fx:id="warning_box" spacing="5.0" />
+                 </TitledPane>
+             </VBox>
+            <opaqueInsets>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </opaqueInsets>
+        </VBox>
+    </left>
+    <bottom>
+        <AnchorPane style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
+            <Label fx:id="status_label" text="System connected" AnchorPane.leftAnchor="10.0" />
+        </AnchorPane>
+    </bottom>
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" text="Close" />
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" text="About" />
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
+            <JFXMasonryPane fx:id="elevator_view" HSpacing="10.0" VSpacing="10.0" />
+        </ScrollPane>
+    </center>
+</JFXToolbar>
