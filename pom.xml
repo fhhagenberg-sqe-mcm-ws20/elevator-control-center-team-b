@@ -13,6 +13,7 @@
         <sonar.organization>fhhagenberg-sqe-mcm-ws20</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.projectName>elevator-control-center-team-b</sonar.projectName>
+        <sonar.coverage.exclusions>**/at/fhhagenberg/App.class</sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
