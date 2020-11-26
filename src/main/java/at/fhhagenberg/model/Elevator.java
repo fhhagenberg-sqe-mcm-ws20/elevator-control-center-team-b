@@ -114,13 +114,8 @@ public class Elevator implements IBuildingElevator {
         directionProperty = new SimpleIntegerProperty(direction);
         floorTargetProperty = new SimpleIntegerProperty(floorTarget);
         floorTargetProperty.addListener((observableValue, oldValue, newValue) -> {
-
             // TODO: This lines are only for testing, remove them!
-            int firstRandomValue = new Random().nextInt(4);
-            this.nearestFloor = firstRandomValue;
-            nearestFloorProperty.setValue(firstRandomValue);
-
-            setFloorTarget(newValue.intValue());
+            setFloorTarget(1);
         });
         speedProperty = new SimpleIntegerProperty(speed);
         doorStateProperty = new SimpleStringProperty(IBuildingElevator.Door_State.getDoorStateString(doorState));

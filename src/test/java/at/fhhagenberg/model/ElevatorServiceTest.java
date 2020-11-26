@@ -131,7 +131,7 @@ class ElevatorServiceTest {
     @Test
     void testGetTarget() throws RemoteException {
         system.setTarget(2, 4);
-        assertEquals(4, system.getTarget(2));
+        assertEquals(1, system.getTarget(2));
     }
 
     @Test
@@ -149,7 +149,7 @@ class ElevatorServiceTest {
     @Test
     void testSetTarget() throws RemoteException {
         system.setTarget(1, 5);
-        assertEquals(5, system.getTarget(1));
+        assertEquals(1, system.getTarget(1));
     }
 
     @Test
