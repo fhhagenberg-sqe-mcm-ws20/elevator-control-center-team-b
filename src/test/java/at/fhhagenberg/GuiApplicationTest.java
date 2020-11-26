@@ -6,9 +6,9 @@ import at.fhhagenberg.sqe.IElevator;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXToggleButton;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -23,11 +23,9 @@ import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.service.query.EmptyNodeQueryException;
 
-import java.awt.event.KeyEvent;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.util.NodeQueryUtils.isVisible;
 
@@ -37,6 +35,7 @@ class GuiApplicationTest {
     private IElevator system;
     private IBuildingElevator[] elevators;
     private IFloor[] floors;
+    private MainController controller;
 
     /**
      * Will be called with {@code @Before} semantics, i. e. before each test method.
@@ -53,6 +52,7 @@ class GuiApplicationTest {
         stage.setScene(scene);
         stage.show();
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        controller = mainLoader.getController();
 
         // Mock data
         boolean[] temp = new boolean[5];
@@ -81,7 +81,14 @@ class GuiApplicationTest {
         Building mockBuilding = new Building(3, 10, 5, elevators, floors);
         system = new ElevatorSystem(mockBuilding, 100L);
 
-        ((MainController) mainLoader.getController()).initModel(system);
+        controller.initModel(system);
+    }
+
+    @Test
+    void testControllerInitException() {
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class, () -> {
+            controller.initModel(system);
+        });
     }
 
     @Test
@@ -93,7 +100,7 @@ class GuiApplicationTest {
      * @param robot - Will be injected by the test runner.
      */
     @Test
-    void testShowAllEleveators(FxRobot robot) {
+    void testShowAllElevators(FxRobot robot) {
         Assertions.assertThat(robot.lookup("#elevator_view").queryAs(JFXMasonryPane.class).getChildren().size() == elevators.length);
     }
 
@@ -126,6 +133,7 @@ class GuiApplicationTest {
 
         //When
         Platform.runLater(() -> robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(false));
+        Platform.runLater(() -> assertFalse(robot.lookup("#mode_button").queryAs(JFXToggleButton.class).isSelected()));
         Assertions.assertThat(!firstElevator.isDisabled());
         robot.sleep(200);
 
@@ -140,6 +148,9 @@ class GuiApplicationTest {
         robot.press(KeyCode.ENTER);
         robot.sleep(100);
         assertEquals(0, firstElevator.getValue().intValue());
+
+        Platform.runLater(() -> robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(true));
+        Platform.runLater(() -> assertTrue(robot.lookup("#mode_button").queryAs(JFXToggleButton.class).isSelected()));
     }
 
     /**
@@ -155,8 +166,76 @@ class GuiApplicationTest {
         robot.sleep(100);
 
         //Then
-        assertThrows(EmptyNodeQueryException.class, () -> {
-            Label WarningLabel = robot.lookup("#PAYLOAD7").queryAs(Label.class);
+        assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD7").queryAs(Label.class));
+    }
+
+    @Test
+    void testInitException() {
+        assertThrows(IllegalStateException.class, () -> controller.getElevatorControllers().get(0).initModel(null, 0, 0, null));
+    }
+
+    @Test
+    void testCreateInfo(FxRobot robot) {
+        Platform.runLater(() -> {
+            controller.getElevatorControllers().get(0).createInfo("WARNING", "test", "Test Warning");
+            controller.getElevatorControllers().get(0).createInfo("WARNING", "test", "Test test");
+            Assertions.assertThat(robot.lookup("#test").queryAs(Label.class)).hasText("Test Warning");
+
+            controller.getElevatorControllers().get(0).createInfo("TEST", "test_nonexistent", "Test test");
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#test_nonexistent").queryAs(Label.class));
+        });
+
+        Platform.runLater(() -> {
+            controller.getElevatorControllers().get(0).createInfo("ERROR", "test2", "Test test2");
+            controller.getElevatorControllers().get(0).createInfo("ERROR", "test2", "Test test");
+            Assertions.assertThat(robot.lookup("#test2").queryAs(Label.class)).hasText("Test test2");
+        });
+    }
+
+    @Test
+    void testDeleteInfo(FxRobot robot) {
+        Platform.runLater(() -> {
+            controller.getElevatorControllers().get(0).createInfo("WARNING", "test3", "Test");
+            controller.getElevatorControllers().get(0).createInfo("WARNING", "test32", "Test");
+            controller.getElevatorControllers().get(0).createInfo("ERROR", "test33", "Test");
+            controller.getElevatorControllers().get(0).deleteInfo("test3");
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#test3").queryAs(Label.class));
+
+            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD7");
+            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD8");
+            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD5");
+            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD1");
+            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD2");
+            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD4");
+            controller.getElevatorControllers().get(0).deleteInfo("test32");
+            controller.getElevatorControllers().get(0).deleteInfo("test33");
+
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD7").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD8").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD5").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD1").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD2").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD4").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#test32").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#test33").queryAs(Label.class));
+        });
+    }
+
+    @Test
+    void testAddInfoToLeftPane(FxRobot robot) {
+        Platform.runLater(() -> {
+            controller.getElevatorControllers().get(0).addInfoToLeftMenu("test4", "WARNING", "Hello warning", "left-bar-info", FontAwesomeIcon.EXCLAMATION);
+            controller.getElevatorControllers().get(0).addInfoToLeftMenu("test4", "WARNING", "Hello warning", "left-bar-info", FontAwesomeIcon.EXCLAMATION);
+            Assertions.assertThat(robot.lookup("#test4").queryAs(Label.class)).hasText("Hello warning");
+
+            controller.getElevatorControllers().get(0).addInfoToLeftMenu("test4", "WARNING", "Hello warning 2", "left-bar-test", FontAwesomeIcon.EXCLAMATION);
+            Assertions.assertThat(robot.lookup("#test4").queryAs(Label.class)).hasText("Hello warning 2");
+
+            controller.getElevatorControllers().get(0).addInfoToLeftMenu("test4", "ERROR", "Hello error", "left-bar-test", FontAwesomeIcon.EXCLAMATION);
+            Assertions.assertThat(robot.lookup("#test4").queryAs(Label.class)).hasText("Hello error");
+
+            controller.getElevatorControllers().get(0).addInfoToLeftMenu("test4", "WARNING", "Hello error 2", "left-bar-test", FontAwesomeIcon.EXCLAMATION);
+            Assertions.assertThat(robot.lookup("#test4").queryAs(Label.class)).hasText("Hello error 2");
         });
     }
 }

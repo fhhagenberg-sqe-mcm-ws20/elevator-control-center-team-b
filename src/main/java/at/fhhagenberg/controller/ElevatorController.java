@@ -8,7 +8,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -104,7 +103,6 @@ public class ElevatorController {
         // TODO: This line is only for testing, remove it!
         speed_field.setOnMouseClicked(mouseEvent -> createInfo(WARNING, "test" + ID, "Elevator " + ID + ": Hey"));
 
-
         // Set payload component
         String weightFormat = "%d kg";
         payload_field.textProperty().bind(this.buildingElevator.payloadProperty.asString(weightFormat));
@@ -164,22 +162,18 @@ public class ElevatorController {
      * @param infoId   id of the info
      * @param infoText text of theinfo
      */
-    private void createInfo(String infoType, String infoId, String infoText) {
+    public void createInfo(String infoType, String infoId, String infoText) {
         if (infoType.equals(WARNING)) {
             if (!warningList.contains(infoId)) {
                 addInfoToLeftMenu(infoId, WARNING, infoText, WARNING_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION_TRIANGLE);
                 updateTopIcon(WARNING);
-                if (!warningList.contains(infoId)) {
-                    warningList.add(infoId);
-                }
+                warningList.add(infoId);
             }
         } else if (infoType.equals(ERROR)) {
             if (!errorList.contains(infoId)) {
                 addInfoToLeftMenu(infoId, ERROR, infoText, ERROR_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION);
                 updateTopIcon(ERROR);
-                if (!errorList.contains(infoId)) {
-                    errorList.add(infoId);
-                }
+                errorList.add(infoId);
             }
         }
     }
@@ -199,9 +193,9 @@ public class ElevatorController {
         if (infoLabel == null) {
             Label newInfoLabel = new Label(text);
             newInfoLabel.setId(labelId);
-            newInfoLabel.getStyleClass().addAll(LEFT_BAR_LABEL_STYLE_CLASS,
-                    style);
+            newInfoLabel.getStyleClass().addAll(LEFT_BAR_LABEL_STYLE_CLASS, style);
             newInfoLabel.setGraphic(labelIcon);
+
             VBox infoBox;
             if (infoType.equals(WARNING)) {
                 infoBox = (VBox) leftMenu.lookup(WARNING_BOX_ID);
@@ -210,21 +204,11 @@ public class ElevatorController {
             }
             infoBox.getChildren().add(newInfoLabel);
         } else {
-            if (!infoLabel.getStyleClass().contains(style)) {
-                VBox infoBox;
-                if (infoType.equals(ERROR)) {
-                    infoBox = (VBox) leftMenu.lookup(ERROR_BOX_ID);
-                    infoBox.getChildren().add(infoLabel);
-                    infoLabel.getStyleClass().remove(WARNING_STYLE_CLASS);
-                } else {
-                    infoBox = (VBox) leftMenu.lookup(WARNING_BOX_ID);
-                    infoBox.getChildren().add(infoLabel);
-                    infoLabel.getStyleClass().remove(ERROR_STYLE_CLASS);
-                }
-                infoLabel.getStyleClass().add(style);
-                infoLabel.setText(text);
-                infoLabel.setGraphic(labelIcon);
-            }
+            infoLabel.getStyleClass().remove(WARNING_STYLE_CLASS);
+            infoLabel.getStyleClass().remove(ERROR_STYLE_CLASS);
+            infoLabel.getStyleClass().add(style);
+            infoLabel.setText(text);
+            infoLabel.setGraphic(labelIcon);
         }
     }
 
@@ -238,10 +222,8 @@ public class ElevatorController {
             info_pane.getChildren().clear();
             info_pane.getChildren().add(createIcon(ERROR_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION));
         } else {
-            if (errorList.isEmpty()) {
-                info_pane.getChildren().clear();
-                info_pane.getChildren().add(createIcon(WARNING_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION_TRIANGLE));
-            }
+            info_pane.getChildren().clear();
+            info_pane.getChildren().add(createIcon(WARNING_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION_TRIANGLE));
         }
     }
 
@@ -262,7 +244,7 @@ public class ElevatorController {
      *
      * @param infoId ID of the info to be removed from lists and GUI
      */
-    public void deleteWarningOrError(String infoId) {
+    public void deleteInfo(String infoId) {
         warningList.remove(infoId);
         errorList.remove(infoId);
         if (!errorList.isEmpty()) {
@@ -291,7 +273,7 @@ public class ElevatorController {
             createInfo(ERROR, payloadInfoId, String.format("Elevator %d: Error payload too high.", ID));
         } else {
             if (!warningList.isEmpty() || !errorList.isEmpty()) {
-                deleteWarningOrError(payloadInfoId);
+                deleteInfo(payloadInfoId);
             }
         }
     }

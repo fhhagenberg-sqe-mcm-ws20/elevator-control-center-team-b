@@ -24,17 +24,20 @@ public class MainController {
     private ElevatorSystem elevatorSystem;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
 
+    public ArrayList<ElevatorController> getElevatorControllers() {
+        return elevatorControllers;
+    }
+
     public void initialize() {
         mode_button.selectedProperty().addListener(((observable, oldValue, newValue) -> {
-            if(newValue){
+            if (newValue) {
                 mode_button.setText("Auto");
-            }else{
+            } else {
                 mode_button.setText("Manual");
             }
-            if (!elevatorControllers.isEmpty()) {
-                for (ElevatorController elevatorController : elevatorControllers) {
-                    elevatorController.setAutoMode(newValue);
-                }
+
+            for (ElevatorController elevatorController : elevatorControllers) {
+                elevatorController.setAutoMode(newValue);
             }
         }));
     }
@@ -48,8 +51,7 @@ public class MainController {
         if (this.elevatorSystem != null) {
             throw new IllegalStateException("Model can only be initialized once");
         }
-        // Needed for JMetro layout
-        //mode_button.getStyleClass().add("jfx-toggle-button");
+
         this.elevatorSystem = (ElevatorSystem) elevatorSystem;
         displayElevatorControllers();
     }
@@ -57,7 +59,7 @@ public class MainController {
     /**
      * Method to initialize the elevator views
      *
-     * @throws IOException
+     * @throws IOException if no resource is found
      */
     public void displayElevatorControllers() throws IOException {
         FXMLLoader elevatorLoader;
