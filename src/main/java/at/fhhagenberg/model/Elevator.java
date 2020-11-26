@@ -149,12 +149,12 @@ public class Elevator implements IBuildingElevator {
     }
 
     public void setFloorTarget(int floor) {
-        int direction = nearestFloor - floor;
+        int newDirection = nearestFloor - floor;
         this.floorTarget = floor;
         floorTargetProperty.set(this.floorTarget);
-        if (direction == 0) {
+        if (newDirection == 0) {
             setDirection(Direction_State.UNCOMMITTED.value());
-        } else if (direction < 0) {
+        } else if (newDirection < 0) {
             setDirection(Direction_State.UP.value());
         } else {
             setDirection(Direction_State.DOWN.value());
