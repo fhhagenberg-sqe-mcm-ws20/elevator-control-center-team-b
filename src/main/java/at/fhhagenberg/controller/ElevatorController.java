@@ -158,21 +158,17 @@ public class ElevatorController {
      *
      * @param infoType type of the info
      * @param infoId   id of the info
-     * @param infoText text of theinfo
+     * @param infoText text of the info
      */
     public void createInfo(String infoType, String infoId, String infoText) {
-        if (infoType.equals(WARNING)) {
-            if (!warningList.contains(infoId)) {
-                addInfoToLeftMenu(infoId, WARNING, infoText, WARNING_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION_TRIANGLE);
-                updateTopIcon(WARNING);
-                warningList.add(infoId);
-            }
-        } else if (infoType.equals(ERROR)) {
-            if (!errorList.contains(infoId)) {
-                addInfoToLeftMenu(infoId, ERROR, infoText, ERROR_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION);
-                updateTopIcon(ERROR);
-                errorList.add(infoId);
-            }
+        if (infoType.equals(WARNING) && !warningList.contains(infoId)) {
+            addInfoToLeftMenu(infoId, WARNING, infoText, WARNING_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION_TRIANGLE);
+            updateTopIcon(WARNING);
+            warningList.add(infoId);
+        } else if (infoType.equals(ERROR) && !errorList.contains(infoId)) {
+            addInfoToLeftMenu(infoId, ERROR, infoText, ERROR_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION);
+            updateTopIcon(ERROR);
+            errorList.add(infoId);
         }
     }
 

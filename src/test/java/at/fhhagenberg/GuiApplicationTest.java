@@ -101,7 +101,7 @@ class GuiApplicationTest {
      */
     @Test
     void testShowAllElevators(FxRobot robot) {
-        Assertions.assertThat(robot.lookup("#elevator_view").queryAs(JFXMasonryPane.class).getChildren().size() == elevators.length);
+        Assertions.assertThat(robot.lookup("#elevator_view").queryAs(JFXMasonryPane.class).getChildren().size() == elevators.length).isTrue();
     }
 
     /**
@@ -127,14 +127,14 @@ class GuiApplicationTest {
     void testManualModeWork(FxRobot robot) {
         // Given
         JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
-        Assertions.assertThat(firstElevator.isDisabled());
+        Assertions.assertThat(firstElevator.isDisabled()).isTrue();
         robot.sleep(100);
         assertEquals(2, firstElevator.getValue().intValue());
 
         //When
         Platform.runLater(() -> robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(false));
         Platform.runLater(() -> assertFalse(robot.lookup("#mode_button").queryAs(JFXToggleButton.class).isSelected()));
-        Assertions.assertThat(!firstElevator.isDisabled());
+        Assertions.assertThat(!firstElevator.isDisabled()).isTrue();
         robot.sleep(200);
 
         //Then
