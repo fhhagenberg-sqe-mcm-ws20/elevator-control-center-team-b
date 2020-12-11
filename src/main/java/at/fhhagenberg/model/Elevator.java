@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleStringProperty;
 import lombok.Getter;
 
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * Elevator example class
@@ -20,11 +19,13 @@ import java.util.Random;
 public class Elevator implements IBuildingElevator {
 
     @Getter
+    private int number;
+    @Getter
     private int direction;
     @Getter
     private int acceleration;
     @Getter
-    private boolean[] buttons;
+    private boolean[] floorButtons;
     @Getter
     private int doorState;
     @Getter
@@ -64,10 +65,11 @@ public class Elevator implements IBuildingElevator {
      * @param weight   Weight of the elevator
      * @param capacity Capacity of the elevator
      */
-    public Elevator(int floors, int weight, int capacity) {
+    public Elevator(int number, int floors, int weight, int capacity) {
+        this.number = number;
         this.direction = Direction_State.UNCOMMITTED.value();
         this.acceleration = 0;
-        this.buttons = new boolean[floors];
+        this.floorButtons = new boolean[floors];
         this.doorState = Door_State.CLOSED.value();
         this.nearestFloor = 0;
         this.positionFromGround = 0;
@@ -82,10 +84,10 @@ public class Elevator implements IBuildingElevator {
 
     /**
      * Constructor to set a specific elevator state
-     *
+     * @param number             Number of elevator
      * @param direction          Current direction of the elevator
      * @param acceleration       Acceleration of the elevator
-     * @param buttons            Active buttons
+     * @param floorButtons       Active buttons, buttons pressed on specific floor
      * @param doorState          Door state of the elevator
      * @param nearestFloor       Floor that is closest to the elevator in feet
      * @param positionFromGround Position of the elevator from ground in feet
@@ -95,10 +97,11 @@ public class Elevator implements IBuildingElevator {
      * @param floorServices      Floors that the elevator stops at
      * @param floorTarget        Current active target the elevator will go to
      */
-    public Elevator(int direction, int acceleration, boolean[] buttons, int doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, boolean[] floorServices, int floorTarget) {
+    public Elevator(int number, int direction, int acceleration, boolean[] floorButtons, int doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, boolean[] floorServices, int floorTarget) {
+        this.number = number;
         this.direction = direction;
         this.acceleration = acceleration;
-        this.buttons = buttons;
+        this.floorButtons = floorButtons;
         this.doorState = doorState;
         this.nearestFloor = nearestFloor;
         this.positionFromGround = positionFromGround;
@@ -140,7 +143,7 @@ public class Elevator implements IBuildingElevator {
     }
 
     public boolean getButtonStatus(int floor) {
-        return buttons[floor];
+        return floorButtons[floor];
     }
 
     public void setFloorTarget(int floor) {
@@ -154,6 +157,22 @@ public class Elevator implements IBuildingElevator {
         } else {
             setDirection(Direction_State.DOWN.value());
         }
+    }
+
+    @Override
+    public void update(IBuildingElevator elevator) {
+        this.number = elevator.getNumber();
+        this.direction = elevator.getDirection();
+        this.acceleration = elevator.getAcceleration();
+        this.floorButtons = elevator.getFloorButtons();
+        this.doorState = elevator.getDoorState();
+        this.nearestFloor = elevator.getNearestFloor();
+        this.positionFromGround = elevator.getPositionFromGround();
+        this.speed = elevator.getSpeed();
+        this.weight = elevator.getWeight();
+        this.capacity = elevator.getCapacity();
+        this.floorServices = elevator.getFloorServices();
+        this.floorTarget = elevator.getFloorTarget();
     }
 
     public void setWeight(int weight) {

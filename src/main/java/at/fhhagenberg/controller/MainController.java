@@ -1,8 +1,9 @@
 package at.fhhagenberg.controller;
 
+import at.fhhagenberg.model.Building;
 import at.fhhagenberg.model.ElevatorSystem;
 import at.fhhagenberg.model.IBuildingElevator;
-import at.fhhagenberg.sqe.IElevator;
+import sqelevator.IElevator;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +22,7 @@ public class MainController {
     public VBox warning_box;
     public VBox error_box;
 
-    private ElevatorSystem elevatorSystem;
+    private Building building;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
 
     public ArrayList<ElevatorController> getElevatorControllers() {
@@ -45,14 +46,14 @@ public class MainController {
     /**
      * Method to initialize the model
      *
-     * @param elevatorSystem the ElevatorSystem
+     * @param building the data
      */
-    public void initModel(IElevator elevatorSystem) throws IOException {
-        if (this.elevatorSystem != null) {
+    public void initModel(Building building) throws IOException {
+        if (this.building != null) {
             throw new IllegalStateException("Model can only be initialized once");
         }
 
-        this.elevatorSystem = (ElevatorSystem) elevatorSystem;
+        this.building = building;
         displayElevatorControllers();
     }
 
@@ -63,13 +64,13 @@ public class MainController {
      */
     public void displayElevatorControllers() throws IOException {
         FXMLLoader elevatorLoader;
-        for (int i = 0; i < this.elevatorSystem.getBuilding().getElevators().length; i++) {
+        for (int i = 0; i < this.building.getElevators().length; i++) {
             elevatorLoader = new FXMLLoader(getClass().getResource("/Elevator.fxml"));
-            IBuildingElevator elevator = this.elevatorSystem.getBuilding().getElevators()[i];
+            IBuildingElevator elevator = this.building.getElevators()[i];
             AnchorPane elevatorAnchorPane = elevatorLoader.load();
             elevatorAnchorPane.setId("elevator" + i);
             ElevatorController elevatorController = elevatorLoader.getController();
-            elevatorController.initModel(elevator, i, this.elevatorSystem.getBuilding().getFloorCount(), left_menu);
+            elevatorController.initModel(elevator, i, this.building.getFloorCount(), left_menu);
             elevatorControllers.add(elevatorController);
             elevator_view.getChildren().add(elevatorAnchorPane);
         }

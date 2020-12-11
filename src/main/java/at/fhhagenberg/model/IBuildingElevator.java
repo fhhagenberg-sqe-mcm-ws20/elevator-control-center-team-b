@@ -2,6 +2,7 @@ package at.fhhagenberg.model;
 
 public interface IBuildingElevator {
 
+
     /**
      * Enum for state of elevator doors
      */
@@ -230,5 +231,14 @@ public interface IBuildingElevator {
      * @param floor floor
      */
     void setFloorTarget(int floor);
+
+    int getNumber();
+
+    boolean[] getFloorButtons();
+
+    boolean[] getFloorServices();
+
+    void update(IBuildingElevator elevator);
+
 
 }

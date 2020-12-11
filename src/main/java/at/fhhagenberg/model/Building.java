@@ -2,6 +2,8 @@ package at.fhhagenberg.model;
 
 import lombok.Getter;
 
+import java.util.List;
+
 /**
  * A building contains floors, height and elevators
  */
@@ -28,5 +30,14 @@ public class Building {
     public IBuildingElevator getElevator(int elevatorNumber) {
         if (elevatorNumber > elevatorCount - 1 || elevatorNumber < 0) return null;
         return elevators[elevatorNumber];
+    }
+
+    public void update(List<IFloor> floors, List<IBuildingElevator> elevators){
+        for (IFloor floor : floors){
+            this.floors[floor.getNumber()].update(floor);
+        }
+        for (IBuildingElevator elevator : elevators){
+            this.elevators[elevator.getNumber()].update(elevator);
+        }
     }
 }

@@ -1,6 +1,6 @@
 package at.fhhagenberg.model;
 
-import at.fhhagenberg.sqe.IElevator;
+import sqelevator.IElevator;
 import lombok.Generated;
 import lombok.Getter;
 

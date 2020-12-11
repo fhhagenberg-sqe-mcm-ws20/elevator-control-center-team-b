@@ -1,41 +1,22 @@
 package at.fhhagenberg.model;
 
-import at.fhhagenberg.sqe.IElevator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testfx.framework.junit5.Init;
+import sqelevator.IElevator;
+import sqelevator.MockElevator;
 
 import java.rmi.RemoteException;
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorServiceTest {
 
     private IElevator system;
-    private IBuildingElevator[] elevators;
-    private IFloor[] floors;
 
     @BeforeEach
     void Init() {
-        boolean[] temp = new boolean[5];
-        boolean[] tempButton = new boolean[5];
-        Arrays.fill(temp, true);
-        tempButton[0] = true;
-
-        floors = new IFloor[5];
-        floors[0] = new Floor(false, true);
-        floors[1] = new Floor(false, false);
-        floors[2] = new Floor(false, false);
-        floors[3] = new Floor(false, false);
-        floors[4] = new Floor(false, false);
-
-        elevators = new Elevator[3];
-        elevators[0] = new Elevator(5, 200, 10);
-        elevators[1] = new Elevator(IBuildingElevator.Direction_State.DOWN.value(), 2, tempButton, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, temp, 0);
-        elevators[2] = new Elevator(IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, new boolean[5], IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 1500, 10, temp, 0);
-
-        Building mockBuilding = new Building(3, 10, 5, elevators, floors);
-        system = new ElevatorSystem(mockBuilding, 100L);
+        system = new MockElevator();
     }
 
     @Test
@@ -71,7 +52,7 @@ class ElevatorServiceTest {
     @Test
     void testGetElevatorNum() throws RemoteException {
         int elevatorNum = system.getElevatorNum();
-        assertEquals(3, elevatorNum);
+        assertEquals(9, elevatorNum);
     }
 
     @Test
@@ -155,12 +136,12 @@ class ElevatorServiceTest {
     @Test
     void testGetClockTick() throws RemoteException {
         long clockTick = system.getClockTick();
-        assertEquals(100L, clockTick);
+        assertEquals(2L, clockTick);
     }
 
     @Test
     void testElevatorCount() throws RemoteException {
-        assertEquals(3, system.getElevatorNum());
+        assertEquals(9, system.getElevatorNum());
     }
 
     @Test
