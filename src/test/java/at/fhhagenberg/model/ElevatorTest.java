@@ -1,25 +1,24 @@
 package at.fhhagenberg.model;
 
-import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorTest {
-    private ArrayList<IBuildingElevator> elevators = new ArrayList<>();
-    private ArrayList<IFloor> floors = new ArrayList<>();
+    private final ArrayList<IBuildingElevator> elevators = new ArrayList<>();
+    private final ArrayList<IFloor> floors = new ArrayList<>();
     private Building building;
 
     @BeforeEach
     void Init() {
-        boolean[] temp = new boolean[5];
-        boolean[] tempButton = new boolean[5];
-        Arrays.fill(temp, true);
-        tempButton[0] = true;
+        ArrayList<Integer> floorButtons = new ArrayList<>(IntStream.range(0, 2).boxed().collect(Collectors.toList()));
+        ArrayList<Integer> servicedFloors = new ArrayList<>(IntStream.range(0, 5).boxed().collect(Collectors.toList()));
+
 
         floors.add(0, new Floor(0, false, true));
         floors.add(1, new Floor(1, false, false));
@@ -28,8 +27,8 @@ class ElevatorTest {
         floors.add(4, new Floor(4, false, true));
 
         elevators.add(0, new Elevator(0, 5, 200, 10));
-        elevators.add(1, new Elevator(1, IBuildingElevator.Direction_State.DOWN.value(), 2, tempButton, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, temp, 0));
-        elevators.add(2, new Elevator(2, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, new boolean[5], IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 1500, 10, temp, 0));
+        elevators.add(1, new Elevator(1, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, servicedFloors, 0));
+        elevators.add(2, new Elevator(2, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, floorButtons, IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 1500, 10, servicedFloors, 0));
 
         building = new Building(3, 10, 5, elevators, floors);
     }

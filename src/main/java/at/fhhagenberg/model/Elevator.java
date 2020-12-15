@@ -6,7 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Elevator example class
@@ -27,8 +29,6 @@ public class Elevator implements IBuildingElevator {
     @Getter
     private int acceleration;
     @Getter
-    private boolean[] floorButtons;
-    @Getter
     private int doorState;
     @Getter
     private int nearestFloor;
@@ -41,15 +41,13 @@ public class Elevator implements IBuildingElevator {
     @Getter
     private int capacity;
     @Getter
-    private boolean[] floorServices;
-    @Getter
     private int floorTarget;
 
     // Properties for GUI
     @Getter
-    public SimpleIntegerProperty directionProperty;
+    public SimpleIntegerProperty directionProperty = new SimpleIntegerProperty();
     @Getter
-    public SimpleIntegerProperty floorTargetProperty;
+    public SimpleIntegerProperty floorTargetProperty = new SimpleIntegerProperty();
     @Getter
     public SimpleIntegerProperty speedProperty;
     @Getter
@@ -59,9 +57,9 @@ public class Elevator implements IBuildingElevator {
     @Getter
     public SimpleIntegerProperty nearestFloorProperty;
     @Getter
-    private final ObservableList<Integer> pressedFloorBtnList = FXCollections.observableArrayList();
+    private ObservableList<Integer> floorButtons;
     @Getter
-    private final ObservableList<Integer> servingFloorsList = FXCollections.observableArrayList();
+    private ObservableList<Integer> floorServices;
 
 
     /**
@@ -77,13 +75,13 @@ public class Elevator implements IBuildingElevator {
         this.capacity = capacity;
         this.direction = Direction_State.UNCOMMITTED.value();
         this.acceleration = 0;
-        this.floorButtons = new boolean[floorCount];
         this.doorState = Door_State.CLOSED.value();
         this.nearestFloor = 0;
         this.positionFromGround = 0;
+        this.positionFromGround = 0;
         this.speed = 0;
-        this.floorServices = new boolean[floorCount];
-        Arrays.fill(floorServices, true);
+        floorButtons = FXCollections.observableArrayList();
+        floorServices = FXCollections.observableArrayList(IntStream.range(0, floorCount).boxed().collect(Collectors.toList()));
         setGuiProperties();
     }
 
@@ -103,28 +101,27 @@ public class Elevator implements IBuildingElevator {
      * @param floorServices      Floors that the elevator stops at
      * @param floorTarget        Current active target the elevator will go to
      */
-    public Elevator(int number, int direction, int acceleration, boolean[] floorButtons, int doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, boolean[] floorServices, int floorTarget) {
+    public Elevator(int number, int direction, int acceleration, ArrayList<Integer> floorButtons, int doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, ArrayList<Integer> floorServices, int floorTarget) {
         this.number = number;
         this.direction = direction;
         this.acceleration = acceleration;
-        this.floorButtons = floorButtons;
         this.doorState = doorState;
         this.nearestFloor = nearestFloor;
         this.positionFromGround = positionFromGround;
         this.speed = speed;
         this.weight = weight;
         this.capacity = capacity;
-        this.floorServices = floorServices;
+        this.floorButtons = FXCollections.observableArrayList(floorButtons);
         if (nearestFloor != floorTarget) {
             this.floorTarget = floorTarget;
-            this.pressedFloorBtnList.add(floorTarget);
         }
+        this.floorServices = FXCollections.observableArrayList(floorServices);
         setGuiProperties();
     }
 
     public void setGuiProperties() {
-        directionProperty = new SimpleIntegerProperty(direction);
-        floorTargetProperty = new SimpleIntegerProperty(floorTarget);
+        directionProperty.set(direction);
+        setFloorTarget(floorTarget);
         floorTargetProperty.addListener((observableValue, oldValue, newValue) -> {
             if (floorTarget != newValue.intValue()) {
                 setFloorTarget(newValue.intValue());
@@ -134,11 +131,6 @@ public class Elevator implements IBuildingElevator {
         doorStateProperty = new SimpleStringProperty(IBuildingElevator.Door_State.getDoorStateString(doorState));
         payloadProperty = new SimpleIntegerProperty(weight);
         nearestFloorProperty = new SimpleIntegerProperty(nearestFloor);
-        for (int i = 0; i < floorServices.length; i++) {
-            if (floorServices[i]) {
-                servingFloorsList.add(i);
-            }
-        }
     }
 
     public void setDirection(int direction) {
@@ -150,26 +142,33 @@ public class Elevator implements IBuildingElevator {
     }
 
     public void setServicesFloor(int floor, boolean service) {
-        floorServices[floor] = service;
+        //floorServices[floor] = service;
+        if (service) {
+            floorServices.add(floor);
+        } else {
+            floorServices.remove(Integer.valueOf(floor));
+        }
     }
 
     public boolean servesFloor(int floor) {
-        return floorServices[floor];
+        return floorServices.contains(floor);
+        // floorServices[floor];
     }
 
     public boolean getButtonStatus(int floor) {
-        return floorButtons[floor];
+        return floorButtons.contains(floor);
+        //return floorButtons[floor];
     }
 
     public void setFloorTarget(int floor) {
         int newDirection = nearestFloor - floor;
         floorTarget = floor;
         floorTargetProperty.set(floorTarget);
-        if (!pressedFloorBtnList.contains(floorTarget) && floorTarget != nearestFloor) {
-            pressedFloorBtnList.add(0, floorTarget);
-        } else if (pressedFloorBtnList.contains(floorTarget) && floorTarget != nearestFloor) {
-            pressedFloorBtnList.remove(Integer.valueOf(floorTarget));
-            pressedFloorBtnList.add(0, floorTarget);
+        if (!floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
+            floorButtons.add(0, floorTarget);
+        } else if (floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
+            floorButtons.remove(Integer.valueOf(floorTarget));
+            floorButtons.add(0, floorTarget);
         }
         if (newDirection == 0) {
             setDirection(Direction_State.UNCOMMITTED.value());
@@ -182,18 +181,18 @@ public class Elevator implements IBuildingElevator {
 
     @Override
     public void update(IBuildingElevator elevator) {
-        this.number = elevator.getNumber();
-        this.direction = elevator.getDirection();
-        this.acceleration = elevator.getAcceleration();
-        this.floorButtons = elevator.getFloorButtons();
-        this.doorState = elevator.getDoorState();
-        this.nearestFloor = elevator.getNearestFloor();
-        this.positionFromGround = elevator.getPositionFromGround();
-        this.speed = elevator.getSpeed();
-        this.weight = elevator.getWeight();
-        this.capacity = elevator.getCapacity();
-        this.floorServices = elevator.getFloorServices();
-        this.floorTarget = elevator.getFloorTarget();
+        number = elevator.getNumber();
+        setDirection(elevator.getDirection());
+        acceleration = elevator.getAcceleration();
+        floorButtons = FXCollections.observableArrayList(elevator.getFloorButtons());
+        doorState = elevator.getDoorState();
+        nearestFloor = elevator.getNearestFloor();
+        positionFromGround = elevator.getPositionFromGround();
+        speed = elevator.getSpeed();
+        weight = elevator.getWeight();
+        capacity = elevator.getCapacity();
+        floorServices = FXCollections.observableArrayList(elevator.getFloorServices());
+        addPressedFloorButton(elevator.getFloorTarget());
     }
 
     public void setWeight(int weight) {
@@ -208,14 +207,13 @@ public class Elevator implements IBuildingElevator {
      */
     public void addPressedFloorButton(int floorNumber) {
         // If it does not exist and is not the current floor we add it
-        if (!pressedFloorBtnList.contains(floorNumber) && nearestFloor != floorNumber) {
-            pressedFloorBtnList.add(floorNumber);
+        if (!floorButtons.contains(floorNumber) && nearestFloor != floorNumber) {
+            floorButtons.add(floorNumber);
         } else {
-            // TODO remove else as it is only used for testing!
-            pressedFloorBtnList.remove(Integer.valueOf(floorNumber));
+            floorButtons.remove(Integer.valueOf(floorNumber));
         }
-        if (!pressedFloorBtnList.isEmpty()) {
-            setFloorTarget(pressedFloorBtnList.get(0));
+        if (!floorButtons.isEmpty()) {
+            setFloorTarget(floorButtons.get(0));
         } else {
             setFloorTarget(nearestFloor);
         }

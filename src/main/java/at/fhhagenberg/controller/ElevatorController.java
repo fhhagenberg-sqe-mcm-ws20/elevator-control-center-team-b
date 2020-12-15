@@ -82,7 +82,7 @@ public class ElevatorController {
         nearestFloor.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(350));
 
         // Bind Combobox to pressed buttons
-        targetField.setItems(this.buildingElevator.getServingFloorsList());
+        targetField.setItems(this.buildingElevator.getFloorServices());
         targetField.valueProperty().bindBidirectional((Property) this.buildingElevator.getFloorTargetProperty());
 
         // Set direction component
@@ -94,7 +94,6 @@ public class ElevatorController {
         doorStatusField.textProperty().bind(this.buildingElevator.doorStateProperty);
         // TODO: This line is only for testing, remove it!
         doorStatusField.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(250));
-
 
         // Set speed component
         String speedFormat = "%d m/s";
@@ -123,7 +122,7 @@ public class ElevatorController {
         }
 
         // Bind floor buttons to the pressed buttons list of the elevator
-        ((Elevator) buildingElevator).getPressedFloorBtnList().addListener((ListChangeListener<Integer>) change -> {
+        ((Elevator) buildingElevator).getFloorButtons().addListener((ListChangeListener<Integer>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
                     // Get only the first integer of the change as this one is the one we need
@@ -306,7 +305,7 @@ public class ElevatorController {
         floorButton.setId(FLOOR_BUTTON_ID_PREFIX + floorNumber);
         floorButton.setText(String.valueOf(floorNumber));
         floorButton.getStyleClass().add(ROUND_BUTTON_STYLE);
-        if (buildingElevator.getPressedFloorBtnList().contains(floorNumber)) {
+        if (buildingElevator.getFloorButtons().contains(floorNumber)) {
             floorButton.getStyleClass().add("clicked");
         }
         floorButton.setOnMouseClicked(mouseEvent -> {

@@ -1,5 +1,7 @@
 package at.fhhagenberg.model;
 
+import java.util.List;
+
 public interface IBuildingElevator {
 
 
@@ -62,6 +64,7 @@ public interface IBuildingElevator {
                     return Door_State.CLOSED;
             }
         }
+
         public static String getDoorStateString(int value) {
             switch (value) {
                 case 1:
@@ -234,9 +237,9 @@ public interface IBuildingElevator {
 
     int getNumber();
 
-    boolean[] getFloorButtons();
+    List<Integer> getFloorButtons();
 
-    boolean[] getFloorServices();
+    List<Integer> getFloorServices();
 
     void update(IBuildingElevator elevator);
 
