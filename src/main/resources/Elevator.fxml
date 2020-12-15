@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <AnchorPane fx:id="root" style="-fx-background-color: GHOSTWHITE;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhhagenberg.controller.ElevatorController">
    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <AnchorPane>
@@ -18,6 +14,11 @@
          <StackPane fx:id="infoPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="10.0" />
          <StackPane fx:id="directionPane" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
       </AnchorPane>
+      <FlowPane fx:id="floor_btn" disable="true" hgap="5.0" prefWrapLength="200.0" vgap="10.0">
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </FlowPane>
       <HBox>
          <opaqueInsets>
             <Insets />
@@ -54,7 +55,7 @@
             <HBox.margin>
                <Insets right="10.0" />
             </HBox.margin>
-            <JFXComboBox fx:id="targetField" disable="true" prefHeight="30.0" promptText="Target Floor">
+            <JFXComboBox fx:id="targetField" disable="true" prefHeight="30.0" promptText="No floor target">
                <VBox.margin>
                   <Insets />
                </VBox.margin>

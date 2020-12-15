@@ -1,14 +1,16 @@
 package sqelevator;
 
-import at.fhhagenberg.model.*;
+import at.fhhagenberg.model.Elevator;
+import at.fhhagenberg.model.Floor;
+import at.fhhagenberg.model.IBuildingElevator;
+import at.fhhagenberg.model.IFloor;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 
 public class MockElevator implements IElevator {
-    private IBuildingElevator[] elevators;
-    private IFloor[] floors;
+    private final IBuildingElevator[] elevators;
+    private final IFloor[] floors;
     private Long clockTick = 1L;
 
     // Mock data

@@ -2,14 +2,15 @@ package at.fhhagenberg.controller;
 
 import at.fhhagenberg.model.Elevator;
 import at.fhhagenberg.model.IBuildingElevator;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.Property;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.ListChangeListener;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -26,6 +27,7 @@ public class ElevatorController {
     public Label speedField;
     public Label doorStatusField;
     public Label payloadField;
+    public FlowPane floor_btn;
     private Elevator buildingElevator;
     private int id;
 
@@ -39,12 +41,15 @@ public class ElevatorController {
     private static final String ERROR = "ERROR";
 
     // Style classes
-    private static final String WARNING_STYLE_CLASS = "warning";
-    private static final String ERROR_STYLE_CLASS = "danger";
-    private static final String LEFT_BAR_LABEL_STYLE_CLASS = "left-bar-info";
+    private static final String WARNING_STYLE = "warning";
+    private static final String ERROR_STYLE = "danger";
+    private static final String LEFT_BAR_LABEL_STYLE = "left-bar-info";
+    private static final String ROUND_BUTTON_STYLE = "round-button";
+
 
     // Info ID's
     private String payloadInfoId;
+    private final String FLOOR_BUTTON_ID_PREFIX = "FLOOR_BUTTON";
 
     // List to save warnings and errors of elevator
     private final ArrayList<String> warningList = new ArrayList<>();
@@ -76,12 +81,8 @@ public class ElevatorController {
         // TODO: This line is only for testing, remove it!
         nearestFloor.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(350));
 
-        // Set target component
-        ObservableList<Integer> elevatorFloors = FXCollections.observableArrayList();
-        for (int i = 0; i < floorCount; i++) {
-            elevatorFloors.add(i);
-        }
-        targetField.getItems().addAll(elevatorFloors);
+        // Bind Combobox to pressed buttons
+        targetField.setItems(this.buildingElevator.getServingFloorsList());
         targetField.valueProperty().bindBidirectional((Property) this.buildingElevator.getFloorTargetProperty());
 
         // Set direction component
@@ -113,6 +114,30 @@ public class ElevatorController {
                 checkPayload(newValue.intValue());
             }
         });
+
+        // Create all floor buttons
+        for (int i = 0; i < floorCount; i++) {
+            if (buildingElevator.servesFloor(i)) {
+                this.floor_btn.getChildren().add(createButton(i));
+            }
+        }
+
+        // Bind floor buttons to the pressed buttons list of the elevator
+        ((Elevator) buildingElevator).getPressedFloorBtnList().addListener((ListChangeListener<Integer>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    // Get only the first integer of the change as this one is the one we need
+                    JFXButton currentFloorBtn = (JFXButton) floor_btn.lookup("#" + FLOOR_BUTTON_ID_PREFIX + change.getAddedSubList().get(0));
+                    currentFloorBtn.getStyleClass().add("clicked");
+                } else if (change.wasRemoved()) {
+                    JFXButton currentFloorBtn = (JFXButton) floor_btn.lookup("#" + FLOOR_BUTTON_ID_PREFIX + change.getRemoved().get(0));
+                    currentFloorBtn.getStyleClass().remove("clicked");
+                    if (targetField.getItems().isEmpty()) {
+                        targetField.getSelectionModel().clearSelection();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -129,6 +154,7 @@ public class ElevatorController {
      */
     public void setAutoMode(boolean isAutoMode) {
         targetField.setDisable(isAutoMode);
+        floor_btn.setDisable(isAutoMode);
     }
 
     /**
@@ -162,11 +188,11 @@ public class ElevatorController {
      */
     public void createInfo(String infoType, String infoId, String infoText) {
         if (infoType.equals(WARNING) && !warningList.contains(infoId)) {
-            addInfoToLeftMenu(infoId, WARNING, infoText, WARNING_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION_TRIANGLE);
+            addInfoToLeftMenu(infoId, WARNING, infoText, WARNING_STYLE, FontAwesomeIcon.EXCLAMATION_TRIANGLE);
             updateTopIcon(WARNING);
             warningList.add(infoId);
         } else if (infoType.equals(ERROR) && !errorList.contains(infoId)) {
-            addInfoToLeftMenu(infoId, ERROR, infoText, ERROR_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION);
+            addInfoToLeftMenu(infoId, ERROR, infoText, ERROR_STYLE, FontAwesomeIcon.EXCLAMATION);
             updateTopIcon(ERROR);
             errorList.add(infoId);
         }
@@ -187,7 +213,7 @@ public class ElevatorController {
         if (infoLabel == null) {
             Label newInfoLabel = new Label(text);
             newInfoLabel.setId(labelId);
-            newInfoLabel.getStyleClass().addAll(LEFT_BAR_LABEL_STYLE_CLASS, style);
+            newInfoLabel.getStyleClass().addAll(LEFT_BAR_LABEL_STYLE, style);
             newInfoLabel.setGraphic(labelIcon);
 
             VBox infoBox;
@@ -198,8 +224,8 @@ public class ElevatorController {
             }
             infoBox.getChildren().add(newInfoLabel);
         } else {
-            infoLabel.getStyleClass().remove(WARNING_STYLE_CLASS);
-            infoLabel.getStyleClass().remove(ERROR_STYLE_CLASS);
+            infoLabel.getStyleClass().remove(WARNING_STYLE);
+            infoLabel.getStyleClass().remove(ERROR_STYLE);
             infoLabel.getStyleClass().add(style);
             infoLabel.setText(text);
             infoLabel.setGraphic(labelIcon);
@@ -214,10 +240,10 @@ public class ElevatorController {
     public void updateTopIcon(String warningType) {
         if (warningType.equals(ERROR)) {
             infoPane.getChildren().clear();
-            infoPane.getChildren().add(createIcon(ERROR_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION));
+            infoPane.getChildren().add(createIcon(ERROR_STYLE, FontAwesomeIcon.EXCLAMATION));
         } else {
             infoPane.getChildren().clear();
-            infoPane.getChildren().add(createIcon(WARNING_STYLE_CLASS, FontAwesomeIcon.EXCLAMATION_TRIANGLE));
+            infoPane.getChildren().add(createIcon(WARNING_STYLE, FontAwesomeIcon.EXCLAMATION_TRIANGLE));
         }
     }
 
@@ -270,5 +296,22 @@ public class ElevatorController {
                 deleteInfo(payloadInfoId);
             }
         }
+    }
+
+    /**
+     * Method to create a floor button
+     */
+    public JFXButton createButton(int floorNumber) {
+        JFXButton floorButton = new JFXButton();
+        floorButton.setId(FLOOR_BUTTON_ID_PREFIX + floorNumber);
+        floorButton.setText(String.valueOf(floorNumber));
+        floorButton.getStyleClass().add(ROUND_BUTTON_STYLE);
+        if (buildingElevator.getPressedFloorBtnList().contains(floorNumber)) {
+            floorButton.getStyleClass().add("clicked");
+        }
+        floorButton.setOnMouseClicked(mouseEvent -> {
+            buildingElevator.addPressedFloorButton(floorNumber);
+        });
+        return floorButton;
     }
 }

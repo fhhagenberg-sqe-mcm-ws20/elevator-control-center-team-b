@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelConverter {
-        private IElevator elevatorConnection;
+        private final IElevator elevatorConnection;
         private Long lastClockTick = 1L;
 
         public ModelConverter(IElevator elevatorConnection) {
@@ -20,12 +20,11 @@ public class ModelConverter {
             int floorNumber =  elevatorConnection.getFloorNum();
             List<IFloor> floors = getFloors();
             List<IBuildingElevator> elevators = getElevators(floors);
-            Building building = new Building(elevatorNumber, elevatorConnection.getFloorHeight(), floorNumber, elevators.toArray(new IBuildingElevator[0]), floors.toArray(new IFloor[0]));
-            return building;
+            return new Building(elevatorNumber, elevatorConnection.getFloorHeight(), floorNumber, elevators.toArray(new IBuildingElevator[0]), floors.toArray(new IFloor[0]));
         }
 
         public void update(Building building) throws RemoteException {
-            Long currentClockTick = elevatorConnection.getClockTick();
+            long currentClockTick = elevatorConnection.getClockTick();
             if (currentClockTick > lastClockTick) {
                 List<IFloor> floors = getFloors();
                 List<IBuildingElevator> elevators = getElevators(floors);

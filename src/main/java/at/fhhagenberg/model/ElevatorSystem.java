@@ -1,8 +1,8 @@
 package at.fhhagenberg.model;
 
-import sqelevator.IElevator;
 import lombok.Generated;
 import lombok.Getter;
+import sqelevator.IElevator;
 
 import java.rmi.RemoteException;
 

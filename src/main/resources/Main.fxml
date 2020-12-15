@@ -4,16 +4,8 @@
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import com.jfoenix.controls.JFXToolbar?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <JFXToolbar xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhhagenberg.controller.MainController">
     <left>
         <VBox fx:id="left_menu" prefWidth="150.0">
@@ -51,4 +43,7 @@
             <JFXMasonryPane fx:id="elevator_view" HSpacing="10.0" VSpacing="10.0" />
         </ScrollPane>
     </center>
+   <right>
+      <ScrollPane hbarPolicy="NEVER" BorderPane.alignment="CENTER" />
+   </right>
 </JFXToolbar>

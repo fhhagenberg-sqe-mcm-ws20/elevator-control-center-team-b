@@ -2,7 +2,6 @@ package at.fhhagenberg.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit5.Init;
 import sqelevator.IElevator;
 import sqelevator.MockElevator;
 

@@ -27,3 +27,20 @@
 .glyph-icon {
     -glyph-size: 20px;
 }
+
+
+.round-button {
+    -fx-background-color: white, white;
+    -fx-background-radius: 16.4, 15;
+    -fx-background-insets: -1.4, 0;
+    -fx-border-radius: 10;
+    -fx-border-width: 2;
+    -fx-border-color: dimgrey;
+    -fx-padding: 3;
+    -fx-font-size: 0;
+}
+.round-button.clicked {
+    -fx-border-color: green;
+    -fx-background-color: lightgreen;
+
+}

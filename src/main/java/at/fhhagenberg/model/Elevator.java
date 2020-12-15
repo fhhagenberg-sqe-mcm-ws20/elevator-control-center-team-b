@@ -2,6 +2,8 @@ package at.fhhagenberg.model;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -56,34 +58,38 @@ public class Elevator implements IBuildingElevator {
     public SimpleIntegerProperty payloadProperty;
     @Getter
     public SimpleIntegerProperty nearestFloorProperty;
+    @Getter
+    private final ObservableList<Integer> pressedFloorBtnList = FXCollections.observableArrayList();
+    @Getter
+    private final ObservableList<Integer> servingFloorsList = FXCollections.observableArrayList();
 
 
     /**
      * Default constructor where no specific state is used
      *
-     * @param floors   Amount of floors the elevator serves
-     * @param weight   Weight of the elevator
-     * @param capacity Capacity of the elevator
+     * @param floorCount Amount of floors the elevator serves
+     * @param weight     Weight of the elevator
+     * @param capacity   Capacity of the elevator
      */
-    public Elevator(int number, int floors, int weight, int capacity) {
+    public Elevator(int number, int floorCount, int weight, int capacity) {
         this.number = number;
+        this.weight = weight;
+        this.capacity = capacity;
         this.direction = Direction_State.UNCOMMITTED.value();
         this.acceleration = 0;
-        this.floorButtons = new boolean[floors];
+        this.floorButtons = new boolean[floorCount];
         this.doorState = Door_State.CLOSED.value();
         this.nearestFloor = 0;
         this.positionFromGround = 0;
         this.speed = 0;
-        this.weight = weight;
-        this.capacity = capacity;
-        this.floorServices = new boolean[floors];
+        this.floorServices = new boolean[floorCount];
         Arrays.fill(floorServices, true);
-        this.floorTarget = 0;
         setGuiProperties();
     }
 
     /**
      * Constructor to set a specific elevator state
+     *
      * @param number             Number of elevator
      * @param direction          Current direction of the elevator
      * @param acceleration       Acceleration of the elevator
@@ -109,7 +115,10 @@ public class Elevator implements IBuildingElevator {
         this.weight = weight;
         this.capacity = capacity;
         this.floorServices = floorServices;
-        this.floorTarget = floorTarget;
+        if (nearestFloor != floorTarget) {
+            this.floorTarget = floorTarget;
+            this.pressedFloorBtnList.add(floorTarget);
+        }
         setGuiProperties();
     }
 
@@ -117,13 +126,19 @@ public class Elevator implements IBuildingElevator {
         directionProperty = new SimpleIntegerProperty(direction);
         floorTargetProperty = new SimpleIntegerProperty(floorTarget);
         floorTargetProperty.addListener((observableValue, oldValue, newValue) -> {
-            // TODO: This lines are only for testing, remove them!
-            setFloorTarget(1);
+            if (floorTarget != newValue.intValue()) {
+                setFloorTarget(newValue.intValue());
+            }
         });
         speedProperty = new SimpleIntegerProperty(speed);
         doorStateProperty = new SimpleStringProperty(IBuildingElevator.Door_State.getDoorStateString(doorState));
         payloadProperty = new SimpleIntegerProperty(weight);
         nearestFloorProperty = new SimpleIntegerProperty(nearestFloor);
+        for (int i = 0; i < floorServices.length; i++) {
+            if (floorServices[i]) {
+                servingFloorsList.add(i);
+            }
+        }
     }
 
     public void setDirection(int direction) {
@@ -148,8 +163,13 @@ public class Elevator implements IBuildingElevator {
 
     public void setFloorTarget(int floor) {
         int newDirection = nearestFloor - floor;
-        this.floorTarget = floor;
-        floorTargetProperty.set(this.floorTarget);
+        floorTarget = floor;
+        if (floorTargetProperty.getValue() != floorTarget) {
+            floorTargetProperty.set(floorTarget);
+        }
+        if (!pressedFloorBtnList.contains(floor) && floorTarget != nearestFloor) {
+            addPressedFloorButton(floor);
+        }
         if (newDirection == 0) {
             setDirection(Direction_State.UNCOMMITTED.value());
         } else if (newDirection < 0) {
@@ -178,5 +198,25 @@ public class Elevator implements IBuildingElevator {
     public void setWeight(int weight) {
         this.weight = weight;
         payloadProperty.setValue(weight);
+    }
+
+    /**
+     * Method to add a floor button if it was pressed
+     *
+     * @param floorNumber number of the floor
+     */
+    public void addPressedFloorButton(int floorNumber) {
+        // If it does not exist and is not the current floor we add it
+        if (!pressedFloorBtnList.contains(floorNumber) && nearestFloor != floorNumber) {
+            pressedFloorBtnList.add(floorNumber);
+        } else {
+            // TODO remove else as it is only used for testing!
+            pressedFloorBtnList.remove(Integer.valueOf(floorNumber));
+        }
+        if (!pressedFloorBtnList.isEmpty()) {
+            setFloorTarget(pressedFloorBtnList.get(0));
+        } else {
+            setFloorTarget(nearestFloor);
+        }
     }
 }

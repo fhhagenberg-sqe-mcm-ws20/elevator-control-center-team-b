@@ -1,9 +1,7 @@
 package at.fhhagenberg.controller;
 
 import at.fhhagenberg.model.Building;
-import at.fhhagenberg.model.ElevatorSystem;
 import at.fhhagenberg.model.IBuildingElevator;
-import sqelevator.IElevator;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.fxml.FXMLLoader;
@@ -36,7 +34,6 @@ public class MainController {
             } else {
                 mode_button.setText("Manual");
             }
-
             for (ElevatorController elevatorController : elevatorControllers) {
                 elevatorController.setAutoMode(newValue);
             }

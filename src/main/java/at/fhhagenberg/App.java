@@ -2,25 +2,21 @@ package at.fhhagenberg;
 
 import at.fhhagenberg.controller.MainController;
 import at.fhhagenberg.converter.ModelConverter;
-import at.fhhagenberg.model.*;
-import sqelevator.IElevator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Generated;
+import sqelevator.IElevator;
 import sqelevator.MockElevator;
-
-import java.util.Arrays;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
 
-    private IElevator system = new MockElevator();
-
+    private final IElevator system = new MockElevator();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
