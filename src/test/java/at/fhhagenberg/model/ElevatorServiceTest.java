@@ -111,7 +111,7 @@ class ElevatorServiceTest {
     @Test
     void testGetTarget() throws RemoteException {
         system.setTarget(2, 4);
-        assertEquals(1, system.getTarget(2));
+        assertEquals(4, system.getTarget(2));
     }
 
     @Test
@@ -129,7 +129,7 @@ class ElevatorServiceTest {
     @Test
     void testSetTarget() throws RemoteException {
         system.setTarget(1, 5);
-        assertEquals(1, system.getTarget(1));
+        assertEquals(5, system.getTarget(1));
     }
 
     @Test
@@ -141,13 +141,5 @@ class ElevatorServiceTest {
     @Test
     void testElevatorCount() throws RemoteException {
         assertEquals(9, system.getElevatorNum());
-    }
-
-    @Test
-    void testGetElevator() {
-        if (system instanceof ElevatorSystem) {
-            var elevator = ((ElevatorSystem) system).getElevator(0);
-            assertNotNull(elevator);
-        }
     }
 }

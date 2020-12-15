@@ -2,6 +2,7 @@ package at.fhhagenberg.model;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,11 +16,11 @@ public class Building {
     @Getter
     private final int floorCount;
     @Getter
-    private final IBuildingElevator[] elevators;
+    private final ArrayList<IBuildingElevator> elevators;
     @Getter
-    private final IFloor[] floors;
+    private final ArrayList<IFloor> floors;
 
-    public Building(int elevatorCount, int floorHeight, int floorCount, IBuildingElevator[] elevators, IFloor[] floors) {
+    public Building(int elevatorCount, int floorHeight, int floorCount, ArrayList<IBuildingElevator> elevators, ArrayList<IFloor> floors) {
         this.elevatorCount = elevatorCount;
         this.floorHeight = floorHeight;
         this.floorCount = floorCount;
@@ -27,17 +28,18 @@ public class Building {
         this.floors = floors;
     }
 
+
     public IBuildingElevator getElevator(int elevatorNumber) {
         if (elevatorNumber > elevatorCount - 1 || elevatorNumber < 0) return null;
-        return elevators[elevatorNumber];
+        return elevators.get(elevatorNumber);
     }
 
-    public void update(List<IFloor> floors, List<IBuildingElevator> elevators){
-        for (IFloor floor : floors){
-            this.floors[floor.getNumber()].update(floor);
+    public void update(List<IFloor> floors, List<IBuildingElevator> elevators) {
+        for (IFloor floor : floors) {
+            this.floors.get(floor.getNumber()).update(floor);
         }
-        for (IBuildingElevator elevator : elevators){
-            this.elevators[elevator.getNumber()].update(elevator);
+        for (IBuildingElevator elevator : elevators) {
+            this.elevators.get(elevator.getNumber()).update(elevator);
         }
     }
 }

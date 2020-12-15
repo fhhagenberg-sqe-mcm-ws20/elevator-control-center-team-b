@@ -74,7 +74,7 @@ class GuiApplicationTest {
      */
     @Test
     void testShowAllElevators(FxRobot robot) {
-        Assertions.assertThat(robot.lookup("#elevator_view").queryAs(JFXMasonryPane.class).getChildren().size() == testBuilding.getElevators().length).isTrue();
+        Assertions.assertThat(robot.lookup("#elevator_view").queryAs(JFXMasonryPane.class).getChildren().size() == testBuilding.getElevators().size()).isTrue();
     }
 
     /**

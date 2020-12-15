@@ -69,9 +69,9 @@ public class MainController {
      */
     public void displayElevatorControllers() throws IOException {
         FXMLLoader elevatorLoader;
-        for (int i = 0; i < this.building.getElevators().length; i++) {
+        for (int i = 0; i < this.building.getElevators().size(); i++) {
             elevatorLoader = new FXMLLoader(getClass().getResource("/Elevator.fxml"));
-            IBuildingElevator elevator = this.building.getElevators()[i];
+            IBuildingElevator elevator = this.building.getElevators().get(i);
             AnchorPane elevatorAnchorPane = elevatorLoader.load();
             elevatorAnchorPane.setId("elevator" + i);
             ElevatorController elevatorController = elevatorLoader.getController();
@@ -80,7 +80,7 @@ public class MainController {
             elevator_view.getChildren().add(elevatorAnchorPane);
         }
         for (int i = 0; i < building.getFloorCount(); i++) {
-            floor_list_right.getChildren().add(createFloorDisplay(building.getFloors()[i].getNumber()));
+            floor_list_right.getChildren().add(createFloorDisplay(building.getFloors().get(i).getNumber()));
         }
     }
 
@@ -103,10 +103,10 @@ public class MainController {
         arrowDownIcon.getStyleClass().add("right-side-icon");
         gridPane.add(arrowDownIcon, 1, 1, 1, 1);
 
-        if (building.getFloors()[floorNumber].isUpButton()) {
+        if (building.getFloors().get(floorNumber).isUpButton()) {
             arrowUpIcon.getStyleClass().add("clicked");
         }
-        if (building.getFloors()[floorNumber].isDownButton()) {
+        if (building.getFloors().get(floorNumber).isDownButton()) {
             arrowDownIcon.getStyleClass().add("clicked");
         }
         gridPane.getStyleClass().add(ROUND_BUTTON_STYLE);

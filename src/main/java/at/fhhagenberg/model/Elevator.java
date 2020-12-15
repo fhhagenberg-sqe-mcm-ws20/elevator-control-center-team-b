@@ -164,11 +164,12 @@ public class Elevator implements IBuildingElevator {
     public void setFloorTarget(int floor) {
         int newDirection = nearestFloor - floor;
         floorTarget = floor;
-        if (floorTargetProperty.getValue() != floorTarget) {
-            floorTargetProperty.set(floorTarget);
-        }
-        if (!pressedFloorBtnList.contains(floor) && floorTarget != nearestFloor) {
-            addPressedFloorButton(floor);
+        floorTargetProperty.set(floorTarget);
+        if (!pressedFloorBtnList.contains(floorTarget) && floorTarget != nearestFloor) {
+            pressedFloorBtnList.add(0, floorTarget);
+        } else if (pressedFloorBtnList.contains(floorTarget) && floorTarget != nearestFloor) {
+            pressedFloorBtnList.remove(Integer.valueOf(floorTarget));
+            pressedFloorBtnList.add(0, floorTarget);
         }
         if (newDirection == 0) {
             setDirection(Direction_State.UNCOMMITTED.value());

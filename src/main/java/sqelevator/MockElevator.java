@@ -17,7 +17,7 @@ public class MockElevator implements IElevator {
     boolean[] temp = new boolean[5];
     boolean[] tempButton = new boolean[5];
 
-    public MockElevator(){
+    public MockElevator() {
         Arrays.fill(temp, true);
         tempButton[0] = true;
         floors = new IFloor[5];
@@ -40,13 +40,13 @@ public class MockElevator implements IElevator {
     }
 
     private void checkElevatorBounds(int elevator) throws RemoteException {
-        if(elevator >= elevators.length){
+        if (elevator >= elevators.length) {
             throw new RemoteException();
         }
     }
 
     private void checkFloorBounds(int floor) throws RemoteException {
-        if(floor >= floors.length){
+        if (floor >= floors.length) {
             throw new RemoteException();
         }
     }

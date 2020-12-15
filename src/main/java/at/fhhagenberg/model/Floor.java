@@ -7,6 +7,7 @@ import lombok.Getter;
  *  contains information about pressed buttons
  */
 public class Floor implements IFloor {
+
     @Getter
     private int number;
     @Getter
