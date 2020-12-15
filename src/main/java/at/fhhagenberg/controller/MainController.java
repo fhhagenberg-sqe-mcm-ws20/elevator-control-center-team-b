@@ -4,9 +4,13 @@ import at.fhhagenberg.model.Building;
 import at.fhhagenberg.model.IBuildingElevator;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXToggleButton;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -19,6 +23,7 @@ public class MainController {
     public VBox left_menu;
     public VBox warning_box;
     public VBox error_box;
+    public VBox floor_list_right;
 
     private Building building;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
@@ -26,6 +31,9 @@ public class MainController {
     public ArrayList<ElevatorController> getElevatorControllers() {
         return elevatorControllers;
     }
+
+    private static final String ROUND_BUTTON_STYLE = "round-button";
+
 
     public void initialize() {
         mode_button.selectedProperty().addListener(((observable, oldValue, newValue) -> {
@@ -71,5 +79,37 @@ public class MainController {
             elevatorControllers.add(elevatorController);
             elevator_view.getChildren().add(elevatorAnchorPane);
         }
+        for (int i = 0; i < building.getFloorCount(); i++) {
+            floor_list_right.getChildren().add(createFloorDisplay(building.getFloors()[i].getNumber()));
+        }
+    }
+
+    /**
+     * Method to create a floor label
+     */
+    public Node createFloorDisplay(int floorNumber) {
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(5);
+
+        Label floorLabel = new Label(floorNumber + " Floor");
+        gridPane.add(floorLabel, 0, 0, 1, 2);
+
+        FontAwesomeIconView arrowUpIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_UP);
+        arrowUpIcon.getStyleClass().add("right-side-icon");
+        gridPane.add(arrowUpIcon, 1, 0, 1, 1);
+
+        FontAwesomeIconView arrowDownIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_DOWN);
+        arrowDownIcon.getStyleClass().add("right-side-icon");
+        gridPane.add(arrowDownIcon, 1, 1, 1, 1);
+
+        if (building.getFloors()[floorNumber].isUpButton()) {
+            arrowUpIcon.getStyleClass().add("clicked");
+        }
+        if (building.getFloors()[floorNumber].isDownButton()) {
+            arrowDownIcon.getStyleClass().add("clicked");
+        }
+        gridPane.getStyleClass().add(ROUND_BUTTON_STYLE);
+        return gridPane;
     }
 }

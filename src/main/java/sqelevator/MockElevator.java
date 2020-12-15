@@ -23,9 +23,9 @@ public class MockElevator implements IElevator {
         floors = new IFloor[5];
         floors[0] = new Floor(0, false, true);
         floors[1] = new Floor(1, false, false);
-        floors[2] = new Floor(2, false, false);
+        floors[2] = new Floor(2, true, false);
         floors[3] = new Floor(3, false, false);
-        floors[4] = new Floor(4, false, false);
+        floors[4] = new Floor(4, true, true);
 
         elevators = new Elevator[9];
         elevators[0] = new Elevator(0, 5, 200, 300);

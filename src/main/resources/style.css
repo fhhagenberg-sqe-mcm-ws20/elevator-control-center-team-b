@@ -39,8 +39,17 @@
     -fx-padding: 3;
     -fx-font-size: 0;
 }
+
 .round-button.clicked {
     -fx-border-color: green;
     -fx-background-color: lightgreen;
+}
 
+.right-side-icon {
+    -glyph-size: 15px;
+    -fx-padding: 5;
+}
+
+.right-side-icon.clicked {
+    -fx-fill: #228B22;
 }
