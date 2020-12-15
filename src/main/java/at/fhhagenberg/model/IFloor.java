@@ -1,13 +1,22 @@
 package at.fhhagenberg.model;
 
+import javafx.beans.property.SimpleBooleanProperty;
+
 public interface IFloor {
 
-    boolean isDownButton();
-    boolean isUpButton();
     int getNumber();
 
-    void setDownButton(boolean active);
-    void setUpButton(boolean active);
+    SimpleBooleanProperty getDownButtonProperty();
+
+    SimpleBooleanProperty getUpButtonProperty();
+
+    boolean isDownButtonActive();
+
+    boolean isUpButtonActive();
+
+    void setDownButtonActive(boolean active);
+
+    void setUpButtonActive(boolean active);
 
     void update(IFloor floor);
 }

@@ -30,7 +30,7 @@ public class MockElevator implements IElevator {
         elevators.add(new Elevator(1, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, servicedFloors, 2));
         elevators.add(new Elevator(2, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, floorButtons, IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 1500, 10, servicedFloors, 0));
         elevators.add(new Elevator(3, 5, 250, 300));
-        elevators.add(new Elevator(3, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, servicedFloors, 4));
+        elevators.add(new Elevator(4, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, servicedFloors, 4));
         elevators.add(new Elevator(5, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, floorButtons, IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 1500, 10, servicedFloors, 0));
         elevators.add(new Elevator(6, 5, 150, 300));
         elevators.add(new Elevator(7, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 360, 300, servicedFloors, 2));
@@ -112,13 +112,13 @@ public class MockElevator implements IElevator {
     @Override
     public boolean getFloorButtonDown(int floor) throws RemoteException {
         checkFloorBounds(floor);
-        return floors.get(floor).isDownButton();
+        return floors.get(floor).isDownButtonActive();
     }
 
     @Override
     public boolean getFloorButtonUp(int floor) throws RemoteException {
         checkFloorBounds(floor);
-        return floors.get(floor).isUpButton();
+        return floors.get(floor).isUpButtonActive();
     }
 
     @Override

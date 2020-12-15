@@ -47,12 +47,7 @@ public class ModelConverter {
         for (int i = 0; i < numberOfElevators; i++) {
             ArrayList<Integer> floorButtonsTest = new ArrayList<>();
             ArrayList<Integer> servicedFloorsTest = new ArrayList<>();
-            //boolean[] floorButtons = new boolean[floors.size()];
-            //boolean[] servicedFloors = new boolean[floors.size()];
-            for (int j = 0; j < floors.size(); j++) {
-                IFloor currentFloor = floors.get(j);
-                //servicedFloors[j] = elevatorConnection.getServicesFloors(i, currentFloor.getNumber());
-                //floorButtons[j] = elevatorConnection.getElevatorButton(i, currentFloor.getNumber());
+            for (IFloor currentFloor : floors) {
                 if (elevatorConnection.getElevatorButton(i, currentFloor.getNumber())) {
                     floorButtonsTest.add(currentFloor.getNumber());
                 }
@@ -60,10 +55,6 @@ public class ModelConverter {
                     servicedFloorsTest.add(currentFloor.getNumber());
                 }
             }
-            /*elevators.add(new Elevator(i, elevatorConnection.getCommittedDirection(i), elevatorConnection.getElevatorAccel(i), floorButtons, elevatorConnection.getElevatorDoorStatus(i),
-                    elevatorConnection.getElevatorFloor(i), elevatorConnection.getElevatorPosition(i), elevatorConnection.getElevatorSpeed(i), elevatorConnection.getElevatorWeight(i),
-                    elevatorConnection.getElevatorCapacity(i), servicedFloors, elevatorConnection.getTarget(i)));
-*/
             elevators.add(new Elevator(i, elevatorConnection.getCommittedDirection(i), elevatorConnection.getElevatorAccel(i), floorButtonsTest, elevatorConnection.getElevatorDoorStatus(i),
                     elevatorConnection.getElevatorFloor(i), elevatorConnection.getElevatorPosition(i), elevatorConnection.getElevatorSpeed(i), elevatorConnection.getElevatorWeight(i),
                     elevatorConnection.getElevatorCapacity(i), servicedFloorsTest, elevatorConnection.getTarget(i)));

@@ -97,18 +97,32 @@ public class MainController {
 
         FontAwesomeIconView arrowUpIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_UP);
         arrowUpIcon.getStyleClass().add("right-side-icon");
+        if (building.getFloors().get(floorNumber).getUpButtonProperty().getValue()) {
+            arrowUpIcon.getStyleClass().add("clicked");
+        }
         gridPane.add(arrowUpIcon, 1, 0, 1, 1);
+        building.getFloors().get(floorNumber).getUpButtonProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue) {
+                arrowUpIcon.getStyleClass().add("clicked");
+            } else {
+                arrowUpIcon.getStyleClass().remove("clicked");
+            }
+        });
 
         FontAwesomeIconView arrowDownIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_DOWN);
         arrowDownIcon.getStyleClass().add("right-side-icon");
-        gridPane.add(arrowDownIcon, 1, 1, 1, 1);
-
-        if (building.getFloors().get(floorNumber).isUpButton()) {
-            arrowUpIcon.getStyleClass().add("clicked");
-        }
-        if (building.getFloors().get(floorNumber).isDownButton()) {
+        if (building.getFloors().get(floorNumber).getDownButtonProperty().getValue()) {
             arrowDownIcon.getStyleClass().add("clicked");
         }
+        gridPane.add(arrowDownIcon, 1, 1, 1, 1);
+        building.getFloors().get(floorNumber).getDownButtonProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue) {
+                arrowDownIcon.getStyleClass().add("clicked");
+            } else {
+                arrowDownIcon.getStyleClass().remove("clicked");
+            }
+        });
+
         gridPane.getStyleClass().add(ROUND_BUTTON_STYLE);
         return gridPane;
     }

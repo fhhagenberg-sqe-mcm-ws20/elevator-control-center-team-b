@@ -308,9 +308,7 @@ public class ElevatorController {
         if (buildingElevator.getFloorButtons().contains(floorNumber)) {
             floorButton.getStyleClass().add("clicked");
         }
-        floorButton.setOnMouseClicked(mouseEvent -> {
-            buildingElevator.addPressedFloorButton(floorNumber);
-        });
+        floorButton.setOnMouseClicked(mouseEvent -> buildingElevator.addPressedFloorButton(floorNumber));
         return floorButton;
     }
 }

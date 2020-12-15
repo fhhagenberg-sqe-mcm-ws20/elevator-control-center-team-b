@@ -112,10 +112,13 @@ public class Elevator implements IBuildingElevator {
         this.weight = weight;
         this.capacity = capacity;
         this.floorButtons = FXCollections.observableArrayList(floorButtons);
+        this.floorServices = FXCollections.observableArrayList(floorServices);
+        if (floorButtons.contains(nearestFloor)) {
+            floorButtons.remove(Integer.valueOf(nearestFloor));
+        }
         if (nearestFloor != floorTarget) {
             this.floorTarget = floorTarget;
         }
-        this.floorServices = FXCollections.observableArrayList(floorServices);
         setGuiProperties();
     }
 
@@ -142,7 +145,6 @@ public class Elevator implements IBuildingElevator {
     }
 
     public void setServicesFloor(int floor, boolean service) {
-        //floorServices[floor] = service;
         if (service) {
             floorServices.add(floor);
         } else {
@@ -152,12 +154,10 @@ public class Elevator implements IBuildingElevator {
 
     public boolean servesFloor(int floor) {
         return floorServices.contains(floor);
-        // floorServices[floor];
     }
 
     public boolean getButtonStatus(int floor) {
         return floorButtons.contains(floor);
-        //return floorButtons[floor];
     }
 
     public void setFloorTarget(int floor) {
@@ -206,7 +206,7 @@ public class Elevator implements IBuildingElevator {
      * @param floorNumber number of the floor
      */
     public void addPressedFloorButton(int floorNumber) {
-        // If it does not exist and is not the current floor we add it
+        // If pressed floor is not pressed and is not the current floor we add it
         if (!floorButtons.contains(floorNumber) && nearestFloor != floorNumber) {
             floorButtons.add(floorNumber);
         } else {

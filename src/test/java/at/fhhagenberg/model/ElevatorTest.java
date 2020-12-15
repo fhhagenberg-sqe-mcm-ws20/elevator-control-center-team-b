@@ -19,7 +19,6 @@ class ElevatorTest {
         ArrayList<Integer> floorButtons = new ArrayList<>(IntStream.range(0, 2).boxed().collect(Collectors.toList()));
         ArrayList<Integer> servicedFloors = new ArrayList<>(IntStream.range(0, 5).boxed().collect(Collectors.toList()));
 
-
         floors.add(0, new Floor(0, false, true));
         floors.add(1, new Floor(1, false, false));
         floors.add(2, new Floor(2, false, false));
@@ -119,10 +118,10 @@ class ElevatorTest {
     @Test
     void testFloorButtons() {
         var floor = building.getFloors().get(0);
-        floor.setDownButton(true);
-        assertTrue(floor.isDownButton());
+        floor.setDownButtonActive(true);
+        assertTrue(floor.isDownButtonActive());
 
-        floor.setUpButton(true);
-        assertTrue(floor.isUpButton());
+        floor.setUpButtonActive(true);
+        assertTrue(floor.isUpButtonActive());
     }
 }
