@@ -34,7 +34,6 @@ class ModelConverterTest {
     @Test
     void testUpdate() throws RemoteException {
         // Given a new Building
-        ((MockElevator)elevatorConnection).setClockTick(2L);
         elevatorConnection.setTarget(1, 2);
         ((MockElevator) elevatorConnection).setFloorButtonUp(1, true);
 

@@ -16,10 +16,12 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static at.fhhagenberg.controller.GuiConstants.*;
+
 public class MainController {
     public Label status_label;
     public JFXToggleButton mode_button;
-    public JFXMasonryPane elevator_view;
+    public JFXMasonryPane elevatorView;
     public VBox leftMenu;
     public VBox warningBox;
     public VBox errorBox;
@@ -31,17 +33,6 @@ public class MainController {
     public ArrayList<ElevatorController> getElevatorControllers() {
         return elevatorControllers;
     }
-
-    private static final String ROUND_BUTTON_STYLE = "round-button";
-    private static final String CLICKED_STYLE = "clicked";
-    private static final String RIGHT_SIDE_ICON_STYLE = "right-side-icon";
-
-    private static final String FLOOR_BTN_PREFIX = "floor_btn";
-    private static final String DOWN_ARROW_ID = "down_icon";
-    private static final String UP_ICON_ID = "up_icon";
-
-
-
 
     public void initialize() {
         mode_button.selectedProperty().addListener(((observable, oldValue, newValue) -> {
@@ -81,11 +72,11 @@ public class MainController {
             elevatorLoader = new FXMLLoader(getClass().getResource("/Elevator.fxml"));
             IBuildingElevator elevator = this.building.getElevators().get(i);
             AnchorPane elevatorAnchorPane = elevatorLoader.load();
-            elevatorAnchorPane.setId("elevator" + i);
+            elevatorAnchorPane.setId(ELEVATOR_ID_PREFIX + i);
             ElevatorController elevatorController = elevatorLoader.getController();
             elevatorController.initModel(elevator, i, this.building.getFloorCount(), leftMenu);
             elevatorControllers.add(elevatorController);
-            elevator_view.getChildren().add(elevatorAnchorPane);
+            elevatorView.getChildren().add(elevatorAnchorPane);
         }
         for (int i = 0; i < building.getFloorCount(); i++) {
             floorListRight.getChildren().add(createFloorDisplay(building.getFloors().get(i).getNumber()));
@@ -97,7 +88,7 @@ public class MainController {
      */
     public Node createFloorDisplay(int floorNumber) {
         GridPane gridPane = new GridPane();
-        gridPane.setId(FLOOR_BTN_PREFIX + floorNumber);
+        gridPane.setId(FLOOR_BTN_ID_PREFIX + floorNumber);
         gridPane.setHgap(10);
         gridPane.setVgap(5);
 
@@ -105,9 +96,9 @@ public class MainController {
         gridPane.add(floorLabel, 0, 0, 1, 2);
 
         FontAwesomeIconView arrowUpIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_UP);
-        arrowUpIcon.setId(UP_ICON_ID);
+        arrowUpIcon.setId(UP_ARROW_ID);
         arrowUpIcon.getStyleClass().add(RIGHT_SIDE_ICON_STYLE);
-        if (building.getFloors().get(floorNumber).getUpButtonProperty().getValue()) {
+        if (building.getFloors().get(floorNumber).getUpButtonProperty().get()) {
             arrowUpIcon.getStyleClass().add(CLICKED_STYLE);
         }
         gridPane.add(arrowUpIcon, 1, 0, 1, 1);

@@ -6,50 +6,51 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<JFXToolbar xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhhagenberg.controller.MainController">
+<JFXToolbar xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="at.fhhagenberg.controller.MainController">
     <left>
         <VBox fx:id="leftMenu" maxWidth="200.0">
-            <JFXToggleButton fx:id="mode_button" maxWidth="1.7976931348623157E308" selected="true" text="Auto" />
+            <JFXToggleButton fx:id="mode_button" maxWidth="1.7976931348623157E308" selected="true" text="Auto"/>
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                 <VBox>
                     <TitledPane collapsible="false" text="Errors">
-                        <VBox fx:id="errorBox" spacing="5.0" />
+                        <VBox fx:id="errorBox" spacing="5.0"/>
                     </TitledPane>
                     <TitledPane text="Warnings">
-                        <VBox fx:id="warningBox" spacing="5.0" />
+                        <VBox fx:id="warningBox" spacing="5.0"/>
                     </TitledPane>
                 </VBox>
             </ScrollPane>
             <opaqueInsets>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </opaqueInsets>
         </VBox>
     </left>
     <bottom>
         <AnchorPane style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
-            <Label fx:id="status_label" text="System connected" AnchorPane.leftAnchor="10.0" />
+            <Label fx:id="status_label" text="System connected" AnchorPane.leftAnchor="10.0"/>
         </AnchorPane>
     </bottom>
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
-                <MenuItem mnemonicParsing="false" text="Close" />
+                <MenuItem mnemonicParsing="false" text="Close"/>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
-                <MenuItem mnemonicParsing="false" text="About" />
+                <MenuItem mnemonicParsing="false" text="About"/>
             </Menu>
         </MenuBar>
     </top>
     <center>
         <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
-            <JFXMasonryPane fx:id="elevator_view" HSpacing="10.0" VSpacing="10.0" />
+            <JFXMasonryPane fx:id="elevatorView" HSpacing="10.0" VSpacing="10.0"/>
         </ScrollPane>
     </center>
-   <right>
-       <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxWidth="200.0" BorderPane.alignment="CENTER">
-           <TitledPane animated="false" collapsible="false" text="Floors" textAlignment="CENTER">
-               <VBox fx:id="floorListRight" spacing="10.0" />
-           </TitledPane>
-       </ScrollPane>
-   </right>
+    <right>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxWidth="200.0" BorderPane.alignment="CENTER">
+            <TitledPane animated="false" collapsible="false" text="Floors" textAlignment="CENTER">
+                <VBox fx:id="floorListRight" spacing="10.0"/>
+            </TitledPane>
+        </ScrollPane>
+    </right>
 </JFXToolbar>

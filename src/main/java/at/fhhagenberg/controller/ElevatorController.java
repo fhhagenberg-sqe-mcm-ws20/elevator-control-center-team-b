@@ -16,6 +16,8 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 
+import static at.fhhagenberg.controller.GuiConstants.*;
+
 public class ElevatorController {
 
     public Label elevatorId;
@@ -33,24 +35,9 @@ public class ElevatorController {
 
     // Left Menu and ID's of info boxes
     private VBox leftMenu;
-    private static final String WARNING_BOX_ID = "#warningBox";
-    private static final String ERROR_BOX_ID = "#errorBox";
-
-    // Warning and Error type
-    private static final String WARNING = "WARNING";
-    private static final String ERROR = "ERROR";
-
-    // Style classes
-    private static final String WARNING_STYLE = "warning";
-    private static final String ERROR_STYLE = "danger";
-    private static final String LEFT_BAR_LABEL_STYLE = "left-bar-info";
-    private static final String ROUND_BUTTON_STYLE = "round-button";
-    private static final String CLICKED_STYLE = "clicked";
-
 
     // Info ID's
     private String payloadInfoId;
-    private static final String FLOOR_BUTTON_ID_PREFIX = "FLOOR_BUTTON";
 
     // List to save warnings and errors of elevator
     private final ArrayList<String> warningList = new ArrayList<>();
@@ -84,7 +71,7 @@ public class ElevatorController {
         String floorFormat = "Current floor: %d";
         nearestFloor.textProperty().bind(this.buildingElevator.nearestFloorProperty.asString(floorFormat));
         // TODO: This line is only for testing, remove it!
-        nearestFloor.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(350));
+        nearestFloor.setOnMouseClicked(mouseEvent -> buildingElevator.setWeight(350));
 
         // Bind Combobox to pressed buttons
         targetField.setItems(this.buildingElevator.getFloorServices());
@@ -98,7 +85,7 @@ public class ElevatorController {
         // Set door state component
         doorStatusField.textProperty().bind(this.buildingElevator.doorStateProperty);
         // TODO: This line is only for testing, remove it!
-        doorStatusField.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(250));
+        doorStatusField.setOnMouseClicked(mouseEvent -> buildingElevator.setWeight(250));
 
         // Set speed component
         String speedFormat = "%d m/s";
@@ -110,7 +97,7 @@ public class ElevatorController {
         String weightFormat = "%d kg";
         payloadField.textProperty().bind(this.buildingElevator.payloadProperty.asString(weightFormat));
         // TODO: This line is only for testing, remove it!
-        payloadField.setOnMouseClicked(mouseEvent -> ((Elevator) buildingElevator).setWeight(450));
+        payloadField.setOnMouseClicked(mouseEvent -> buildingElevator.setWeight(450));
 
         checkPayload(this.buildingElevator.getPayloadProperty().getValue());
         this.buildingElevator.payloadProperty.addListener((observableValue, oldValue, newValue) -> {
@@ -131,14 +118,14 @@ public class ElevatorController {
         }
 
         // Bind floor buttons to the pressed buttons list of the elevator
-        ((Elevator) buildingElevator).getFloorButtons().addListener((ListChangeListener<Integer>) change -> {
+        buildingElevator.getFloorButtons().addListener((ListChangeListener<Integer>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
                     // Get only the first integer of the change as this one is the one we need
-                    JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BUTTON_ID_PREFIX + change.getAddedSubList().get(0));
+                    JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BTN_ID_PREFIX + change.getAddedSubList().get(0));
                     currentFloorBtn.getStyleClass().add(CLICKED_STYLE);
                 } else if (change.wasRemoved()) {
-                    JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BUTTON_ID_PREFIX + change.getRemoved().get(0));
+                    JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BTN_ID_PREFIX + change.getRemoved().get(0));
                     currentFloorBtn.getStyleClass().remove(CLICKED_STYLE);
                     if (targetField.getItems().isEmpty()) {
                         targetField.getSelectionModel().clearSelection();
@@ -152,7 +139,7 @@ public class ElevatorController {
      * Method to setup ID's for labels so that we can operate on them later on.
      */
     private void setupIds() {
-        payloadInfoId = "PAYLOAD" + id;
+        payloadInfoId = PAYLOAD_ID_PREFIX + id;
     }
 
     /**
@@ -226,9 +213,10 @@ public class ElevatorController {
 
             VBox infoBox;
             if (infoType.equals(WARNING)) {
-                infoBox = (VBox) leftMenu.lookup(WARNING_BOX_ID);
+                infoBox = (VBox) leftMenu.lookup("#" + WARNING_BOX_ID);
             } else {
-                infoBox = (VBox) leftMenu.lookup(ERROR_BOX_ID);
+                infoBox = (VBox) leftMenu.lookup("#" + ERROR_BOX_ID);
+                infoBox = (VBox) leftMenu.lookup("#" + ERROR_BOX_ID);
             }
             infoBox.getChildren().add(newInfoLabel);
         } else {
@@ -311,7 +299,7 @@ public class ElevatorController {
      */
     public JFXButton createButton(int floorNumber) {
         JFXButton floorButton = new JFXButton();
-        floorButton.setId(FLOOR_BUTTON_ID_PREFIX + floorNumber);
+        floorButton.setId(FLOOR_BTN_ID_PREFIX + floorNumber);
         floorButton.setText(String.valueOf(floorNumber));
         floorButton.getStyleClass().add(ROUND_BUTTON_STYLE);
         if (buildingElevator.getFloorButtons().contains(floorNumber)) {

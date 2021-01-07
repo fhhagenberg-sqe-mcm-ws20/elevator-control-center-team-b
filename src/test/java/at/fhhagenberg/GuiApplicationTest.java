@@ -27,6 +27,7 @@ import org.testfx.framework.junit5.Start;
 import org.testfx.service.query.EmptyNodeQueryException;
 import sqelevator.MockElevator;
 
+import static at.fhhagenberg.controller.GuiConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.util.NodeQueryUtils.isVisible;
@@ -68,7 +69,7 @@ class GuiApplicationTest {
 
     @Test
     void testIsPaneVisible() {
-        verifyThat("#elevator_view", isVisible());
+        verifyThat("#elevatorView", isVisible());
     }
 
     /**
@@ -76,7 +77,7 @@ class GuiApplicationTest {
      */
     @Test
     void testShowAllElevators(FxRobot robot) {
-        Assertions.assertThat(robot.lookup("#elevator_view").queryAs(JFXMasonryPane.class).getChildren().size() == testBuilding.getElevators().size()).isTrue();
+        Assertions.assertThat(robot.lookup("#elevatorView").queryAs(JFXMasonryPane.class).getChildren().size() == testBuilding.getElevators().size()).isTrue();
     }
 
     /**
@@ -84,7 +85,7 @@ class GuiApplicationTest {
      */
     @Test
     void testShowErrorMessageInLeftMenu(FxRobot robot) {
-        Assertions.assertThat(robot.lookup("#PAYLOAD5").queryAs(Label.class)).hasText("Elevator 5: Error payload too high.");
+        Assertions.assertThat(robot.lookup("#" + PAYLOAD_ID_PREFIX + "5").queryAs(Label.class)).hasText("Elevator 5: Error payload too high.");
     }
 
     /**
@@ -92,7 +93,7 @@ class GuiApplicationTest {
      */
     @Test
     void testShowWarningMessageInLeftMenu(FxRobot robot) {
-        Assertions.assertThat(robot.lookup("#PAYLOAD7").queryAs(Label.class)).hasText("Elevator 7: Warning payload on a high level.");
+        Assertions.assertThat(robot.lookup("#" + PAYLOAD_ID_PREFIX + "7").queryAs(Label.class)).hasText("Elevator 7: Warning payload on a high level.");
     }
 
     /**
@@ -134,14 +135,14 @@ class GuiApplicationTest {
     @Test
     void testCancelWarning(FxRobot robot) {
         // Given
-        Assertions.assertThat(robot.lookup("#PAYLOAD7").queryAs(Label.class)).hasText("Elevator 7: Warning payload on a high level.");
+        Assertions.assertThat(robot.lookup("#" + PAYLOAD_ID_PREFIX + "7").queryAs(Label.class)).hasText("Elevator 7: Warning payload on a high level.");
 
         //When
         Platform.runLater(() -> ((Elevator) testBuilding.getElevator(7)).setWeight(290));
         robot.sleep(100);
 
         //Then
-        assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD7").queryAs(Label.class));
+        assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#" + PAYLOAD_ID_PREFIX + "7").queryAs(Label.class));
     }
 
     @Test
@@ -176,12 +177,12 @@ class GuiApplicationTest {
             controller.getElevatorControllers().get(0).deleteInfo("test3");
             assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#test3").queryAs(Label.class));
 
-            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD7");
-            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD8");
-            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD5");
-            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD1");
-            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD2");
-            controller.getElevatorControllers().get(0).deleteInfo("PAYLOAD4");
+            controller.getElevatorControllers().get(0).deleteInfo(PAYLOAD_ID_PREFIX + "7");
+            controller.getElevatorControllers().get(0).deleteInfo(PAYLOAD_ID_PREFIX + "8");
+            controller.getElevatorControllers().get(0).deleteInfo(PAYLOAD_ID_PREFIX + "5");
+            controller.getElevatorControllers().get(0).deleteInfo(PAYLOAD_ID_PREFIX + "1");
+            controller.getElevatorControllers().get(0).deleteInfo(PAYLOAD_ID_PREFIX + "2");
+            controller.getElevatorControllers().get(0).deleteInfo(PAYLOAD_ID_PREFIX + "4");
             controller.getElevatorControllers().get(0).deleteInfo("test32");
             controller.getElevatorControllers().get(0).deleteInfo("test33");
 
@@ -218,7 +219,7 @@ class GuiApplicationTest {
     void createFloorButton() {
         JFXButton test = controller.getElevatorControllers().get(0).createButton(1);
         assertNotNull(test);
-        assertEquals("FLOOR_BUTTON1", test.getId());
+        assertEquals(FLOOR_BTN_ID_PREFIX + "1", test.getId());
     }
 
     @Test
@@ -231,32 +232,37 @@ class GuiApplicationTest {
     @Test
     void testFloorListDownChange(FxRobot robot) {
         // Given
-        FontAwesomeIconView downArrow = robot.lookup("#floor_btn3").lookup("#down_icon").tryQueryAs(FontAwesomeIconView.class).get();
+        FontAwesomeIconView downArrow = robot.lookup("#" + FLOOR_BTN_ID_PREFIX + 3).lookup("#" + DOWN_ARROW_ID).tryQueryAs(FontAwesomeIconView.class).get();
         assertNotNull(downArrow);
         // When
         testBuilding.getFloors().get(3).setDownButtonActive(true);
         // Then
-        assertTrue(downArrow.getStyleClass().contains("clicked"));
+        assertTrue(downArrow.getStyleClass().contains(CLICKED_STYLE));
         robot.sleep(100);
         // When
         testBuilding.getFloors().get(3).setDownButtonActive(false);
         // Then
-        assertFalse(downArrow.getStyleClass().contains("clicked"));
+        assertFalse(downArrow.getStyleClass().contains(CLICKED_STYLE));
     }
 
     @Test
     void testFloorListUpChange(FxRobot robot) {
         // Given
-        FontAwesomeIconView downArrow = robot.lookup("#floor_btn3").lookup("#up_icon").tryQueryAs(FontAwesomeIconView.class).get();
+        FontAwesomeIconView downArrow = robot.lookup("#" + FLOOR_BTN_ID_PREFIX + 3).lookup("#" + UP_ARROW_ID).tryQueryAs(FontAwesomeIconView.class).get();
         assertNotNull(downArrow);
         // When
         testBuilding.getFloors().get(3).setUpButtonActive(true);
         // Then
-        assertTrue(downArrow.getStyleClass().contains("clicked"));
+        assertTrue(downArrow.getStyleClass().contains(CLICKED_STYLE));
         robot.sleep(100);
         // When
         testBuilding.getFloors().get(3).setUpButtonActive(false);
         // Then
-        assertFalse(downArrow.getStyleClass().contains("clicked"));
+        assertFalse(downArrow.getStyleClass().contains(CLICKED_STYLE));
+    }
+
+    @Test
+    void testButtonDisplayOfElevator(FxRobot robot) {
+
     }
 }
