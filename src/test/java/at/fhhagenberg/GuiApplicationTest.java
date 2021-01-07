@@ -25,7 +25,10 @@ import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.service.query.EmptyNodeQueryException;
+import sqelevator.IElevator;
 import sqelevator.MockElevator;
+
+import java.rmi.RemoteException;
 
 import static at.fhhagenberg.controller.GuiConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,8 +37,11 @@ import static org.testfx.util.NodeQueryUtils.isVisible;
 
 @ExtendWith(ApplicationExtension.class)
 class GuiApplicationTest {
+
     private MainController controller;
     private Building testBuilding;
+    private ModelConverter converter;
+    private IElevator elevatorConnection;
 
     /**
      * Will be called with {@code @Before} semantics, i. e. before each test method.
@@ -54,7 +60,8 @@ class GuiApplicationTest {
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         controller = mainLoader.getController();
 
-        ModelConverter converter = new ModelConverter(new MockElevator());
+        elevatorConnection = new MockElevator();
+        converter = new ModelConverter(elevatorConnection);
         testBuilding = converter.init();
 
         controller.initModel(testBuilding);
@@ -100,7 +107,7 @@ class GuiApplicationTest {
      * @param robot - Will be injected by the test runner.
      */
     @Test
-    void testManualModeWork(FxRobot robot) {
+    void testManualModeWork(FxRobot robot) throws RemoteException {
         // Given
         JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
         Assertions.assertThat(firstElevator.isDisabled()).isTrue();
@@ -113,20 +120,26 @@ class GuiApplicationTest {
         Assertions.assertThat(!firstElevator.isDisabled());
         robot.sleep(200);
 
-        //Then
         robot.clickOn(firstElevator);
         robot.sleep(100);
         // Click on the first entry
         robot.press(KeyCode.UP);
+
         robot.release(KeyCode.UP);
         robot.press(KeyCode.UP);
         robot.release(KeyCode.UP);
         robot.press(KeyCode.ENTER);
         robot.sleep(100);
+
+        //Then
         assertEquals(0, firstElevator.getValue().intValue());
 
         Platform.runLater(() -> robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(true));
         Platform.runLater(() -> assertTrue(robot.lookup("#mode_button").queryAs(JFXToggleButton.class).isSelected()));
+
+        // Check if everything in the Backend has changed
+        assertEquals(0, testBuilding.getElevator(1).getFloorTarget());
+        assertEquals(0, elevatorConnection.getTarget(1));
     }
 
     /**
@@ -262,7 +275,20 @@ class GuiApplicationTest {
     }
 
     @Test
-    void testButtonDisplayOfElevator(FxRobot robot) {
-
+    void testSetTargetWithApi(FxRobot robot) throws RemoteException {
+        // Given
+        elevatorConnection.setTarget(1, 4);
+        Platform.runLater(() -> {
+            try {
+                converter.update(testBuilding);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        });
+        // When
+        robot.sleep(100);
+        JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
+        //Then
+        assertEquals(4, firstElevator.getValue().intValue());
     }
 }
