@@ -1,6 +1,7 @@
 package at.fhhagenberg.converter;
 
 import at.fhhagenberg.model.*;
+import lombok.Getter;
 import sqelevator.IElevator;
 
 import java.rmi.RemoteException;
@@ -8,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModelConverter {
+
+    @Getter
     private final IElevator elevatorConnection;
     private Long lastClockTick = 1L;
 
@@ -57,9 +60,17 @@ public class ModelConverter {
             }
             elevators.add(new Elevator(i, elevatorConnection.getCommittedDirection(i), elevatorConnection.getElevatorAccel(i), floorButtonsTest, elevatorConnection.getElevatorDoorStatus(i),
                     elevatorConnection.getElevatorFloor(i), elevatorConnection.getElevatorPosition(i), elevatorConnection.getElevatorSpeed(i), elevatorConnection.getElevatorWeight(i),
-                    elevatorConnection.getElevatorCapacity(i), servicedFloorsTest, elevatorConnection.getTarget(i)));
+                    elevatorConnection.getElevatorCapacity(i), servicedFloorsTest, elevatorConnection.getTarget(i), this));
         }
         return elevators;
+    }
+
+    public void setTarget(int elevatorNumber, int target) throws RemoteException {
+        elevatorConnection.setTarget(elevatorNumber, target);
+    }
+
+    public void setCommittedDirection(int elevatorNumber, int direction) throws RemoteException {
+        elevatorConnection.setCommittedDirection(elevatorNumber, direction);
     }
 }
 

@@ -242,4 +242,6 @@ public interface IBuildingElevator {
     List<Integer> getFloorServices();
 
     void update(IBuildingElevator elevator);
+
+    void addPressedFloorButton(int floorNumber);
 }

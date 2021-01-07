@@ -1,11 +1,13 @@
 package at.fhhagenberg.model;
 
+import at.fhhagenberg.converter.ModelConverter;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -61,6 +63,7 @@ public class Elevator implements IBuildingElevator {
     @Getter
     private ObservableList<Integer> floorServices;
 
+    private ModelConverter modelConverter;
 
     /**
      * Default constructor where no specific state is used
@@ -101,7 +104,8 @@ public class Elevator implements IBuildingElevator {
      * @param floorServices      Floors that the elevator stops at
      * @param floorTarget        Current active target the elevator will go to
      */
-    public Elevator(int number, int direction, int acceleration, ArrayList<Integer> floorButtons, int doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, ArrayList<Integer> floorServices, int floorTarget) {
+    public Elevator(int number, int direction, int acceleration, ArrayList<Integer> floorButtons, int doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, ArrayList<Integer> floorServices, int floorTarget,
+                    ModelConverter modelConverter) {
         this.number = number;
         this.direction = direction;
         this.acceleration = acceleration;
@@ -119,11 +123,24 @@ public class Elevator implements IBuildingElevator {
         if (nearestFloor != floorTarget) {
             this.floorTarget = floorTarget;
         }
+        this.modelConverter = modelConverter;
         setGuiProperties();
     }
 
     public void setGuiProperties() {
         directionProperty.set(direction);
+        directionProperty.addListener((observableValue, oldValue, newValue) -> {
+            // ModelConverter might be null due to test classes
+            if (modelConverter != null) {
+                try {
+                    modelConverter.setCommittedDirection(number, newValue.intValue());
+                } catch (RemoteException e) {
+                    //TODO add error handling when system is not connected
+                    e.printStackTrace();
+                }
+            }
+
+        });
         setFloorTarget(floorTarget);
         floorTargetProperty.addListener((observableValue, oldValue, newValue) -> {
             if (floorTarget != newValue.intValue()) {
@@ -163,7 +180,7 @@ public class Elevator implements IBuildingElevator {
     public void setFloorTarget(int floor) {
         int newDirection = nearestFloor - floor;
         floorTarget = floor;
-        floorTargetProperty.set(floorTarget);
+        floorTargetProperty.setValue(floor);
         if (!floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
             floorButtons.add(0, floorTarget);
         } else if (floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
@@ -176,6 +193,15 @@ public class Elevator implements IBuildingElevator {
             setDirection(Direction_State.UP.value());
         } else {
             setDirection(Direction_State.DOWN.value());
+        }
+        // ModelConverter might be null due to test classes
+        if (modelConverter != null) {
+            try {
+                modelConverter.setTarget(number, floorTarget);
+            } catch (RemoteException e) {
+                //TODO add error handling when system is not connected
+                e.printStackTrace();
+            }
         }
     }
 

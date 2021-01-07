@@ -26,8 +26,8 @@ class ElevatorTest {
         floors.add(4, new Floor(4, false, true));
 
         elevators.add(0, new Elevator(0, 5, 200, 10));
-        elevators.add(1, new Elevator(1, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, servicedFloors, 0));
-        elevators.add(2, new Elevator(2, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, floorButtons, IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 1500, 10, servicedFloors, 0));
+        elevators.add(1, new Elevator(1, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, servicedFloors, 0, null));
+        elevators.add(2, new Elevator(2, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, floorButtons, IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 1500, 10, servicedFloors, 0, null));
 
         building = new Building(3, 10, 5, elevators, floors);
     }
@@ -124,4 +124,28 @@ class ElevatorTest {
         floor.setUpButtonActive(true);
         assertTrue(floor.isUpButtonActive());
     }
+
+    @Test
+    void testAddPressedFloorButton() {
+        building.getElevator(1).addPressedFloorButton(4);
+        var floorButtons = building.getElevator(1).getFloorButtons();
+        assertTrue(floorButtons.contains(4));
+    }
+
+    @Test
+    void testAddPressedNearestFloorButton() {
+        building.getElevator(1).addPressedFloorButton(3);
+        var floorButtons = building.getElevator(1).getFloorButtons();
+        assertFalse(floorButtons.contains(3));
+    }
+
+    @Test
+    void testRemovePressedFloorButton() {
+        building.getElevator(1).addPressedFloorButton(0);
+        building.getElevator(1).addPressedFloorButton(1);
+        var floorButtons = building.getElevator(1).getFloorButtons();
+        assertTrue(floorButtons.isEmpty());
+        assertEquals(building.getElevator(1).getFloorTarget(), building.getElevator(1).getNearestFloor());
+    }
+
 }

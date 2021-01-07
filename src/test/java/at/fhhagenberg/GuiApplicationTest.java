@@ -4,6 +4,7 @@ import at.fhhagenberg.controller.MainController;
 import at.fhhagenberg.converter.ModelConverter;
 import at.fhhagenberg.model.Building;
 import at.fhhagenberg.model.Elevator;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXToggleButton;
@@ -32,7 +33,7 @@ import static org.testfx.util.NodeQueryUtils.isVisible;
 @ExtendWith(ApplicationExtension.class)
 class GuiApplicationTest {
     private MainController controller;
-    Building testBuilding;
+    private Building testBuilding;
 
     /**
      * Will be called with {@code @Before} semantics, i. e. before each test method.
@@ -210,5 +211,20 @@ class GuiApplicationTest {
             controller.getElevatorControllers().get(0).addInfoToLeftMenu("test4", "WARNING", "Hello error 2", "left-bar-test", FontAwesomeIcon.EXCLAMATION);
             Assertions.assertThat(robot.lookup("#test4").queryAs(Label.class)).hasText("Hello error 2");
         });
+    }
+
+    @Test
+    void createFloorButton(){
+        JFXButton test = controller.getElevatorControllers().get(0).createButton(1);
+        assertNotNull(test);
+        assertEquals("FLOOR_BUTTON1", test.getId());
+    }
+
+    @Test
+    void testFloorDisplay() {
+        // Given
+        // When
+        // Then
+        assertEquals(5, controller.floor_list_right.getChildren().size());
     }
 }
