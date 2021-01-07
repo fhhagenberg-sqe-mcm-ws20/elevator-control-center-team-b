@@ -8,11 +8,9 @@ import sqelevator.MockElevator;
 
 import java.rmi.RemoteException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-
-public class ModelConverterTest {
+class ModelConverterTest {
 
     private ModelConverter converter;
     private Building testBuilding;
@@ -31,6 +29,18 @@ public class ModelConverterTest {
         assertEquals(5, testBuilding.getFloorCount());
         assertEquals(10, testBuilding.getFloorHeight());
         assertEquals(9, testBuilding.getElevatorCount());
+    }
+
+    @Test
+    void testUpdate() throws RemoteException {
+        // Given a new Building
+        ((MockElevator)elevatorConnection).setClockTick(2L);
+        elevatorConnection.setTarget(1, 2);
+        ((MockElevator) elevatorConnection).setFloorButtonUp(1, true);
+
+        converter.update(testBuilding);
+        assertEquals(2, testBuilding.getElevator(1).getFloorTarget());
+        assertTrue(testBuilding.getFloors().get(1).isDownButtonActive());
     }
 
     @Test

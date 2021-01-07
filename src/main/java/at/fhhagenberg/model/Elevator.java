@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
 import lombok.Getter;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -104,7 +104,8 @@ public class Elevator implements IBuildingElevator {
      * @param floorServices      Floors that the elevator stops at
      * @param floorTarget        Current active target the elevator will go to
      */
-    public Elevator(int number, int direction, int acceleration, ArrayList<Integer> floorButtons, int doorState, int nearestFloor, int positionFromGround, int speed, int weight, int capacity, ArrayList<Integer> floorServices, int floorTarget,
+    public Elevator(int number, int direction, int acceleration, List<Integer> floorButtons, int doorState, int nearestFloor,
+                    int positionFromGround, int speed, int weight, int capacity, List<Integer> floorServices, int floorTarget,
                     ModelConverter modelConverter) {
         this.number = number;
         this.direction = direction;
@@ -209,6 +210,7 @@ public class Elevator implements IBuildingElevator {
     public void update(IBuildingElevator elevator) {
         number = elevator.getNumber();
         setDirection(elevator.getDirection());
+        setFloorTarget(elevator.getFloorTarget());
         acceleration = elevator.getAcceleration();
         floorButtons = FXCollections.observableArrayList(elevator.getFloorButtons());
         doorState = elevator.getDoorState();
@@ -218,7 +220,6 @@ public class Elevator implements IBuildingElevator {
         weight = elevator.getWeight();
         capacity = elevator.getCapacity();
         floorServices = FXCollections.observableArrayList(elevator.getFloorServices());
-        addPressedFloorButton(elevator.getFloorTarget());
     }
 
     public void setWeight(int weight) {

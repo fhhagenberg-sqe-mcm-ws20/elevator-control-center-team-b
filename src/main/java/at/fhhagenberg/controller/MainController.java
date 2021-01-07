@@ -20,10 +20,10 @@ public class MainController {
     public Label status_label;
     public JFXToggleButton mode_button;
     public JFXMasonryPane elevator_view;
-    public VBox left_menu;
-    public VBox warning_box;
-    public VBox error_box;
-    public VBox floor_list_right;
+    public VBox leftMenu;
+    public VBox warningBox;
+    public VBox errorBox;
+    public VBox floorListRight;
 
     private Building building;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
@@ -33,6 +33,14 @@ public class MainController {
     }
 
     private static final String ROUND_BUTTON_STYLE = "round-button";
+    private static final String CLICKED_STYLE = "clicked";
+    private static final String RIGHT_SIDE_ICON_STYLE = "right-side-icon";
+
+    private static final String FLOOR_BTN_PREFIX = "floor_btn";
+    private static final String DOWN_ARROW_ID = "down_icon";
+    private static final String UP_ICON_ID = "up_icon";
+
+
 
 
     public void initialize() {
@@ -75,12 +83,12 @@ public class MainController {
             AnchorPane elevatorAnchorPane = elevatorLoader.load();
             elevatorAnchorPane.setId("elevator" + i);
             ElevatorController elevatorController = elevatorLoader.getController();
-            elevatorController.initModel(elevator, i, this.building.getFloorCount(), left_menu);
+            elevatorController.initModel(elevator, i, this.building.getFloorCount(), leftMenu);
             elevatorControllers.add(elevatorController);
             elevator_view.getChildren().add(elevatorAnchorPane);
         }
         for (int i = 0; i < building.getFloorCount(); i++) {
-            floor_list_right.getChildren().add(createFloorDisplay(building.getFloors().get(i).getNumber()));
+            floorListRight.getChildren().add(createFloorDisplay(building.getFloors().get(i).getNumber()));
         }
     }
 
@@ -89,6 +97,7 @@ public class MainController {
      */
     public Node createFloorDisplay(int floorNumber) {
         GridPane gridPane = new GridPane();
+        gridPane.setId(FLOOR_BTN_PREFIX + floorNumber);
         gridPane.setHgap(10);
         gridPane.setVgap(5);
 
@@ -96,30 +105,32 @@ public class MainController {
         gridPane.add(floorLabel, 0, 0, 1, 2);
 
         FontAwesomeIconView arrowUpIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_UP);
-        arrowUpIcon.getStyleClass().add("right-side-icon");
+        arrowUpIcon.setId(UP_ICON_ID);
+        arrowUpIcon.getStyleClass().add(RIGHT_SIDE_ICON_STYLE);
         if (building.getFloors().get(floorNumber).getUpButtonProperty().getValue()) {
-            arrowUpIcon.getStyleClass().add("clicked");
+            arrowUpIcon.getStyleClass().add(CLICKED_STYLE);
         }
         gridPane.add(arrowUpIcon, 1, 0, 1, 1);
         building.getFloors().get(floorNumber).getUpButtonProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) {
-                arrowUpIcon.getStyleClass().add("clicked");
+                arrowUpIcon.getStyleClass().add(CLICKED_STYLE);
             } else {
-                arrowUpIcon.getStyleClass().remove("clicked");
+                arrowUpIcon.getStyleClass().remove(CLICKED_STYLE);
             }
         });
 
         FontAwesomeIconView arrowDownIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_DOWN);
-        arrowDownIcon.getStyleClass().add("right-side-icon");
-        if (building.getFloors().get(floorNumber).getDownButtonProperty().getValue()) {
-            arrowDownIcon.getStyleClass().add("clicked");
+        arrowDownIcon.setId(DOWN_ARROW_ID);
+        arrowDownIcon.getStyleClass().add(RIGHT_SIDE_ICON_STYLE);
+        if (building.getFloors().get(floorNumber).getDownButtonProperty().get()) {
+            arrowDownIcon.getStyleClass().add(CLICKED_STYLE);
         }
         gridPane.add(arrowDownIcon, 1, 1, 1, 1);
         building.getFloors().get(floorNumber).getDownButtonProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) {
-                arrowDownIcon.getStyleClass().add("clicked");
+                arrowDownIcon.getStyleClass().add(CLICKED_STYLE);
             } else {
-                arrowDownIcon.getStyleClass().remove("clicked");
+                arrowDownIcon.getStyleClass().remove(CLICKED_STYLE);
             }
         });
 

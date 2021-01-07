@@ -14,7 +14,7 @@
          <StackPane fx:id="infoPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="10.0" />
          <StackPane fx:id="directionPane" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
       </AnchorPane>
-      <FlowPane fx:id="floor_btn" alignment="CENTER" disable="true" hgap="5.0" prefWrapLength="200.0" vgap="10.0">
+      <FlowPane fx:id="floorButtonPane" alignment="CENTER" disable="true" hgap="5.0" prefWrapLength="200.0" vgap="10.0">
          <VBox.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </VBox.margin>

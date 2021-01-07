@@ -27,14 +27,14 @@ public class ElevatorController {
     public Label speedField;
     public Label doorStatusField;
     public Label payloadField;
-    public FlowPane floor_btn;
+    public FlowPane floorButtonPane;
     private Elevator buildingElevator;
     private int id;
 
     // Left Menu and ID's of info boxes
     private VBox leftMenu;
-    private static final String WARNING_BOX_ID = "#warning_box";
-    private static final String ERROR_BOX_ID = "#error_box";
+    private static final String WARNING_BOX_ID = "#warningBox";
+    private static final String ERROR_BOX_ID = "#errorBox";
 
     // Warning and Error type
     private static final String WARNING = "WARNING";
@@ -45,11 +45,12 @@ public class ElevatorController {
     private static final String ERROR_STYLE = "danger";
     private static final String LEFT_BAR_LABEL_STYLE = "left-bar-info";
     private static final String ROUND_BUTTON_STYLE = "round-button";
+    private static final String CLICKED_STYLE = "clicked";
 
 
     // Info ID's
     private String payloadInfoId;
-    private final String FLOOR_BUTTON_ID_PREFIX = "FLOOR_BUTTON";
+    private static final String FLOOR_BUTTON_ID_PREFIX = "FLOOR_BUTTON";
 
     // List to save warnings and errors of elevator
     private final ArrayList<String> warningList = new ArrayList<>();
@@ -72,6 +73,10 @@ public class ElevatorController {
         this.id = id;
         setupIds();
 
+        setupGuiProperties(floorCount);
+    }
+
+    private void setupGuiProperties(int floorCount) {
         // Set id component
         elevatorId.setText("ID: " + id);
 
@@ -114,10 +119,14 @@ public class ElevatorController {
             }
         });
 
+        setupButtons(floorCount);
+    }
+
+    private void setupButtons(int floorCount) {
         // Create all floor buttons
         for (int i = 0; i < floorCount; i++) {
             if (buildingElevator.servesFloor(i)) {
-                this.floor_btn.getChildren().add(createButton(i));
+                this.floorButtonPane.getChildren().add(createButton(i));
             }
         }
 
@@ -126,11 +135,11 @@ public class ElevatorController {
             while (change.next()) {
                 if (change.wasAdded()) {
                     // Get only the first integer of the change as this one is the one we need
-                    JFXButton currentFloorBtn = (JFXButton) floor_btn.lookup("#" + FLOOR_BUTTON_ID_PREFIX + change.getAddedSubList().get(0));
-                    currentFloorBtn.getStyleClass().add("clicked");
+                    JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BUTTON_ID_PREFIX + change.getAddedSubList().get(0));
+                    currentFloorBtn.getStyleClass().add(CLICKED_STYLE);
                 } else if (change.wasRemoved()) {
-                    JFXButton currentFloorBtn = (JFXButton) floor_btn.lookup("#" + FLOOR_BUTTON_ID_PREFIX + change.getRemoved().get(0));
-                    currentFloorBtn.getStyleClass().remove("clicked");
+                    JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BUTTON_ID_PREFIX + change.getRemoved().get(0));
+                    currentFloorBtn.getStyleClass().remove(CLICKED_STYLE);
                     if (targetField.getItems().isEmpty()) {
                         targetField.getSelectionModel().clearSelection();
                     }
@@ -153,7 +162,7 @@ public class ElevatorController {
      */
     public void setAutoMode(boolean isAutoMode) {
         targetField.setDisable(isAutoMode);
-        floor_btn.setDisable(isAutoMode);
+        floorButtonPane.setDisable(isAutoMode);
     }
 
     /**
@@ -280,7 +289,7 @@ public class ElevatorController {
     /**
      * Method to check if payload is in capacity
      *
-     * @param payload of the current elevatpr
+     * @param payload of the current elevator
      */
     private void checkPayload(int payload) {
         int payloadCheck = this.buildingElevator.getCapacity() - payload;
@@ -306,7 +315,7 @@ public class ElevatorController {
         floorButton.setText(String.valueOf(floorNumber));
         floorButton.getStyleClass().add(ROUND_BUTTON_STYLE);
         if (buildingElevator.getFloorButtons().contains(floorNumber)) {
-            floorButton.getStyleClass().add("clicked");
+            floorButton.getStyleClass().add(CLICKED_STYLE);
         }
         floorButton.setOnMouseClicked(mouseEvent -> buildingElevator.addPressedFloorButton(floorNumber));
         return floorButton;

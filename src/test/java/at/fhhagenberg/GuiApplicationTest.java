@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXToggleButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -214,17 +215,48 @@ class GuiApplicationTest {
     }
 
     @Test
-    void createFloorButton(){
+    void createFloorButton() {
         JFXButton test = controller.getElevatorControllers().get(0).createButton(1);
         assertNotNull(test);
         assertEquals("FLOOR_BUTTON1", test.getId());
     }
 
     @Test
-    void testFloorDisplay() {
-        // Given
-        // When
+    void testFloorDisplayHasAllFloors() {
+        // Given 5 floors
         // Then
-        assertEquals(5, controller.floor_list_right.getChildren().size());
+        assertEquals(5, controller.floorListRight.getChildren().size());
+    }
+
+    @Test
+    void testFloorListDownChange(FxRobot robot) {
+        // Given
+        FontAwesomeIconView downArrow = robot.lookup("#floor_btn3").lookup("#down_icon").tryQueryAs(FontAwesomeIconView.class).get();
+        assertNotNull(downArrow);
+        // When
+        testBuilding.getFloors().get(3).setDownButtonActive(true);
+        // Then
+        assertTrue(downArrow.getStyleClass().contains("clicked"));
+        robot.sleep(100);
+        // When
+        testBuilding.getFloors().get(3).setDownButtonActive(false);
+        // Then
+        assertFalse(downArrow.getStyleClass().contains("clicked"));
+    }
+
+    @Test
+    void testFloorListUpChange(FxRobot robot) {
+        // Given
+        FontAwesomeIconView downArrow = robot.lookup("#floor_btn3").lookup("#up_icon").tryQueryAs(FontAwesomeIconView.class).get();
+        assertNotNull(downArrow);
+        // When
+        testBuilding.getFloors().get(3).setUpButtonActive(true);
+        // Then
+        assertTrue(downArrow.getStyleClass().contains("clicked"));
+        robot.sleep(100);
+        // When
+        testBuilding.getFloors().get(3).setUpButtonActive(false);
+        // Then
+        assertFalse(downArrow.getStyleClass().contains("clicked"));
     }
 }

@@ -4,6 +4,7 @@ import at.fhhagenberg.model.Elevator;
 import at.fhhagenberg.model.Floor;
 import at.fhhagenberg.model.IBuildingElevator;
 import at.fhhagenberg.model.IFloor;
+import lombok.Setter;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -13,8 +14,9 @@ import java.util.stream.IntStream;
 public class MockElevator implements IElevator {
     private final ArrayList<IBuildingElevator> elevators = new ArrayList<>();
     private final ArrayList<IFloor> floors = new ArrayList<>();
+    // Setter is only used for testing purposes
+    @Setter
     private Long clockTick = 1L;
-
 
     public MockElevator() {
         ArrayList<Integer> floorButtons = new ArrayList<>(IntStream.range(0, 2).boxed().collect(Collectors.toList()));
@@ -166,5 +168,9 @@ public class MockElevator implements IElevator {
     @Override
     public long getClockTick() throws RemoteException {
         return clockTick += 1;
+    }
+
+    public void setFloorButtonUp(int floor, boolean upActive){
+        floors.get(floor).setUpButtonActive(upActive);
     }
 }

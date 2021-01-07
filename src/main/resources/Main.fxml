@@ -8,15 +8,15 @@
 <?import javafx.scene.layout.*?>
 <JFXToolbar xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.fhhagenberg.controller.MainController">
     <left>
-        <VBox fx:id="left_menu" maxWidth="200.0">
+        <VBox fx:id="leftMenu" maxWidth="200.0">
             <JFXToggleButton fx:id="mode_button" maxWidth="1.7976931348623157E308" selected="true" text="Auto" />
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                 <VBox>
                     <TitledPane collapsible="false" text="Errors">
-                        <VBox fx:id="error_box" spacing="5.0" />
+                        <VBox fx:id="errorBox" spacing="5.0" />
                     </TitledPane>
                     <TitledPane text="Warnings">
-                        <VBox fx:id="warning_box" spacing="5.0" />
+                        <VBox fx:id="warningBox" spacing="5.0" />
                     </TitledPane>
                 </VBox>
             </ScrollPane>
@@ -48,7 +48,7 @@
    <right>
        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxWidth="200.0" BorderPane.alignment="CENTER">
            <TitledPane animated="false" collapsible="false" text="Floors" textAlignment="CENTER">
-               <VBox fx:id="floor_list_right" spacing="10.0" />
+               <VBox fx:id="floorListRight" spacing="10.0" />
            </TitledPane>
        </ScrollPane>
    </right>
