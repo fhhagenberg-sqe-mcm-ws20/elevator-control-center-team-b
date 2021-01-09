@@ -1,30 +1,49 @@
 package at.fhhagenberg.model;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import lombok.Getter;
 
 /**
- *  Floor of a building
- *  contains information about pressed buttons
+ * Floor of a building
+ * contains information about pressed buttons
  */
 public class Floor implements IFloor {
 
     @Getter
-    private boolean downButton;
+    private int number;
     @Getter
-    private boolean upButton;
+    private final SimpleBooleanProperty downButtonProperty;
+    @Getter
+    private final SimpleBooleanProperty upButtonProperty;
 
-    public Floor(boolean downButton, boolean upButton) {
-        this.downButton = downButton;
-        this.upButton = upButton;
+    public Floor(int number, boolean downButton, boolean upButton) {
+        this.number = number;
+        this.downButtonProperty = new SimpleBooleanProperty(downButton);
+        this.upButtonProperty = new SimpleBooleanProperty(upButton);
     }
 
     @Override
-    public void setDownButton(boolean active) {
-        this.downButton = active;
+    public boolean isDownButtonActive() {
+        return downButtonProperty.getValue();
     }
 
     @Override
-    public void setUpButton(boolean active) {
-        this.upButton = active;
+    public boolean isUpButtonActive() {
+        return upButtonProperty.getValue();
+    }
+
+    public void setDownButtonActive(boolean active) {
+        this.downButtonProperty.set(active);
+    }
+
+    public void setUpButtonActive(boolean active) {
+        this.upButtonProperty.set(active);
+    }
+
+    @Override
+    public void update(IFloor floor) {
+        this.number = floor.getNumber();
+        this.downButtonProperty.set(floor.isDownButtonActive());
+        this.upButtonProperty.set(floor.isUpButtonActive());
     }
 }

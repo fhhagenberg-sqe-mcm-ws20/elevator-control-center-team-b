@@ -3,33 +3,31 @@ package at.fhhagenberg.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ElevatorTest {
-    private IBuildingElevator[] elevators;
-    private IFloor[] floors;
+    private final ArrayList<IBuildingElevator> elevators = new ArrayList<>();
+    private final ArrayList<IFloor> floors = new ArrayList<>();
     private Building building;
 
     @BeforeEach
     void Init() {
-        boolean[] temp = new boolean[5];
-        boolean[] tempButton = new boolean[5];
-        Arrays.fill(temp, true);
-        tempButton[0] = true;
+        ArrayList<Integer> floorButtons = new ArrayList<>(IntStream.range(0, 2).boxed().collect(Collectors.toList()));
+        ArrayList<Integer> servicedFloors = new ArrayList<>(IntStream.range(0, 5).boxed().collect(Collectors.toList()));
 
-        floors = new IFloor[5];
-        floors[0] = new Floor(false, true);
-        floors[1] = new Floor(false, false);
-        floors[2] = new Floor(false, false);
-        floors[3] = new Floor(false, false);
-        floors[4] = new Floor(false, false);
+        floors.add(0, new Floor(0, false, true));
+        floors.add(1, new Floor(1, false, false));
+        floors.add(2, new Floor(2, false, false));
+        floors.add(3, new Floor(3, true, true));
+        floors.add(4, new Floor(4, false, true));
 
-        elevators = new Elevator[3];
-        elevators[0] = new Elevator(5, 200, 10);
-        elevators[1] = new Elevator(IBuildingElevator.Direction_State.DOWN.value(), 2, tempButton, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, temp, 0);
-        elevators[2] = new Elevator(IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, new boolean[5], IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 1500, 10, temp, 0);
+        elevators.add(0, new Elevator(0, 5, 200, 10));
+        elevators.add(1, new Elevator(1, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1500, 10, servicedFloors, 0, null));
+        elevators.add(2, new Elevator(2, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, floorButtons, IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 1500, 10, servicedFloors, 0, null));
 
         building = new Building(3, 10, 5, elevators, floors);
     }
@@ -56,23 +54,23 @@ class ElevatorTest {
         IBuildingElevator.Door_State new_state = IBuildingElevator.Door_State.OPEN;
 
         new_state = new_state.setValue(1);
-        assertEquals( "Open", IBuildingElevator.Door_State.getDoorStateString(new_state.value()));
+        assertEquals("Open", IBuildingElevator.Door_State.getDoorStateString(new_state.value()));
         assertEquals(IBuildingElevator.Door_State.OPEN, new_state);
 
         new_state = new_state.setValue(2);
-        assertEquals( "Closed", IBuildingElevator.Door_State.getDoorStateString(new_state.value()));
+        assertEquals("Closed", IBuildingElevator.Door_State.getDoorStateString(new_state.value()));
         assertEquals(IBuildingElevator.Door_State.CLOSED, new_state);
 
         new_state = new_state.setValue(3);
-        assertEquals( "Opening", IBuildingElevator.Door_State.getDoorStateString(new_state.value()));
+        assertEquals("Opening", IBuildingElevator.Door_State.getDoorStateString(new_state.value()));
         assertEquals(IBuildingElevator.Door_State.OPENING, new_state);
 
         new_state = new_state.setValue(4);
-        assertEquals( "Closing", IBuildingElevator.Door_State.getDoorStateString(new_state.value()));
+        assertEquals("Closing", IBuildingElevator.Door_State.getDoorStateString(new_state.value()));
         assertEquals(IBuildingElevator.Door_State.CLOSING, new_state);
 
         new_state = new_state.setValue(10);
-        assertEquals( "Closed", IBuildingElevator.Door_State.getDoorStateString(new_state.value()));
+        assertEquals("Closed", IBuildingElevator.Door_State.getDoorStateString(new_state.value()));
         assertEquals(IBuildingElevator.Door_State.CLOSED, new_state);
     }
 
@@ -119,11 +117,35 @@ class ElevatorTest {
 
     @Test
     void testFloorButtons() {
-        var floor = building.getFloors()[0];
-        floor.setDownButton(true);
-        assertTrue(floor.isDownButton());
+        var floor = building.getFloors().get(0);
+        floor.setDownButtonActive(true);
+        assertTrue(floor.isDownButtonActive());
 
-        floor.setUpButton(true);
-        assertTrue(floor.isUpButton());
+        floor.setUpButtonActive(true);
+        assertTrue(floor.isUpButtonActive());
     }
+
+    @Test
+    void testAddPressedFloorButton() {
+        building.getElevator(1).addPressedFloorButton(4);
+        var floorButtons = building.getElevator(1).getFloorButtons();
+        assertTrue(floorButtons.contains(4));
+    }
+
+    @Test
+    void testAddPressedNearestFloorButton() {
+        building.getElevator(1).addPressedFloorButton(3);
+        var floorButtons = building.getElevator(1).getFloorButtons();
+        assertFalse(floorButtons.contains(3));
+    }
+
+    @Test
+    void testRemovePressedFloorButton() {
+        building.getElevator(1).addPressedFloorButton(0);
+        building.getElevator(1).addPressedFloorButton(1);
+        var floorButtons = building.getElevator(1).getFloorButtons();
+        assertTrue(floorButtons.isEmpty());
+        assertEquals(building.getElevator(1).getFloorTarget(), building.getElevator(1).getNearestFloor());
+    }
+
 }

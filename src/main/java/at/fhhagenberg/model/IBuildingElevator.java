@@ -1,6 +1,9 @@
 package at.fhhagenberg.model;
 
+import java.util.List;
+
 public interface IBuildingElevator {
+
 
     /**
      * Enum for state of elevator doors
@@ -61,6 +64,7 @@ public interface IBuildingElevator {
                     return Door_State.CLOSED;
             }
         }
+
         public static String getDoorStateString(int value) {
             switch (value) {
                 case 1:
@@ -231,4 +235,13 @@ public interface IBuildingElevator {
      */
     void setFloorTarget(int floor);
 
+    int getNumber();
+
+    List<Integer> getFloorButtons();
+
+    List<Integer> getFloorServices();
+
+    void update(IBuildingElevator elevator);
+
+    void addPressedFloorButton(int floorNumber);
 }

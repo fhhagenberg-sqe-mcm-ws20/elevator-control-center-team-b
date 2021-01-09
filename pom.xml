@@ -26,6 +26,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>11.0.1</version>
+            
         </dependency>
 
         <!-- testing with TestFx/Junit 5-->
