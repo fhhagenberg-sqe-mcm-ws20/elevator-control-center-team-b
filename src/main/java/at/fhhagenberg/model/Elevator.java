@@ -3,6 +3,8 @@ package at.fhhagenberg.model;
 import at.fhhagenberg.converter.ModelConverter;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
@@ -218,6 +220,7 @@ public class Elevator implements IBuildingElevator {
         positionFromGround = elevator.getPositionFromGround();
         speed = elevator.getSpeed();
         weight = elevator.getWeight();
+        payloadProperty.set(weight);
         capacity = elevator.getCapacity();
         floorServices = FXCollections.observableArrayList(elevator.getFloorServices());
     }

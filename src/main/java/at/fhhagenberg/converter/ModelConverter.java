@@ -32,10 +32,6 @@ public class ModelConverter {
 
         //for test suppose in order to get less changes
         if (currentClockTick > lastClockTick + 10L) {
-            System.out.println(building.getElevator(0).getDirection());
-            System.out.println(building.getElevator(0).getWeight());
-            System.out.println(building.getElevator(0).getFloorTarget());
-            System.out.println(building.getElevator(0).getDoorState());
             System.out.println("Clocktick: " + currentClockTick);
             List<IFloor> floors = getFloors();
             List<IBuildingElevator> elevators = getElevators(floors);

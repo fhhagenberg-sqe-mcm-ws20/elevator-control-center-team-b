@@ -20,7 +20,7 @@ public class Building {
     @Getter
     private final List<IFloor> floors;
 
-    public Building(){
+    public Building() {
         elevatorCount = 0;
         floorHeight = 0;
         floorCount = 0;
@@ -46,6 +46,8 @@ public class Building {
             this.floors.get(floor.getNumber()).update(floor);
         }
         for (IBuildingElevator elevator : elevators) {
+            System.out.println("UPDATE FLOOR: " + elevator.getNumber());
+            System.out.println(elevator.getWeight());
             this.elevators.get(elevator.getNumber()).update(elevator);
         }
     }

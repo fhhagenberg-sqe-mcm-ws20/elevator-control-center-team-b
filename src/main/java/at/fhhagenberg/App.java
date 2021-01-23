@@ -5,6 +5,8 @@ import at.fhhagenberg.converter.ModelConverter;
 import at.fhhagenberg.model.Building;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -23,9 +25,11 @@ public class App extends Application {
     //private final IElevator system = new MockElevator();
     private final ElevatorControlSystem elevatorControlSystem;
     private Building building;
-    private Boolean error = false;
+    private boolean error = false;
+    private boolean firstConnectionEstablished = false;
+    Thread thread;
 
-    public App(){
+    public App() {
         elevatorControlSystem = new ElevatorControlSystem("rmi://localhost/ElevatorSim");
     }
 
@@ -38,36 +42,51 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-        building = new Building();
-        //TODO check if controlsystem is null
-        ((MainController) mainLoader.getController()).initModel(elevatorControlSystem.initBuilding());
-
         Runnable runnable = new Runnable() {
             @SneakyThrows
             @Override
             public void run() {
                 while (!error) {
-                    if (!elevatorControlSystem.getSystemConnected()) {
+                    if (!elevatorControlSystem.getSystemConnected().get()) {
                         Platform.runLater(() -> ((MainController) mainLoader.getController()).status_label.setText("Connecting..."));
                     } else {
-                        Platform.runLater(() -> {
-                            ((MainController) mainLoader.getController()).status_label.setText("System connected!");
-                            elevatorControlSystem.update(building);
-                        /*try {
-                            ((MainController) mainLoader.getController()).updateModel();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            error = true;
-                        }*/
-                        });
+                        if (firstConnectionEstablished) {
+                            Platform.runLater(() -> {
+                                ((MainController) mainLoader.getController()).status_label.setText("System connected!");
+                                elevatorControlSystem.update(building);
+                            });
+                        }
                     }
-                    Thread.sleep(25);
+                    Thread.sleep(100);
                 }
             }
         };
-        Thread thread = new Thread(runnable);
+        thread = new Thread(runnable);
         thread.setDaemon(true);
         thread.start();
+
+        elevatorControlSystem.getSystemConnected().addListener(new ChangeListener<Boolean>() {
+            @SneakyThrows
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
+                if (newValue && !firstConnectionEstablished) {
+                    building = elevatorControlSystem.initBuilding();
+                    Platform.runLater(() -> {
+                        try {
+                            ((MainController) mainLoader.getController()).initModel(building);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    firstConnectionEstablished = true;
+                } else if (!newValue) {
+                    thread.wait();
+                    Platform.runLater(() -> ((MainController) mainLoader.getController()).status_label.setText("Connecting..."));
+                } else {
+                    thread.notify();
+                }
+            }
+        });
     }
 
     @Generated

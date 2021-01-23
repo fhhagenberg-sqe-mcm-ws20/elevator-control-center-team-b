@@ -88,12 +88,6 @@ public class MainController {
         }
     }
 
-    public void updateElevatorControllers() throws IOException{
-        for(int i = 0; i < this.building.getElevators().size(); i++){
-
-        }
-    }
-
     /**
      * Method to create a floor label
      */

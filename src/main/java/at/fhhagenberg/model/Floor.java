@@ -16,7 +16,7 @@ public class Floor implements IFloor {
     @Getter
     private final SimpleBooleanProperty upButtonProperty;
 
-    public Floor(int number, boolean downButton, boolean upButton) {
+    public Floor(int number, boolean upButton, boolean downButton) {
         this.number = number;
         this.downButtonProperty = new SimpleBooleanProperty(downButton);
         this.upButtonProperty = new SimpleBooleanProperty(upButton);

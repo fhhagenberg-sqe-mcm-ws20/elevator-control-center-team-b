@@ -2,6 +2,7 @@ package at.fhhagenberg;
 
 import at.fhhagenberg.converter.ModelConverter;
 import at.fhhagenberg.model.Building;
+import javafx.beans.property.SimpleBooleanProperty;
 import sqelevator.IElevator;
 
 import java.rmi.Naming;
@@ -11,34 +12,39 @@ public class ElevatorControlSystem {
 
     private IElevator controller;
     private ModelConverter modelConverter;
-    private boolean systemConnected;
+    private SimpleBooleanProperty systemConnected = new SimpleBooleanProperty(false);
     private String connectionString;
 
-    public ElevatorControlSystem(IElevator mockElevator){
+    public ElevatorControlSystem(IElevator mockElevator) {
         modelConverter = new ModelConverter(mockElevator);
         controller = mockElevator;
-        systemConnected = true;
+        systemConnected.set(true);
     }
 
-    public ElevatorControlSystem(String connectionString){
+    public ElevatorControlSystem(String connectionString) {
         this.connectionString = connectionString;
         reconnectToSimulator();
     }
 
-    public boolean getSystemConnected(){
+    public SimpleBooleanProperty getSystemConnected() {
         return systemConnected;
     }
 
     public void reconnectToSimulator() {
-        systemConnected = false;
+        systemConnected.set(false);
         Runnable runnable = () -> {
-            while(!systemConnected){
-                try{
+            while (!systemConnected.get()) {
+                try {
                     controller = (IElevator) Naming.lookup(connectionString);
                     modelConverter = new ModelConverter(controller);
-                    systemConnected = true;
-                }catch(Exception e){
-                    systemConnected = false;
+                    systemConnected.set(true);
+                } catch (Exception e) {
+                    systemConnected.set(false);
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    systemConnected.set(false);
                 }
             }
         };
@@ -52,10 +58,10 @@ public class ElevatorControlSystem {
         return modelConverter.init();
     }
 
-    public void update(Building building){
-        try{
+    public void update(Building building) {
+        try {
             modelConverter.update(building);
-        }catch(Exception e){
+        } catch (Exception e) {
             reconnectToSimulator();
         }
     }
