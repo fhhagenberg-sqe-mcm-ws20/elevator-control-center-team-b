@@ -28,7 +28,7 @@
     </left>
     <bottom>
         <AnchorPane style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
-            <Label fx:id="status_label" text="System connected" AnchorPane.leftAnchor="10.0"/>
+            <Label fx:id="status_label"  AnchorPane.leftAnchor="10.0"/>
         </AnchorPane>
     </bottom>
     <top>

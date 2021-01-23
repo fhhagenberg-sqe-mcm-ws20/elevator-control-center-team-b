@@ -2,6 +2,7 @@ package at.fhhagenberg.model;
 
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +20,14 @@ public class Building {
     @Getter
     private final List<IFloor> floors;
 
+    public Building(){
+        elevatorCount = 0;
+        floorHeight = 0;
+        floorCount = 0;
+        elevators = new ArrayList<>();
+        floors = new ArrayList<>();
+    }
+
     public Building(int elevatorCount, int floorHeight, int floorCount, List<IBuildingElevator> elevators, List<IFloor> floors) {
         this.elevatorCount = elevatorCount;
         this.floorHeight = floorHeight;
@@ -26,7 +35,6 @@ public class Building {
         this.elevators = elevators;
         this.floors = floors;
     }
-
 
     public IBuildingElevator getElevator(int elevatorNumber) {
         if (elevatorNumber > elevatorCount - 1 || elevatorNumber < 0) return null;

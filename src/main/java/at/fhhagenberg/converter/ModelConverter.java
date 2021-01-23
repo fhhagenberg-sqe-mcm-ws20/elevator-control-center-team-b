@@ -12,7 +12,7 @@ public class ModelConverter {
 
     @Getter
     private final IElevator elevatorConnection;
-    private Long lastClockTick = 1L;
+    private Long lastClockTick = -1L;
 
     public ModelConverter(IElevator elevatorConnection) {
         this.elevatorConnection = elevatorConnection;
@@ -26,9 +26,17 @@ public class ModelConverter {
         return new Building(elevatorNumber, elevatorConnection.getFloorHeight(), floorNumber, elevators, floors);
     }
 
+    //TODO check clock tick more often, what happens if it increases inbetween?
     public void update(Building building) throws RemoteException {
         long currentClockTick = elevatorConnection.getClockTick();
-        if (currentClockTick > lastClockTick) {
+
+        //for test suppose in order to get less changes
+        if (currentClockTick > lastClockTick + 10L) {
+            System.out.println(building.getElevator(0).getDirection());
+            System.out.println(building.getElevator(0).getWeight());
+            System.out.println(building.getElevator(0).getFloorTarget());
+            System.out.println(building.getElevator(0).getDoorState());
+            System.out.println("Clocktick: " + currentClockTick);
             List<IFloor> floors = getFloors();
             List<IBuildingElevator> elevators = getElevators(floors);
             building.update(floors, elevators);
@@ -72,5 +80,7 @@ public class ModelConverter {
     public void setCommittedDirection(int elevatorNumber, int direction) throws RemoteException {
         elevatorConnection.setCommittedDirection(elevatorNumber, direction);
     }
+
+    //TODO set services floor
 }
 

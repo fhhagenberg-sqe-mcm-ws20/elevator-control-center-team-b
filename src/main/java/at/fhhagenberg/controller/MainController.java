@@ -28,7 +28,7 @@ public class MainController {
     public VBox floorListRight;
 
     private Building building;
-    private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
+    private ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
 
     public ArrayList<ElevatorController> getElevatorControllers() {
         return elevatorControllers;
@@ -61,6 +61,11 @@ public class MainController {
         displayElevatorControllers();
     }
 
+    public void updateModel() throws IOException {
+        this.elevatorControllers = new ArrayList<>();
+        displayElevatorControllers();
+    }
+
     /**
      * Method to initialize the elevator views
      *
@@ -80,6 +85,12 @@ public class MainController {
         }
         for (int i = 0; i < building.getFloorCount(); i++) {
             floorListRight.getChildren().add(createFloorDisplay(building.getFloors().get(i).getNumber()));
+        }
+    }
+
+    public void updateElevatorControllers() throws IOException{
+        for(int i = 0; i < this.building.getElevators().size(); i++){
+
         }
     }
 
