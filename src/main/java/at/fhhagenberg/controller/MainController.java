@@ -28,6 +28,7 @@ public class MainController {
     public VBox warningBox;
     public VBox errorBox;
     public VBox floorListRight;
+    public Boolean autoMode;
 
     private Building building;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
@@ -40,8 +41,10 @@ public class MainController {
         mode_button.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
                 mode_button.setText("Auto");
+                autoMode = true;
             } else {
                 mode_button.setText("Manual");
+                autoMode = false;
             }
             for (ElevatorController elevatorController : elevatorControllers) {
                 elevatorController.setAutoMode(newValue);

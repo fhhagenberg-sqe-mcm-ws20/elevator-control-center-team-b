@@ -42,6 +42,7 @@ public class App extends Application {
         primaryStage.show();
 
         handler.addObserver(elevatorControlSystem);
+        MainController mainController = mainLoader.getController();
 
         Runnable runnable = new Runnable() {
             @SneakyThrows
@@ -50,7 +51,7 @@ public class App extends Application {
                 while (!error) {
                     if (elevatorControlSystem.getSystemConnected().get()) {
                         Platform.runLater(() -> {
-                            elevatorControlSystem.update(building);
+                            elevatorControlSystem.update(building, mainController.autoMode);
                         });
                     }
                     Thread.sleep(1000);
@@ -61,7 +62,7 @@ public class App extends Application {
         thread.setDaemon(true);
         thread.start();
 
-        MainController mainController = mainLoader.getController();
+
         elevatorControlSystem.getSystemConnected().addListener(new ChangeListener<Boolean>() {
             @SneakyThrows
             @Override

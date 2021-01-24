@@ -12,6 +12,7 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
 
     private IElevator controller;
     private ModelConverter modelConverter;
+    private AutomaticMode mode = new AutomaticMode();
     private final SimpleBooleanProperty systemConnected = new SimpleBooleanProperty(false);
     private String connectionString;
 
@@ -58,9 +59,12 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
         return modelConverter.init();
     }
 
-    public void update(Building building) {
+    public void update(Building building, Boolean automatic) {
         try {
             modelConverter.update(building);
+            if (automatic) {
+                mode.update(building);
+            }
         } catch (Exception e) {
             reconnectToSimulator();
         }

@@ -210,10 +210,12 @@ public class Elevator implements IBuildingElevator {
     public void update(IBuildingElevator elevator) {
         number = elevator.getNumber();
         setDirection(elevator.getDirection());
-        setFloorTarget(elevator.getFloorTarget());
+        floorTarget = elevator.getFloorTarget();
+        floorTargetProperty.set(floorTarget);
         acceleration = elevator.getAcceleration();
         floorButtons = FXCollections.observableArrayList(elevator.getFloorButtons());
         doorState = elevator.getDoorState();
+        doorStateProperty.set(Door_State.getDoorStateString(doorState));
         positionFromGround = elevator.getPositionFromGround();
         setSpeed(elevator.getSpeed());
         setWeight(elevator.getWeight());
