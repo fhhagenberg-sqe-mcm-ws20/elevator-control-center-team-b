@@ -11,20 +11,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AutomaticMode {
-    private final ArrayList<Floor> requestedFloors = new ArrayList<>();
+    private List<Floor> requestedFloors = new ArrayList<>();
 
     public void update(Building building){
         //update elevator queues
+        requestedFloors = getRequestedFloors(building);
         updateElevatorQueues(building);
     }
 
     private void updateElevatorQueues(Building building) {
         // get nearest elevator button
-        List<Floor> floors = getRequestedFloors(building);
-
         building.getElevators().forEach(elevator -> {
-            updateTarget(elevator, floors.stream().filter(floor -> elevator.servesFloor(floor.getNumber())).map(floor -> floor.getNumber()).collect(Collectors.toList()));
+            updateTarget(elevator, requestedFloors.stream().filter(floor -> elevator.servesFloor(floor.getNumber())).map(floor -> floor.getNumber()).collect(Collectors.toList()));
         });
+    }
+
+    private void removeAlreadyServicedFloor(int servicedFloor){
+        requestedFloors.removeIf(floor -> floor.getNumber() == servicedFloor);
     }
 
     private List<Floor> getRequestedFloors(Building building) {
@@ -68,17 +71,21 @@ public class AutomaticMode {
     private void setNextDownTarget(IBuildingElevator elevator, List<Integer> floors) {
         int largestElevatorButton = Collections.max(elevator.getFloorButtons());
         int largestFloor = Collections.max(floors);
-
         // take either floor or floor button, whichever is nearer
-        elevator.setFloorTarget(Math.min(largestElevatorButton, largestFloor));
+        int nextFloor = Math.min(largestElevatorButton, largestFloor);
+
+        removeAlreadyServicedFloor(nextFloor);
+        elevator.setFloorTarget(nextFloor);
     }
 
     private void setNextUpTarget(IBuildingElevator elevator, List<Integer> floors) {
         int smallestElevatorButton = Collections.min(elevator.getFloorButtons());
         int smallestFloor = Collections.min(floors);
-
         // take either floor or floor button, whichever is nearer
-        elevator.setFloorTarget(Math.min(smallestElevatorButton, smallestFloor));
+        int nextFloor = Math.min(smallestElevatorButton, smallestFloor);
+
+        removeAlreadyServicedFloor(nextFloor);
+        elevator.setFloorTarget(nextFloor);
     }
 
 }
