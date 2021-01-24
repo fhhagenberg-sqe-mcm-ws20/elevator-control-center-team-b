@@ -56,12 +56,30 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
         t.start();
     }
 
-
     public Building initBuilding() throws RemoteException {
         return modelConverter.init();
     }
 
+    public void updateMode(Building building, MainController mainController) {
+        if (building == null) {
+            return;
+        }
+
+        try {
+            if (mainController.autoMode) {
+                mode.update(building);
+            }
+        } catch (Exception e) {
+            reconnectToSimulator();
+            Platform.runLater(mainController::clearNotifications);
+        }
+    }
+
     public void update(Building building, MainController mainController) {
+        if (building == null) {
+            reconnectToSimulator();
+            return;
+        }
 
         try {
             modelConverter.update(building);
@@ -69,7 +87,6 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
                 mode.update(building);
             }
         } catch (Exception e) {
-            System.out.println(e);
             reconnectToSimulator();
             Platform.runLater(mainController::clearNotifications);
         }

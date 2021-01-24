@@ -183,12 +183,14 @@ public class Elevator implements IBuildingElevator {
         int newDirection = nearestFloor - floor;
         floorTarget = floor;
         floorTargetProperty.setValue(floor);
+
         if (!floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
             floorButtons.add(0, floorTarget);
         } else if (floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
             floorButtons.remove(Integer.valueOf(floorTarget));
             floorButtons.add(0, floorTarget);
         }
+
         if (newDirection == 0) {
             setDirection(Direction_State.UNCOMMITTED.value());
         } else if (newDirection < 0) {
@@ -196,6 +198,7 @@ public class Elevator implements IBuildingElevator {
         } else {
             setDirection(Direction_State.DOWN.value());
         }
+
         // ModelConverter might be null due to test classes
         if (modelConverter != null) {
             try {

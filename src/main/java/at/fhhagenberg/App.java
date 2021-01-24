@@ -20,7 +20,7 @@ import lombok.SneakyThrows;
 public class App extends Application {
     //private final IElevator system = new MockElevator();
     private final ElevatorControlSystem elevatorControlSystem;
-    private Building building = new Building();
+    private Building building;
     private Thread thread;
     private final boolean error = false;
     private RemoteExceptionHandler handler = RemoteExceptionHandler.instance();
@@ -44,22 +44,36 @@ public class App extends Application {
         handler.addObserver(elevatorControlSystem);
         MainController mainController = mainLoader.getController();
 
-        Runnable runnable = new Runnable() {
-            @SneakyThrows
-            @Override
-            public void run() {
-                while (!error) {
-                    if (elevatorControlSystem.getSystemConnected().get()) {
-                        Platform.runLater(() -> elevatorControlSystem.update(building, mainController));
-                    }
+
+        thread = new Thread(() -> {
+            while (!error) {
+                if (elevatorControlSystem.getSystemConnected().get()) {
+                    Platform.runLater(() -> elevatorControlSystem.update(building, mainController));
+                }
+                try {
                     Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-        };
-        thread = new Thread(runnable);
+        });
         thread.setDaemon(true);
         thread.start();
 
+        Thread t = new Thread(() -> {
+            while (!error) {
+                if (elevatorControlSystem.getSystemConnected().get()) {
+                    Platform.runLater(() -> elevatorControlSystem.updateMode(building, mainController));
+                }
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.setDaemon(true);
+        t.start();
 
         elevatorControlSystem.getSystemConnected().addListener(new ChangeListener<Boolean>() {
             @SneakyThrows

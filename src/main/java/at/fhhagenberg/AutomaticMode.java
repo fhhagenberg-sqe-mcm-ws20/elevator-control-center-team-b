@@ -4,6 +4,8 @@ import at.fhhagenberg.model.Building;
 import at.fhhagenberg.model.Floor;
 import at.fhhagenberg.model.IBuildingElevator;
 import at.fhhagenberg.model.IFloor;
+import javafx.application.Platform;
+import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +16,10 @@ public class AutomaticMode {
     private List<Floor> requestedFloors = new ArrayList<>();
 
     public void update(Building building) {
+        if (building.getElevators().isEmpty() || building.getFloors().isEmpty()) {
+            return;
+        }
+
         //update elevator queues
         requestedFloors = getRequestedFloors(building);
         updateElevatorQueues(building);
@@ -46,8 +52,8 @@ public class AutomaticMode {
         var targetFloor = elevator.getFloorTarget();
         var doorStatus = elevator.getDoorState();
 
-
-        if (currentFloor == targetFloor || doorStatus == IBuildingElevator.Door_State.OPENING.value()) {
+        if (doorStatus == IBuildingElevator.Door_State.OPENING.value() ) {
+            elevator.setFloorTarget(currentFloor);
             return;
         }
 
@@ -70,26 +76,62 @@ public class AutomaticMode {
     }
 
     private void setNextDownTarget(IBuildingElevator elevator, List<Integer> floors) {
-        int largestElevatorButton = Collections.max(elevator.getFloorButtons());
-        int largestFloor = Collections.max(floors);
-        // take either floor or floor button, whichever is nearer
-        int nextFloor = Math.min(largestElevatorButton, largestFloor);
+        // no floor or button is available
+        if (floors.isEmpty() && elevator.getFloorButtons().isEmpty()) {
+            return;
+        }
 
-        System.out.println("next floor " + nextFloor);
+        int largestElevatorButton = 0;
+        int largestFloor = 0;
 
-        removeAlreadyServicedFloor(nextFloor);
-        elevator.setFloorTarget(nextFloor);
+        if (!elevator.getFloorButtons().isEmpty()) {
+            largestElevatorButton = Collections.max(elevator.getFloorButtons());
+        }
+
+        if (!floors.isEmpty()) {
+            largestFloor = Collections.max(floors);
+        }
+
+        if (!floors.isEmpty() && !elevator.getFloorButtons().isEmpty()) {
+            int nextFloor = Math.max(largestElevatorButton, largestFloor);
+            removeAlreadyServicedFloor(nextFloor);
+            elevator.setFloorTarget(nextFloor);
+        } else if (floors.isEmpty()) {
+            removeAlreadyServicedFloor(largestElevatorButton);
+            elevator.setFloorTarget(largestElevatorButton);
+        } else {
+            removeAlreadyServicedFloor(largestFloor);
+            elevator.setFloorTarget(largestFloor);
+        }
     }
 
     private void setNextUpTarget(IBuildingElevator elevator, List<Integer> floors) {
-        int smallestElevatorButton = Collections.min(elevator.getFloorButtons());
-        int smallestFloor = Collections.min(floors);
-        // take either floor or floor button, whichever is nearer
-        int nextFloor = Math.min(smallestElevatorButton, smallestFloor);
+        // no floor or button is available
+        if (floors.isEmpty() && elevator.getFloorButtons().isEmpty()) {
+            return;
+        }
 
-        System.out.println("next floor " + nextFloor);
+        int smallestElevatorButton = 0;
+        int smallestFloor = 0;
 
-        removeAlreadyServicedFloor(nextFloor);
-        elevator.setFloorTarget(nextFloor);
+        if (!elevator.getFloorButtons().isEmpty()) {
+            smallestElevatorButton = Collections.min(elevator.getFloorButtons());
+        }
+
+        if (!floors.isEmpty()) {
+            smallestFloor = Collections.min(floors);
+        }
+
+        if (!floors.isEmpty() && !elevator.getFloorButtons().isEmpty()) {
+            int nextFloor = Math.max(smallestElevatorButton, smallestFloor);
+            removeAlreadyServicedFloor(nextFloor);
+            elevator.setFloorTarget(nextFloor);
+        } else if (floors.isEmpty()) {
+            removeAlreadyServicedFloor(smallestElevatorButton);
+            elevator.setFloorTarget(smallestElevatorButton);
+        } else {
+            removeAlreadyServicedFloor(smallestFloor);
+            elevator.setFloorTarget(smallestFloor);
+        }
     }
 }
