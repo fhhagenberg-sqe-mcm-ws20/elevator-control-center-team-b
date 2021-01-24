@@ -70,8 +70,6 @@ public class ElevatorController {
         // Set nearest floor component
         String floorFormat = "Current floor: %d";
         nearestFloor.textProperty().bind(this.buildingElevator.nearestFloorProperty.asString(floorFormat));
-        // TODO: This line is only for testing, remove it!
-        nearestFloor.setOnMouseClicked(mouseEvent -> buildingElevator.setWeight(350));
 
         // Bind Combobox to pressed buttons
         targetField.setItems(this.buildingElevator.getFloorServices());
@@ -84,20 +82,14 @@ public class ElevatorController {
 
         // Set door state component
         doorStatusField.textProperty().bind(this.buildingElevator.doorStateProperty);
-        // TODO: This line is only for testing, remove it!
-        doorStatusField.setOnMouseClicked(mouseEvent -> buildingElevator.setWeight(250));
 
         // Set speed component
         String speedFormat = "%d m/s";
         speedField.textProperty().bind(this.buildingElevator.speedProperty.asString(speedFormat));
-        // TODO: This line is only for testing, remove it!
-        speedField.setOnMouseClicked(mouseEvent -> createInfo(WARNING, "test" + this.id, "Elevator " + this.id + ": Hey"));
 
         // Set payload component
         String weightFormat = "%d kg";
         payloadField.textProperty().bind(this.buildingElevator.payloadProperty.asString(weightFormat));
-        // TODO: This line is only for testing, remove it!
-        payloadField.setOnMouseClicked(mouseEvent -> buildingElevator.setWeight(450));
 
         checkPayload(this.buildingElevator.getPayloadProperty().getValue());
         this.buildingElevator.payloadProperty.addListener((observableValue, oldValue, newValue) -> {
