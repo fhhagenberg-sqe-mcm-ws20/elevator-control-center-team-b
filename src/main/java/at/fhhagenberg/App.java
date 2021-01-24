@@ -21,8 +21,9 @@ public class App extends Application {
     //private final IElevator system = new MockElevator();
     private final ElevatorControlSystem elevatorControlSystem;
     private Building building;
+    private Thread thread;
     private final boolean error = false;
-    Thread thread;
+    private RemoteExceptionHandler handler = RemoteExceptionHandler.instance();
 
     public App() {
         elevatorControlSystem = new ElevatorControlSystem("rmi://localhost/ElevatorSim");
@@ -32,11 +33,16 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/Main.fxml"));
         Parent root = mainLoader.load();
-        primaryStage.setTitle("Elevator System");
+
         Scene scene = new Scene(root, 800, 600);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
+        primaryStage.setTitle("Elevator System");
         primaryStage.setScene(scene);
         primaryStage.show();
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
+        handler.addObserver(elevatorControlSystem);
+
         Runnable runnable = new Runnable() {
             @SneakyThrows
             @Override

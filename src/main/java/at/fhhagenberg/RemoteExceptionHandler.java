@@ -18,7 +18,7 @@ public final class RemoteExceptionHandler {
      * Singleton get instance
      * @return RemoteExceptionHandler
      */
-    public static RemoteExceptionHandler getInstance() {
+    public static RemoteExceptionHandler instance() {
         if (INSTANCE == null) {
             INSTANCE = new RemoteExceptionHandler();
         }
@@ -30,7 +30,7 @@ public final class RemoteExceptionHandler {
      * Subscribe to updates
      * @param listener observer
      */
-    public void observe(RemoteExceptionListener listener) {
+    public void addObserver(RemoteExceptionListener listener) {
         observers.add(listener);
     }
 

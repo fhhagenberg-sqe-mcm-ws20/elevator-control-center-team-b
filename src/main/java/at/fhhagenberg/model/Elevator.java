@@ -1,5 +1,6 @@
 package at.fhhagenberg.model;
 
+import at.fhhagenberg.RemoteExceptionHandler;
 import at.fhhagenberg.converter.ModelConverter;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -200,8 +201,7 @@ public class Elevator implements IBuildingElevator {
             try {
                 modelConverter.setTarget(number, floorTarget);
             } catch (RemoteException e) {
-                //TODO add error handling when system is not connected
-                e.printStackTrace();
+                RemoteExceptionHandler.instance().update();
             }
         }
     }

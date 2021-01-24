@@ -8,7 +8,7 @@ import sqelevator.IElevator;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 
-public class ElevatorControlSystem {
+public class ElevatorControlSystem implements RemoteExceptionListener {
 
     private IElevator controller;
     private ModelConverter modelConverter;
@@ -64,5 +64,10 @@ public class ElevatorControlSystem {
         } catch (Exception e) {
             reconnectToSimulator();
         }
+    }
+
+    @Override
+    public void onException() {
+        reconnectToSimulator();
     }
 }
