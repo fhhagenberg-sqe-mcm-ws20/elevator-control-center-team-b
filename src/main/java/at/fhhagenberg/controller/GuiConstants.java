@@ -18,6 +18,7 @@ public class GuiConstants {
     // Style classes
     public static final String WARNING_STYLE = "warning";
     public static final String ERROR_STYLE = "danger";
+    public static final String STATUS_OK_STYLE = "status-ok";
     public static final String LEFT_BAR_LABEL_STYLE = "left-bar-info";
     public static final String ROUND_BUTTON_STYLE = "round-button";
     public static final String CLICKED_STYLE = "clicked";

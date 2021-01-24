@@ -24,6 +24,13 @@
     -fx-text-fill: white;
 }
 
+.status-ok {
+    -fx-background-color: #228B22;
+    -fx-fill: #228B22;
+    -fx-border-color: #228B22;
+    -fx-text-fill: black;
+}
+
 .glyph-icon {
     -glyph-size: 20px;
 }

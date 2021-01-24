@@ -1,5 +1,8 @@
 package at.fhhagenberg.model;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -19,6 +22,9 @@ public class Building {
     private final List<IBuildingElevator> elevators;
     @Getter
     private final List<IFloor> floors;
+
+    private final ObservableList<SimpleBooleanProperty> upButtonList = FXCollections.observableArrayList();
+    private final ObservableList<SimpleBooleanProperty> downButtonList = FXCollections.observableArrayList();
 
     public Building() {
         elevatorCount = 0;
@@ -46,8 +52,6 @@ public class Building {
             this.floors.get(floor.getNumber()).update(floor);
         }
         for (IBuildingElevator elevator : elevators) {
-            System.out.println("UPDATE FLOOR: " + elevator.getNumber());
-            System.out.println(elevator.getWeight());
             this.elevators.get(elevator.getNumber()).update(elevator);
         }
     }

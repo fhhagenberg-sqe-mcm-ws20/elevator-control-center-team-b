@@ -6,12 +6,14 @@ import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXToggleButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ public class MainController {
     public VBox floorListRight;
 
     private Building building;
-    private ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
+    private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
 
     public ArrayList<ElevatorController> getElevatorControllers() {
         return elevatorControllers;
@@ -53,17 +55,23 @@ public class MainController {
      * @param building the data
      */
     public void initModel(Building building) throws IOException {
-        if (this.building != null) {
-            throw new IllegalStateException("Model can only be initialized once");
-        }
-
         this.building = building;
-        displayElevatorControllers();
-    }
-
-    public void updateModel() throws IOException {
-        this.elevatorControllers = new ArrayList<>();
-        displayElevatorControllers();
+        Platform.runLater(new Runnable() {
+            @Override
+            @SneakyThrows
+            public void run() {
+                if (floorListRight.getChildren().size() > 0) {
+                    floorListRight.getChildren().removeAll(floorListRight.getChildren());
+                }
+                if (elevatorView.getChildren().size() > 0) {
+                    elevatorView.getChildren().removeAll(elevatorView.getChildren());
+                }
+                if (!mode_button.isSelected()) {
+                    mode_button.setSelected(true);
+                }
+                displayElevatorControllers();
+            }
+        });
     }
 
     /**
@@ -132,5 +140,10 @@ public class MainController {
 
         gridPane.getStyleClass().add(ROUND_BUTTON_STYLE);
         return gridPane;
+    }
+
+    public void systemCanBeChanged(boolean systemIsConnected) {
+        elevatorView.setDisable(!systemIsConnected);
+        mode_button.setDisable(!systemIsConnected);
     }
 }

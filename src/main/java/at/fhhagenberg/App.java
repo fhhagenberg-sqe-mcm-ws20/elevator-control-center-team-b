@@ -1,7 +1,7 @@
 package at.fhhagenberg;
 
+import at.fhhagenberg.controller.GuiConstants;
 import at.fhhagenberg.controller.MainController;
-import at.fhhagenberg.converter.ModelConverter;
 import at.fhhagenberg.model.Building;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -13,10 +13,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Generated;
 import lombok.SneakyThrows;
-import sqelevator.IElevator;
-
-import java.io.IOException;
-import java.rmi.Naming;
 
 /**
  * JavaFX App
@@ -25,8 +21,7 @@ public class App extends Application {
     //private final IElevator system = new MockElevator();
     private final ElevatorControlSystem elevatorControlSystem;
     private Building building;
-    private boolean error = false;
-    private boolean firstConnectionEstablished = false;
+    private final boolean error = false;
     Thread thread;
 
     public App() {
@@ -47,17 +42,12 @@ public class App extends Application {
             @Override
             public void run() {
                 while (!error) {
-                    if (!elevatorControlSystem.getSystemConnected().get()) {
-                        Platform.runLater(() -> ((MainController) mainLoader.getController()).status_label.setText("Connecting..."));
-                    } else {
-                        if (firstConnectionEstablished) {
-                            Platform.runLater(() -> {
-                                ((MainController) mainLoader.getController()).status_label.setText("System connected!");
-                                elevatorControlSystem.update(building);
-                            });
-                        }
+                    if (elevatorControlSystem.getSystemConnected().get()) {
+                        Platform.runLater(() -> {
+                            elevatorControlSystem.update(building);
+                        });
                     }
-                    Thread.sleep(100);
+                    Thread.sleep(250);
                 }
             }
         };
@@ -65,27 +55,38 @@ public class App extends Application {
         thread.setDaemon(true);
         thread.start();
 
+        MainController mainController = mainLoader.getController();
         elevatorControlSystem.getSystemConnected().addListener(new ChangeListener<Boolean>() {
             @SneakyThrows
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-                if (newValue && !firstConnectionEstablished) {
+                if (newValue) {
                     building = elevatorControlSystem.initBuilding();
-                    Platform.runLater(() -> {
-                        try {
-                            ((MainController) mainLoader.getController()).initModel(building);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    firstConnectionEstablished = true;
-                } else if (!newValue) {
-                    thread.wait();
-                    Platform.runLater(() -> ((MainController) mainLoader.getController()).status_label.setText("Connecting..."));
+                    setStatusUI(mainController, true);
+                    ((MainController) mainLoader.getController()).initModel(building);
                 } else {
-                    thread.notify();
+                    setStatusUI(mainController, false);
                 }
             }
+        });
+        setStatusUI(mainController, elevatorControlSystem.getSystemConnected().get());
+    }
+
+    public void setStatusUI(MainController mainController, boolean isConnected) {
+        Platform.runLater(() -> {
+            String text;
+            String style;
+            if (isConnected) {
+                text = "System Connected.";
+                style = GuiConstants.STATUS_OK_STYLE;
+            } else {
+                text = "System tries to connect..";
+                style = GuiConstants.ERROR_STYLE;
+            }
+            mainController.systemCanBeChanged(isConnected);
+            mainController.status_label.setText(text);
+            mainController.status_label.getStyleClass().removeAll(mainController.status_label.getStyleClass());
+            mainController.status_label.getStyleClass().add(style);
         });
     }
 

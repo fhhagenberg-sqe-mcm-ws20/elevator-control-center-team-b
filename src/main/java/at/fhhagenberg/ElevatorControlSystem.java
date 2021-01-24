@@ -12,7 +12,7 @@ public class ElevatorControlSystem {
 
     private IElevator controller;
     private ModelConverter modelConverter;
-    private SimpleBooleanProperty systemConnected = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty systemConnected = new SimpleBooleanProperty(false);
     private String connectionString;
 
     public ElevatorControlSystem(IElevator mockElevator) {
