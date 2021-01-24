@@ -20,7 +20,7 @@ import lombok.SneakyThrows;
 public class App extends Application {
     //private final IElevator system = new MockElevator();
     private final ElevatorControlSystem elevatorControlSystem;
-    private Building building;
+    private Building building = new Building();
     private Thread thread;
     private final boolean error = false;
     private RemoteExceptionHandler handler = RemoteExceptionHandler.instance();
@@ -50,9 +50,7 @@ public class App extends Application {
             public void run() {
                 while (!error) {
                     if (elevatorControlSystem.getSystemConnected().get()) {
-                        Platform.runLater(() -> {
-                            elevatorControlSystem.update(building, mainController.autoMode);
-                        });
+                        Platform.runLater(() -> elevatorControlSystem.update(building, mainController));
                     }
                     Thread.sleep(1000);
                 }

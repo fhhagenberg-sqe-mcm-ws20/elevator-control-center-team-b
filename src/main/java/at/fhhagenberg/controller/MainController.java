@@ -28,7 +28,7 @@ public class MainController {
     public VBox warningBox;
     public VBox errorBox;
     public VBox floorListRight;
-    public Boolean autoMode;
+    public Boolean autoMode = true;
 
     private Building building;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
@@ -154,5 +154,9 @@ public class MainController {
     public void systemCanBeChanged(boolean systemIsConnected) {
         elevatorView.setDisable(!systemIsConnected);
         mode_button.setDisable(!systemIsConnected);
+    }
+
+    public void clearNotifications() {
+        elevatorControllers.forEach(ElevatorController::clearNotifications);
     }
 }

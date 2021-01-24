@@ -1,7 +1,9 @@
 package at.fhhagenberg;
 
+import at.fhhagenberg.controller.MainController;
 import at.fhhagenberg.converter.ModelConverter;
 import at.fhhagenberg.model.Building;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import sqelevator.IElevator;
 
@@ -59,14 +61,17 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
         return modelConverter.init();
     }
 
-    public void update(Building building, Boolean automatic) {
+    public void update(Building building, MainController mainController) {
+
         try {
             modelConverter.update(building);
-            if (automatic) {
+            if (mainController.autoMode) {
                 mode.update(building);
             }
         } catch (Exception e) {
+            System.out.println(e);
             reconnectToSimulator();
+            Platform.runLater(mainController::clearNotifications);
         }
     }
 

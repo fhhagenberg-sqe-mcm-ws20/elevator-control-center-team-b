@@ -255,6 +255,7 @@ public class ElevatorController {
     public void deleteInfo(String infoId) {
         warningList.remove(infoId);
         errorList.remove(infoId);
+
         if (!errorList.isEmpty()) {
             updateTopIcon(ERROR);
         } else if (!warningList.isEmpty()) {
@@ -262,6 +263,7 @@ public class ElevatorController {
         } else {
             infoPane.getChildren().clear();
         }
+
         VBox parent = (VBox) leftMenu.lookup("#" + infoId).getParent();
         parent.getChildren().remove(leftMenu.lookup("#" + infoId));
     }
@@ -299,5 +301,11 @@ public class ElevatorController {
         }
         floorButton.setOnMouseClicked(mouseEvent -> buildingElevator.addPressedFloorButton(floorNumber));
         return floorButton;
+    }
+
+    public void clearNotifications() {
+        errorList.clear();
+        warningList.clear();
+        infoPane.getChildren().clear();
     }
 }

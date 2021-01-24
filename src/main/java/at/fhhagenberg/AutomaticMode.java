@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class AutomaticMode {
     private List<Floor> requestedFloors = new ArrayList<>();
 
-    public void update(Building building){
+    public void update(Building building) {
         //update elevator queues
         requestedFloors = getRequestedFloors(building);
         updateElevatorQueues(building);
@@ -22,19 +22,19 @@ public class AutomaticMode {
     private void updateElevatorQueues(Building building) {
         // get nearest elevator button
         building.getElevators().forEach(elevator -> {
-            updateTarget(elevator, requestedFloors.stream().filter(floor -> elevator.servesFloor(floor.getNumber())).map(floor -> floor.getNumber()).collect(Collectors.toList()));
+            updateTarget(elevator, requestedFloors.stream().map(Floor::getNumber).filter(elevator::servesFloor).collect(Collectors.toList()));
         });
     }
 
-    private void removeAlreadyServicedFloor(int servicedFloor){
+    private void removeAlreadyServicedFloor(int servicedFloor) {
         requestedFloors.removeIf(floor -> floor.getNumber() == servicedFloor);
     }
 
     private List<Floor> getRequestedFloors(Building building) {
         ArrayList<Floor> result = new ArrayList<>();
 
-        for(IFloor floor : building.getFloors()){
-            if(floor.isDownButtonActive() || floor.isUpButtonActive()){
+        for (IFloor floor : building.getFloors()) {
+            if (floor.isDownButtonActive() || floor.isUpButtonActive()) {
                 result.add((Floor) floor);
             }
         }
@@ -46,7 +46,8 @@ public class AutomaticMode {
         var targetFloor = elevator.getFloorTarget();
         var doorStatus = elevator.getDoorState();
 
-        if(currentFloor != targetFloor || doorStatus != IBuildingElevator.Door_State.OPEN.value()){
+
+        if (currentFloor == targetFloor || doorStatus == IBuildingElevator.Door_State.OPENING.value()) {
             return;
         }
 
@@ -54,15 +55,15 @@ public class AutomaticMode {
         int smallestServicedFloorNumber = Collections.min(servicedFloors);
         int largestServicedFloorNumber = Collections.max(servicedFloors);
 
-        if(currentFloor == smallestServicedFloorNumber){
+        if (currentFloor == smallestServicedFloorNumber) {
             setNextUpTarget(elevator, floors);
-        }else if(currentFloor == largestServicedFloorNumber){
+        } else if (currentFloor == largestServicedFloorNumber) {
             setNextDownTarget(elevator, floors);
-        }else{
+        } else {
             //stay in same direction
-            if(elevator.getDirection() == IBuildingElevator.Direction_State.UP.value()){
+            if (elevator.getDirection() == IBuildingElevator.Direction_State.UP.value()) {
                 setNextUpTarget(elevator, floors);
-            }else if(elevator.getDirection() == IBuildingElevator.Direction_State.DOWN.value()){
+            } else if (elevator.getDirection() == IBuildingElevator.Direction_State.DOWN.value()) {
                 setNextDownTarget(elevator, floors);
             }
         }
@@ -74,6 +75,8 @@ public class AutomaticMode {
         // take either floor or floor button, whichever is nearer
         int nextFloor = Math.min(largestElevatorButton, largestFloor);
 
+        System.out.println("next floor " + nextFloor);
+
         removeAlreadyServicedFloor(nextFloor);
         elevator.setFloorTarget(nextFloor);
     }
@@ -84,8 +87,9 @@ public class AutomaticMode {
         // take either floor or floor button, whichever is nearer
         int nextFloor = Math.min(smallestElevatorButton, smallestFloor);
 
+        System.out.println("next floor " + nextFloor);
+
         removeAlreadyServicedFloor(nextFloor);
         elevator.setFloorTarget(nextFloor);
     }
-
 }
