@@ -47,7 +47,7 @@ public class App extends Application {
                             elevatorControlSystem.update(building);
                         });
                     }
-                    Thread.sleep(250);
+                    Thread.sleep(1000);
                 }
             }
         };

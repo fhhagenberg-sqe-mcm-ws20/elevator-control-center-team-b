@@ -281,10 +281,10 @@ public class ElevatorController {
      */
     private void checkPayload(int payload) {
         int payloadCheck = this.buildingElevator.getCapacity() - payload;
-        if (payloadCheck < 0 && payloadCheck > -150) {
+        if (payloadCheck < -150) {
             errorList.remove(payloadInfoId);
             createInfo(WARNING, payloadInfoId, String.format("Elevator %d: Warning payload on a high level.", id));
-        } else if (payloadCheck <= -150) {
+        } else if (payloadCheck <= 0) {
             warningList.remove(payloadInfoId);
             createInfo(ERROR, payloadInfoId, String.format("Elevator %d: Error payload too high.", id));
         } else {

@@ -214,13 +214,22 @@ public class Elevator implements IBuildingElevator {
         acceleration = elevator.getAcceleration();
         floorButtons = FXCollections.observableArrayList(elevator.getFloorButtons());
         doorState = elevator.getDoorState();
-        nearestFloor = elevator.getNearestFloor();
         positionFromGround = elevator.getPositionFromGround();
-        speed = elevator.getSpeed();
-        weight = elevator.getWeight();
-        payloadProperty.set(weight);
-        capacity = elevator.getCapacity();
+        setSpeed(elevator.getSpeed());
+        setWeight(elevator.getWeight());
+        setNearestFloor(elevator.getNearestFloor());
+        capacity = elevator.getCapacity() * 90;
         floorServices = FXCollections.observableArrayList(elevator.getFloorServices());
+    }
+
+    private void setSpeed(int speed) {
+        this.speed = speed;
+        speedProperty.set(speed);
+    }
+
+    public void setNearestFloor(int nearestFloor) {
+        this.nearestFloor = nearestFloor;
+        nearestFloorProperty.set(nearestFloor);
     }
 
     public void setWeight(int weight) {

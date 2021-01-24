@@ -26,13 +26,9 @@ public class ModelConverter {
         return new Building(elevatorNumber, elevatorConnection.getFloorHeight(), floorNumber, elevators, floors);
     }
 
-    //TODO check clock tick more often, what happens if it increases inbetween?
     public void update(Building building) throws RemoteException {
         long currentClockTick = elevatorConnection.getClockTick();
-
-        //for test suppose in order to get less changes
-        if (currentClockTick > lastClockTick + 10L) {
-            System.out.println("Clocktick: " + currentClockTick);
+        if (currentClockTick > lastClockTick) {
             List<IFloor> floors = getFloors();
             List<IBuildingElevator> elevators = getElevators(floors);
             building.update(floors, elevators);

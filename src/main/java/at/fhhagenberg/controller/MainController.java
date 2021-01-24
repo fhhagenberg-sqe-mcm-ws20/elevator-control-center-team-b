@@ -69,6 +69,12 @@ public class MainController {
                 if (!mode_button.isSelected()) {
                     mode_button.setSelected(true);
                 }
+                if (errorBox.getChildren().size() > 0) {
+                    errorBox.getChildren().removeAll(errorBox.getChildren());
+                }
+                if (warningBox.getChildren().size() > 0) {
+                    warningBox.getChildren().removeAll(warningBox.getChildren());
+                }
                 displayElevatorControllers();
             }
         });
