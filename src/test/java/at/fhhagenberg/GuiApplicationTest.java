@@ -105,7 +105,7 @@ class GuiApplicationTest {
     void testManualModeWork(FxRobot robot) throws RemoteException {
         // Given
         JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
-        Assertions.assertThat(firstElevator.isDisabled()).isTrue();
+        assertTrue(firstElevator.isDisabled());
         robot.sleep(100);
         assertEquals(2, firstElevator.getValue().intValue());
 

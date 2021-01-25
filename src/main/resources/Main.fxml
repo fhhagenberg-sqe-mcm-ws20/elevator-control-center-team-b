@@ -28,7 +28,8 @@
     </left>
     <bottom>
         <AnchorPane style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
-            <Label fx:id="statusLabel" AnchorPane.leftAnchor="10.0"/>
+            <Label fx:id="statusLabel" AnchorPane.leftAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
         </AnchorPane>
     </bottom>
     <top>
