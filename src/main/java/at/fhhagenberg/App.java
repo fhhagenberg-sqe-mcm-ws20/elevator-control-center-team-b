@@ -60,6 +60,8 @@ public class App extends Application {
         mainController = mainLoader.getController();
         createConnectionErrorDialog();
 
+        setupThreads();
+
         elevatorControlSystem.getSystemConnected().addListener(new ChangeListener<Boolean>() {
             @SneakyThrows
             @Override
