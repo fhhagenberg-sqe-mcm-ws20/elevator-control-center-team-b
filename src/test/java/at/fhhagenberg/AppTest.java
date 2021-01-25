@@ -44,13 +44,14 @@ class AppTest {
     @Test
     void testSetStatusUi(FxRobot robot) {
         // Given
-        Assertions.assertThat(robot.lookup("#statusLabel").queryAs(javafx.scene.control.Label.class)).hasText(GuiConstants.MSG_CONNECTING);
-        assertTrue(robot.lookup("#elevatorView").queryAs(JFXMasonryPane.class).isDisabled());
-        //  When
-        testApp.setStatusUI(true);
-        robot.sleep(100);
-        //Then
         Assertions.assertThat(robot.lookup("#statusLabel").queryAs(javafx.scene.control.Label.class)).hasText(GuiConstants.MSG_IS_CONNECTED);
         assertFalse(robot.lookup("#elevatorView").queryAs(JFXMasonryPane.class).isDisabled());
+
+        //  When
+        testApp.setStatusUI(false);
+        robot.sleep(100);
+        //Then
+        Assertions.assertThat(robot.lookup("#statusLabel").queryAs(javafx.scene.control.Label.class)).hasText(GuiConstants.MSG_CONNECTING);
+        assertTrue(robot.lookup("#elevatorView").queryAs(JFXMasonryPane.class).isDisabled());
     }
 }
