@@ -19,6 +19,7 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
     @Getter
     private final SimpleBooleanProperty systemConnected = new SimpleBooleanProperty(false);
     private String connectionString;
+    private Thread connectionThread;
 
     public ElevatorControlSystem(IElevator mockElevator) {
         modelConverter = new ModelConverter(mockElevator);
@@ -31,8 +32,7 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
         reconnectToSimulator();
     }
 
-    public void reconnectToSimulator() {
-        systemConnected.set(false);
+    private Thread createConnectionThread() {
         Runnable runnable = () -> {
             while (!systemConnected.get()) {
                 try {
@@ -46,12 +46,24 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     systemConnected.set(false);
+                    Thread.currentThread().interrupt();
                 }
             }
         };
         Thread t = new Thread(runnable);
         t.setDaemon(true);
-        t.start();
+        return t;
+    }
+
+    public void reconnectToSimulator() {
+        systemConnected.set(false);
+        if (connectionThread == null) {
+            connectionThread = createConnectionThread();
+            connectionThread.start();
+        } else if (!connectionThread.isAlive()) {
+            connectionThread = createConnectionThread();
+            connectionThread.start();
+        }
     }
 
     public Building initBuilding() throws RemoteException {

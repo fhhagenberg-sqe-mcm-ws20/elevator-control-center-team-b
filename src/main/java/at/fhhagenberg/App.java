@@ -27,7 +27,6 @@ public class App extends Application {
     @Getter
     private final ElevatorControlSystem elevatorControlSystem;
     private Building building;
-    private Thread dataUpdateThread, autoUpdateThread;
     private final boolean error = false;
     private final RemoteExceptionHandler handler = RemoteExceptionHandler.instance();
     private MainController mainController;
@@ -79,7 +78,7 @@ public class App extends Application {
     }
 
     public void setupThreads() {
-        dataUpdateThread = new Thread(new Runnable() {
+        Thread dataUpdateThread = new Thread(new Runnable() {
             @Override
             @SneakyThrows
             public void run() {
@@ -94,7 +93,7 @@ public class App extends Application {
         dataUpdateThread.setDaemon(true);
         dataUpdateThread.start();
 
-        autoUpdateThread = new Thread(new Runnable() {
+        Thread autoUpdateThread = new Thread(new Runnable() {
             @Override
             @SneakyThrows
             public void run() {
@@ -102,11 +101,7 @@ public class App extends Application {
                     if (elevatorControlSystem.getSystemConnected().get()) {
                         Platform.runLater(() -> elevatorControlSystem.updateMode(building, mainController));
                     }
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    Thread.sleep(500);
                 }
             }
         });
