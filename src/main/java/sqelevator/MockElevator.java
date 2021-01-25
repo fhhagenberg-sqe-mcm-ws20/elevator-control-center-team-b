@@ -5,12 +5,13 @@ import at.fhhagenberg.model.Floor;
 import at.fhhagenberg.model.IBuildingElevator;
 import at.fhhagenberg.model.IFloor;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class MockElevator implements IElevator {
+public class MockElevator implements IElevator, Serializable {
     private final ArrayList<IBuildingElevator> elevators = new ArrayList<>();
     private final ArrayList<IFloor> floors = new ArrayList<>();
     private final Long clockTick = 1L;

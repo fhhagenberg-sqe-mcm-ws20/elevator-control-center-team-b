@@ -161,8 +161,4 @@ public class MockElevatorAuto implements IElevator {
     public long getClockTick() throws RemoteException {
         return clockTick + 1;
     }
-
-    public void setFloorButtonUp(int floor, boolean upActive) {
-        floors.get(floor).setUpButtonActive(upActive);
-    }
 }
