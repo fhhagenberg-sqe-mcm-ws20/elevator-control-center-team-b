@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import lombok.Generated;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import sqelevator.IElevator;
+import sqelevator.MockElevator;
 
 /**
  * JavaFX App
@@ -31,6 +33,11 @@ public class App extends Application {
 
     public App() {
         elevatorControlSystem = new ElevatorControlSystem("rmi://localhost/ElevatorSim");
+    }
+
+    public App(IElevator mockElevator, Building testBuilding) {
+        elevatorControlSystem = new ElevatorControlSystem(mockElevator);
+        building = testBuilding;
     }
 
     @Override
@@ -69,7 +76,7 @@ public class App extends Application {
                     Platform.runLater(() -> elevatorControlSystem.updateMode(building, mainController));
                 }
                 try {
-                    Thread.sleep(1500);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

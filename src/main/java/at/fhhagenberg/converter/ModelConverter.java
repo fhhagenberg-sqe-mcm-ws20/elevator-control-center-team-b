@@ -47,9 +47,11 @@ public class ModelConverter {
     private ArrayList<IBuildingElevator> getElevators(List<IFloor> floors) throws RemoteException {
         ArrayList<IBuildingElevator> elevators = new ArrayList<>();
         int numberOfElevators = elevatorConnection.getElevatorNum();
+
         for (int i = 0; i < numberOfElevators; i++) {
             ArrayList<Integer> floorButtonsTest = new ArrayList<>();
             ArrayList<Integer> servicedFloorsTest = new ArrayList<>();
+
             for (IFloor currentFloor : floors) {
                 if (elevatorConnection.getElevatorButton(i, currentFloor.getNumber())) {
                     floorButtonsTest.add(currentFloor.getNumber());

@@ -31,6 +31,8 @@ public class Elevator implements IBuildingElevator {
     @Getter
     private int direction;
     @Getter
+    public int lastDirection;
+    @Getter
     private int acceleration;
     @Getter
     private int doorState;
@@ -123,9 +125,7 @@ public class Elevator implements IBuildingElevator {
         if (floorButtons.contains(nearestFloor)) {
             floorButtons.remove(Integer.valueOf(nearestFloor));
         }
-        if (nearestFloor != floorTarget) {
-            this.floorTarget = floorTarget;
-        }
+        this.floorTarget = floorTarget;
         this.modelConverter = modelConverter;
         setGuiProperties();
     }
@@ -143,7 +143,8 @@ public class Elevator implements IBuildingElevator {
             }
 
         });
-        setFloorTarget(floorTarget);
+        setFloorButtons();
+        //setFloorTarget(floorTarget);
         floorTargetProperty.addListener((observableValue, oldValue, newValue) -> {
             if (floorTarget != newValue.intValue()) {
                 setFloorTarget(newValue.intValue());
@@ -156,6 +157,10 @@ public class Elevator implements IBuildingElevator {
     }
 
     public void setDirection(int direction) {
+        if (this.direction != Direction_State.UNCOMMITTED.value()) {
+            lastDirection = this.direction;
+        }
+
         if (direction < Direction_State.UP.value() || direction > Direction_State.UNCOMMITTED.value())
             this.direction = Direction_State.UNCOMMITTED.value();
         else
@@ -184,12 +189,7 @@ public class Elevator implements IBuildingElevator {
         floorTarget = floor;
         floorTargetProperty.setValue(floor);
 
-        if (!floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
-            floorButtons.add(0, floorTarget);
-        } else if (floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
-            floorButtons.remove(Integer.valueOf(floorTarget));
-            floorButtons.add(0, floorTarget);
-        }
+        setFloorButtons();
 
         if (newDirection == 0) {
             setDirection(Direction_State.UNCOMMITTED.value());
@@ -209,6 +209,15 @@ public class Elevator implements IBuildingElevator {
         }
     }
 
+    private void setFloorButtons() {
+        if (!floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
+            floorButtons.add(0, floorTarget);
+        } else if (floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
+            floorButtons.remove(Integer.valueOf(floorTarget));
+            floorButtons.add(0, floorTarget);
+        }
+    }
+
     @Override
     public void update(IBuildingElevator elevator) {
         number = elevator.getNumber();
@@ -225,6 +234,7 @@ public class Elevator implements IBuildingElevator {
         setNearestFloor(elevator.getNearestFloor());
         capacity = elevator.getCapacity();
         floorServices = FXCollections.observableArrayList(elevator.getFloorServices());
+        setFloorButtons();
     }
 
     private void setSpeed(int speed) {

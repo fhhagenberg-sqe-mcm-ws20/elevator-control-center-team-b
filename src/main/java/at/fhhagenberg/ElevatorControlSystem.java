@@ -60,6 +60,7 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
                     });
                     systemConnected.set(true);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     systemConnected.set(false);
                 }
                 try {
@@ -88,6 +89,7 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
                 mode.update(building);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             reconnectToSimulator();
             showErrorDialog();
             Platform.runLater(mainController::clearNotifications);
@@ -102,10 +104,8 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
 
         try {
             modelConverter.update(building);
-            if (mainController.autoMode) {
-                mode.update(building);
-            }
         } catch (Exception e) {
+            e.printStackTrace();
             reconnectToSimulator();
             showErrorDialog();
             Platform.runLater(mainController::clearNotifications);
