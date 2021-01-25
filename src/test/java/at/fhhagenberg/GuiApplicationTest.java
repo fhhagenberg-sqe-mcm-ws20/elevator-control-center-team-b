@@ -105,7 +105,7 @@ class GuiApplicationTest {
         JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
         Assertions.assertThat(firstElevator.isDisabled()).isTrue();
         robot.sleep(100);
-        assertEquals(2, firstElevator.getValue().intValue());
+        assertEquals(0, firstElevator.getValue().intValue());
 
         //When
         Platform.runLater(() -> robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(false));
@@ -131,8 +131,8 @@ class GuiApplicationTest {
         Platform.runLater(() -> assertTrue(robot.lookup("#mode_button").queryAs(JFXToggleButton.class).isSelected()));
 
         // Check if everything in the Backend has changed
-        assertEquals(0, testBuilding.getElevator(1).getFloorTarget());
-        assertEquals(0, elevatorConnection.getTarget(1));
+        assertEquals(2, testBuilding.getElevator(1).getFloorTarget());
+        assertEquals(2, elevatorConnection.getTarget(1));
     }
 
     /**
