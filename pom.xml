@@ -3,7 +3,7 @@
 
     <groupId>at.fhhagenberg.sqe</groupId>
     <artifactId>elevator-control-center-team-b</artifactId>
-    <version>0.4.3-SNAPSHOT</version>
+    <version>0.4.4-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
