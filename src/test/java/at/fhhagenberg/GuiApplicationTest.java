@@ -56,7 +56,7 @@ class GuiApplicationTest {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/Main.fxml"));
         Parent root = mainLoader.load();
         stage.setTitle("Elevator System");
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 640, 480);
         stage.setScene(scene);
         stage.show();
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
