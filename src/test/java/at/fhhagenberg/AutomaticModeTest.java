@@ -1,23 +1,15 @@
 package at.fhhagenberg;
 
-import at.fhhagenberg.controller.MainController;
 import at.fhhagenberg.converter.ModelConverter;
 import at.fhhagenberg.model.Building;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
 import sqelevator.IElevator;
 import sqelevator.MockElevatorAuto;
-
-import java.rmi.RemoteException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,11 +19,10 @@ class AutomaticModeTest {
     private Building testBuilding;
     private ModelConverter converter;
     private IElevator elevatorConnection;
-    private AutomaticMode mode = new AutomaticMode();
+    private final AutomaticMode mode = new AutomaticMode();
 
     /**
      * Will be called with {@code @Before} semantics, i. e. before each test method.
-     *
      */
     @SneakyThrows
     @BeforeEach

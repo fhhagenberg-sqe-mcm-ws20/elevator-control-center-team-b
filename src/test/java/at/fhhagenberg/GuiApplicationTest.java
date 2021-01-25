@@ -2,8 +2,7 @@ package at.fhhagenberg;
 
 import at.fhhagenberg.controller.MainController;
 import at.fhhagenberg.converter.ModelConverter;
-import at.fhhagenberg.model.Building;
-import at.fhhagenberg.model.Elevator;
+import at.fhhagenberg.model.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXMasonryPane;
@@ -16,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,9 @@ import org.testfx.service.query.EmptyNodeQueryException;
 import sqelevator.IElevator;
 import sqelevator.MockElevator;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import static at.fhhagenberg.controller.GuiConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,7 +66,7 @@ class GuiApplicationTest {
         converter = new ModelConverter(elevatorConnection);
         testBuilding = converter.init();
 
-        controller.initModel(testBuilding);
+        controller.setModel(testBuilding);
     }
 
     @Test
@@ -104,12 +106,12 @@ class GuiApplicationTest {
         // Given
         JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
         Assertions.assertThat(firstElevator.isDisabled()).isTrue();
-        robot.sleep(100);
-        assertEquals(0, firstElevator.getValue().intValue());
+        robot.sleep(200);
+        assertEquals(2, firstElevator.getValue().intValue());
 
         //When
-        Platform.runLater(() -> robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(false));
-        Platform.runLater(() -> assertFalse(robot.lookup("#mode_button").queryAs(JFXToggleButton.class).isSelected()));
+        Platform.runLater(() -> robot.lookup("#modeButton").queryAs(JFXToggleButton.class).setSelected(false));
+        Platform.runLater(() -> assertFalse(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected()));
         Assertions.assertThat(!firstElevator.isDisabled());
         robot.sleep(200);
 
@@ -127,12 +129,12 @@ class GuiApplicationTest {
         //Then
         assertEquals(0, firstElevator.getValue().intValue());
 
-        Platform.runLater(() -> robot.lookup("#mode_button").queryAs(JFXToggleButton.class).setSelected(true));
-        Platform.runLater(() -> assertTrue(robot.lookup("#mode_button").queryAs(JFXToggleButton.class).isSelected()));
+        Platform.runLater(() -> robot.lookup("#modeButton").queryAs(JFXToggleButton.class).setSelected(true));
+        Platform.runLater(() -> assertTrue(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected()));
 
         // Check if everything in the Backend has changed
-        assertEquals(2, testBuilding.getElevator(1).getFloorTarget());
-        assertEquals(2, elevatorConnection.getTarget(1));
+        assertEquals(0, testBuilding.getElevator(1).getFloorTarget());
+        assertEquals(0, elevatorConnection.getTarget(1));
     }
 
     /**
@@ -192,12 +194,12 @@ class GuiApplicationTest {
             controller.getElevatorControllers().get(0).deleteInfo("test32");
             controller.getElevatorControllers().get(0).deleteInfo("test33");
 
-            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD7").queryAs(Label.class));
-            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD8").queryAs(Label.class));
-            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD5").queryAs(Label.class));
-            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD1").queryAs(Label.class));
-            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD2").queryAs(Label.class));
-            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#PAYLOAD4").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#" + PAYLOAD_ID_PREFIX + "7").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#" + PAYLOAD_ID_PREFIX + "8").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#" + PAYLOAD_ID_PREFIX + "5").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#" + PAYLOAD_ID_PREFIX + "1").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#" + PAYLOAD_ID_PREFIX + "2").queryAs(Label.class));
+            assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#" + PAYLOAD_ID_PREFIX + "4").queryAs(Label.class));
             assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#test32").queryAs(Label.class));
             assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#test33").queryAs(Label.class));
         });
@@ -283,5 +285,43 @@ class GuiApplicationTest {
         JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
         //Then
         assertEquals(4, firstElevator.getValue().intValue());
+    }
+
+
+    @Test
+    void testClearNotifications(FxRobot robot) {
+        // Given
+        assertNotNull(robot.lookup("#" + PAYLOAD_ID_PREFIX + "1").queryAs(Label.class));
+        assertNotNull(robot.lookup("#" + PAYLOAD_ID_PREFIX + "5").queryAs(Label.class));
+        assertNotNull(robot.lookup("#" + PAYLOAD_ID_PREFIX + "7").queryAs(Label.class));
+        // When
+        Platform.runLater(() -> controller.clearNotifications());
+        robot.sleep(100);
+        // Then
+        assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#" + PAYLOAD_ID_PREFIX + "1").queryAs(Label.class));
+        assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#" + PAYLOAD_ID_PREFIX + "5").queryAs(Label.class));
+        assertThrows(EmptyNodeQueryException.class, () -> robot.lookup("#" + PAYLOAD_ID_PREFIX + "7").queryAs(Label.class));
+    }
+
+    @Test
+    void testNewModelInit(FxRobot robot) throws IOException {
+        // Given
+        assertEquals(9, robot.lookup("#elevatorView").queryAs(JFXMasonryPane.class).getChildren().size());
+        assertEquals(5, robot.lookup("#floorListRight").queryAs(VBox.class).getChildren().size());
+        assertEquals(2, robot.lookup("#errorBox").queryAs(VBox.class).getChildren().size());
+        assertEquals(1, robot.lookup("#warningBox").queryAs(VBox.class).getChildren().size());
+        assertTrue(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected());
+        // When
+        ArrayList<IFloor> floors = new ArrayList<>();
+        floors.add(new Floor(0, true, false));
+        ArrayList<IBuildingElevator> elevators = new ArrayList<>();
+        elevators.add(new Elevator(0, 7, 0, 10));
+        controller.setModel(new Building(3, 10, 1, elevators, floors));
+        robot.sleep(100);
+        // Then
+        assertEquals(1, robot.lookup("#elevatorView").queryAs(JFXMasonryPane.class).getChildren().size());
+        assertEquals(1, robot.lookup("#floorListRight").queryAs(VBox.class).getChildren().size());
+        assertEquals(0, robot.lookup("#errorBox").queryAs(VBox.class).getChildren().size());
+        assertEquals(0, robot.lookup("#warningBox").queryAs(VBox.class).getChildren().size());
     }
 }

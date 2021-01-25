@@ -11,7 +11,6 @@ import org.testfx.api.FxRobot;
 import org.testfx.assertions.api.Assertions;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import sqelevator.IElevator;
 import sqelevator.MockElevator;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

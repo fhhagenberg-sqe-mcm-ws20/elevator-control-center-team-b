@@ -16,6 +16,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import static at.fhhagenberg.controller.GuiConstants.*;
 
@@ -208,7 +211,6 @@ public class ElevatorController {
                 infoBox = (VBox) leftMenu.lookup("#" + WARNING_BOX_ID);
             } else {
                 infoBox = (VBox) leftMenu.lookup("#" + ERROR_BOX_ID);
-                infoBox = (VBox) leftMenu.lookup("#" + ERROR_BOX_ID);
             }
             infoBox.getChildren().add(newInfoLabel);
         } else {
@@ -309,9 +311,15 @@ public class ElevatorController {
         return floorButton;
     }
 
+    /**
+     * Method to clear all notifications
+     */
     public void clearNotifications() {
-        errorList.clear();
-        warningList.clear();
-        infoPane.getChildren().clear();
+        Set<String> set = new LinkedHashSet<>(warningList);
+        set.addAll(errorList);
+        List<String> combinedList = new ArrayList<>(set);
+        for (String infoToDeleteId : combinedList) {
+            deleteInfo(infoToDeleteId);
+        }
     }
 }

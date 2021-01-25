@@ -10,7 +10,7 @@
             fx:controller="at.fhhagenberg.controller.MainController">
     <left>
         <VBox fx:id="leftMenu" maxWidth="200.0">
-            <JFXToggleButton fx:id="mode_button" maxWidth="1.7976931348623157E308" selected="true" text="Auto"/>
+            <JFXToggleButton fx:id="modeButton" maxWidth="1.7976931348623157E308" selected="true" text="Auto"/>
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                 <VBox>
                     <TitledPane collapsible="false" text="Errors">

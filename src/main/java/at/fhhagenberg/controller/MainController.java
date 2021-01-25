@@ -22,7 +22,7 @@ import static at.fhhagenberg.controller.GuiConstants.*;
 
 public class MainController {
     public Label statusLabel;
-    public JFXToggleButton mode_button;
+    public JFXToggleButton modeButton;
     public JFXMasonryPane elevatorView;
     public VBox leftMenu;
     public VBox warningBox;
@@ -38,12 +38,12 @@ public class MainController {
     }
 
     public void initialize() {
-        mode_button.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+        modeButton.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
-                mode_button.setText("Auto");
+                modeButton.setText("Auto");
                 autoMode = true;
             } else {
-                mode_button.setText("Manual");
+                modeButton.setText("Manual");
                 autoMode = false;
             }
             for (ElevatorController elevatorController : elevatorControllers) {
@@ -53,11 +53,11 @@ public class MainController {
     }
 
     /**
-     * Method to initialize the model
+     * Method to set the model
      *
      * @param building the data
      */
-    public void initModel(Building building) throws IOException {
+    public void setModel(Building building) throws IOException {
         this.building = building;
         Platform.runLater(new Runnable() {
             @Override
@@ -69,8 +69,8 @@ public class MainController {
                 if (elevatorView.getChildren().size() > 0) {
                     elevatorView.getChildren().removeAll(elevatorView.getChildren());
                 }
-                if (!mode_button.isSelected()) {
-                    mode_button.setSelected(true);
+                if (!modeButton.isSelected()) {
+                    modeButton.setSelected(true);
                 }
                 if (errorBox.getChildren().size() > 0) {
                     errorBox.getChildren().removeAll(errorBox.getChildren());
@@ -153,7 +153,7 @@ public class MainController {
 
     public void systemCanBeChanged(boolean systemIsConnected) {
         elevatorView.setDisable(!systemIsConnected);
-        mode_button.setDisable(!systemIsConnected);
+        modeButton.setDisable(!systemIsConnected);
     }
 
     public void clearNotifications() {

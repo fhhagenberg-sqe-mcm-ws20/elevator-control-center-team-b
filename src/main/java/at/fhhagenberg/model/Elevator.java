@@ -6,7 +6,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
 import lombok.Getter;
 
 import java.rmi.RemoteException;
@@ -87,6 +86,7 @@ public class Elevator implements IBuildingElevator {
         this.positionFromGround = 0;
         this.positionFromGround = 0;
         this.speed = 0;
+        this.floorTarget = 0;
         floorButtons = FXCollections.observableArrayList();
         floorServices = FXCollections.observableArrayList(IntStream.range(0, floorCount).boxed().collect(Collectors.toList()));
         setGuiProperties();
@@ -144,12 +144,12 @@ public class Elevator implements IBuildingElevator {
 
         });
         setFloorButtons();
-        //setFloorTarget(floorTarget);
         floorTargetProperty.addListener((observableValue, oldValue, newValue) -> {
             if (floorTarget != newValue.intValue()) {
                 setFloorTarget(newValue.intValue());
             }
         });
+        floorTargetProperty.setValue(floorTarget);
         speedProperty = new SimpleIntegerProperty(speed);
         doorStateProperty = new SimpleStringProperty(IBuildingElevator.Door_State.getDoorStateString(doorState));
         weightProperty = new SimpleIntegerProperty(weight);

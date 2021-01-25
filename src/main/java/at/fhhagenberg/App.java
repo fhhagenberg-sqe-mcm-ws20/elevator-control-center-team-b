@@ -15,7 +15,6 @@ import lombok.Generated;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import sqelevator.IElevator;
-import sqelevator.MockElevator;
 
 /**
  * JavaFX App
@@ -92,7 +91,7 @@ public class App extends Application {
                 if (newValue) {
                     building = elevatorControlSystem.initBuilding();
                     setStatusUI(true);
-                    ((MainController) mainLoader.getController()).initModel(building);
+                    ((MainController) mainLoader.getController()).setModel(building);
                 } else {
                     setStatusUI(false);
                 }
