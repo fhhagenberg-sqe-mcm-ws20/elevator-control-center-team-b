@@ -12,18 +12,22 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import lombok.Generated;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
+
     //private final IElevator system = new MockElevator();
+    @Getter
     private final ElevatorControlSystem elevatorControlSystem;
     private Building building;
     private Thread thread;
     private final boolean error = false;
-    private RemoteExceptionHandler handler = RemoteExceptionHandler.instance();
+    private final RemoteExceptionHandler handler = RemoteExceptionHandler.instance();
+    private MainController mainController;
 
     public App() {
         elevatorControlSystem = new ElevatorControlSystem("rmi://localhost/ElevatorSim");
@@ -42,8 +46,7 @@ public class App extends Application {
         primaryStage.show();
 
         handler.addObserver(elevatorControlSystem);
-        MainController mainController = mainLoader.getController();
-
+        mainController = mainLoader.getController();
 
         thread = new Thread(() -> {
             while (!error) {
@@ -81,31 +84,31 @@ public class App extends Application {
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
                 if (newValue) {
                     building = elevatorControlSystem.initBuilding();
-                    setStatusUI(mainController, true);
+                    setStatusUI(true);
                     ((MainController) mainLoader.getController()).initModel(building);
                 } else {
-                    setStatusUI(mainController, false);
+                    setStatusUI(false);
                 }
             }
         });
-        setStatusUI(mainController, elevatorControlSystem.getSystemConnected().get());
+        setStatusUI(elevatorControlSystem.getSystemConnected().get());
     }
 
-    public void setStatusUI(MainController mainController, boolean isConnected) {
+    public void setStatusUI(boolean isConnected) {
         Platform.runLater(() -> {
             String text;
             String style;
             if (isConnected) {
-                text = "System Connected.";
+                text = GuiConstants.MSG_IS_CONNECTED;
                 style = GuiConstants.STATUS_OK_STYLE;
             } else {
-                text = "System tries to connect..";
+                text = GuiConstants.MSG_CONNECTING;
                 style = GuiConstants.ERROR_STYLE;
             }
             mainController.systemCanBeChanged(isConnected);
-            mainController.status_label.setText(text);
-            mainController.status_label.getStyleClass().removeAll(mainController.status_label.getStyleClass());
-            mainController.status_label.getStyleClass().add(style);
+            mainController.statusLabel.setText(text);
+            mainController.statusLabel.getStyleClass().removeAll(mainController.statusLabel.getStyleClass());
+            mainController.statusLabel.getStyleClass().add(style);
         });
     }
 

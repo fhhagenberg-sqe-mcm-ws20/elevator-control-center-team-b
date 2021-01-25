@@ -8,6 +8,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.Property;
 import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -59,7 +60,6 @@ public class ElevatorController {
         this.leftMenu = leftMenu;
         this.id = id;
         setupIds();
-
         setupGuiProperties(floorCount);
     }
 
@@ -89,13 +89,13 @@ public class ElevatorController {
 
         // Set payload component
         String weightFormat = "%d kg";
-        payloadField.textProperty().bind(this.buildingElevator.payloadProperty.asString(weightFormat));
+        payloadField.textProperty().bind(this.buildingElevator.weightProperty.asString(weightFormat));
 
-        checkPayload(this.buildingElevator.getPayloadProperty().getValue());
-        this.buildingElevator.payloadProperty.addListener((observableValue, oldValue, newValue) -> {
-            if (oldValue.intValue() > buildingElevator.getCapacity()) {
-                checkPayload(newValue.intValue());
-            }
+        checkPayload(this.buildingElevator.getWeightProperty().getValue());
+        this.buildingElevator.weightProperty.addListener((observableValue, oldValue, newValue) -> {
+            //if (oldValue.intValue() > buildingElevator.getCapacity()) {
+            checkPayload(newValue.intValue());
+            //}
         });
 
         setupButtons(floorCount);
@@ -264,18 +264,24 @@ public class ElevatorController {
             infoPane.getChildren().clear();
         }
 
-        VBox parent = (VBox) leftMenu.lookup("#" + infoId).getParent();
-        parent.getChildren().remove(leftMenu.lookup("#" + infoId));
+        Node infoToDelete = leftMenu.lookup("#" + infoId);
+        // If the info exists we delete it
+        if (infoToDelete != null) {
+            VBox parent = (VBox) infoToDelete.getParent();
+            parent.getChildren().remove(leftMenu.lookup("#" + infoId));
+        }
     }
 
     /**
      * Method to check if payload is in capacity
+     * as we receive the maximum number of people possible in an elevator as the capacity,
+     * we multiply with an average weight of 90 per person to have the capacity in kg
      *
      * @param payload of the current elevator
      */
     private void checkPayload(int payload) {
-        int payloadCheck = this.buildingElevator.getCapacity() - payload;
-        if (payloadCheck < -150) {
+        int payloadCheck = (buildingElevator.getCapacity() * 90) - payload;
+        if (payloadCheck < 100 && payloadCheck > 0) {
             errorList.remove(payloadInfoId);
             createInfo(WARNING, payloadInfoId, String.format("Elevator %d: Warning payload on a high level.", id));
         } else if (payloadCheck <= 0) {

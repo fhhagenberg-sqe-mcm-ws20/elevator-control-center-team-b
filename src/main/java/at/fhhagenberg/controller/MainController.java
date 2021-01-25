@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import static at.fhhagenberg.controller.GuiConstants.*;
 
 public class MainController {
-    public Label status_label;
+    public Label statusLabel;
     public JFXToggleButton mode_button;
     public JFXMasonryPane elevatorView;
     public VBox leftMenu;

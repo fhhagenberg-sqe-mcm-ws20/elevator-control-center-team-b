@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import lombok.Getter;
 
 import java.rmi.RemoteException;
@@ -56,7 +57,7 @@ public class Elevator implements IBuildingElevator {
     @Getter
     public SimpleStringProperty doorStateProperty;
     @Getter
-    public SimpleIntegerProperty payloadProperty;
+    public SimpleIntegerProperty weightProperty;
     @Getter
     public SimpleIntegerProperty nearestFloorProperty;
     @Getter
@@ -137,8 +138,7 @@ public class Elevator implements IBuildingElevator {
                 try {
                     modelConverter.setCommittedDirection(number, newValue.intValue());
                 } catch (RemoteException e) {
-                    //TODO add error handling when system is not connected
-                    e.printStackTrace();
+                    RemoteExceptionHandler.instance().update();
                 }
             }
 
@@ -151,7 +151,7 @@ public class Elevator implements IBuildingElevator {
         });
         speedProperty = new SimpleIntegerProperty(speed);
         doorStateProperty = new SimpleStringProperty(IBuildingElevator.Door_State.getDoorStateString(doorState));
-        payloadProperty = new SimpleIntegerProperty(weight);
+        weightProperty = new SimpleIntegerProperty(weight);
         nearestFloorProperty = new SimpleIntegerProperty(nearestFloor);
     }
 
@@ -223,7 +223,7 @@ public class Elevator implements IBuildingElevator {
         setSpeed(elevator.getSpeed());
         setWeight(elevator.getWeight());
         setNearestFloor(elevator.getNearestFloor());
-        capacity = elevator.getCapacity() * 90;
+        capacity = elevator.getCapacity();
         floorServices = FXCollections.observableArrayList(elevator.getFloorServices());
     }
 
@@ -239,7 +239,7 @@ public class Elevator implements IBuildingElevator {
 
     public void setWeight(int weight) {
         this.weight = weight;
-        payloadProperty.setValue(weight);
+        weightProperty.setValue(weight);
     }
 
     /**

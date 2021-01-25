@@ -69,7 +69,7 @@ class ElevatorServiceTest {
     @Test
     void testGetElevatorWeight() throws RemoteException {
         int elevatorWeight = system.getElevatorWeight(1);
-        assertEquals(1500, elevatorWeight);
+        assertEquals(1000, elevatorWeight);
     }
 
     @Test

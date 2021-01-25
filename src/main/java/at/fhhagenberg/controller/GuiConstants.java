@@ -24,4 +24,8 @@ public class GuiConstants {
     public static final String CLICKED_STYLE = "clicked";
     public static final String RIGHT_SIDE_ICON_STYLE = "right-side-icon";
 
+    // Messages
+    public static final String MSG_IS_CONNECTED = "System is connected.";
+    public static final String MSG_CONNECTING = "System tries to connect..";
+
 }

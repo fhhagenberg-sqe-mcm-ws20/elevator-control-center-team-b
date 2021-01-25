@@ -4,8 +4,6 @@ import at.fhhagenberg.model.Building;
 import at.fhhagenberg.model.Floor;
 import at.fhhagenberg.model.IBuildingElevator;
 import at.fhhagenberg.model.IFloor;
-import javafx.application.Platform;
-import lombok.SneakyThrows;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +50,7 @@ public class AutomaticMode {
         var targetFloor = elevator.getFloorTarget();
         var doorStatus = elevator.getDoorState();
 
-        if (doorStatus == IBuildingElevator.Door_State.OPENING.value() ) {
+        if (doorStatus == IBuildingElevator.Door_State.OPENING.value()) {
             elevator.setFloorTarget(currentFloor);
             return;
         }

@@ -68,13 +68,6 @@ class GuiApplicationTest {
     }
 
     @Test
-    void testControllerInitException() {
-        org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class, () -> {
-            controller.initModel(testBuilding);
-        });
-    }
-
-    @Test
     void testIsPaneVisible() {
         verifyThat("#elevatorView", isVisible());
     }
