@@ -105,18 +105,15 @@ class GuiApplicationTest {
     void testManualModeWork(FxRobot robot) throws RemoteException {
         // Given
         JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
-        assertTrue(firstElevator.isDisabled());
-        robot.sleep(100);
-        assertEquals(2, firstElevator.getValue().intValue());
+        Assertions.assertThat(firstElevator.isDisabled()).isTrue();
+        Assertions.assertThat(firstElevator.getValue().intValue()).isEqualTo(2);
 
         //When
         Platform.runLater(() -> robot.lookup("#modeButton").queryAs(JFXToggleButton.class).setSelected(false));
         Platform.runLater(() -> assertFalse(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected()));
-        assertTrue(firstElevator.isDisabled());
-        robot.sleep(100);
+        Assertions.assertThat(firstElevator.isDisabled()).isTrue();
 
         robot.clickOn(firstElevator);
-        robot.sleep(100);
         // Click on the first entry
         robot.press(KeyCode.UP);
 
@@ -124,17 +121,16 @@ class GuiApplicationTest {
         robot.press(KeyCode.UP);
         robot.release(KeyCode.UP);
         robot.press(KeyCode.ENTER);
-        robot.sleep(100);
 
         //Then
-        assertEquals(0, firstElevator.getValue().intValue());
+        Assertions.assertThat(firstElevator.getValue().intValue()).isEqualTo(0);
 
         Platform.runLater(() -> robot.lookup("#modeButton").queryAs(JFXToggleButton.class).setSelected(true));
         Platform.runLater(() -> assertTrue(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected()));
 
         // Check if everything in the Backend has changed
-        assertEquals(0, testBuilding.getElevator(1).getFloorTarget());
-        assertEquals(0, elevatorConnection.getTarget(1));
+        Assertions.assertThat(testBuilding.getElevator(1).getFloorTarget()).isEqualTo(0);
+        Assertions.assertThat(elevatorConnection.getTarget(1)).isEqualTo(0);
     }
 
     /**
