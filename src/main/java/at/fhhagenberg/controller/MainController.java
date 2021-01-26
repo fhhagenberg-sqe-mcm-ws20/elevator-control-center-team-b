@@ -41,10 +41,10 @@ public class MainController {
         modeButton.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
                 modeButton.setText("Auto");
-                autoMode = true;
+                MainController.autoMode = true;
             } else {
                 modeButton.setText("Manual");
-                autoMode = false;
+                MainController.autoMode = false;
             }
             for (ElevatorController elevatorController : elevatorControllers) {
                 elevatorController.setAutoMode(newValue);

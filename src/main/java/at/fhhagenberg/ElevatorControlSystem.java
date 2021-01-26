@@ -73,7 +73,7 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
         }
 
         try {
-            if (Boolean.TRUE.equals(mainController.autoMode)) {
+            if (Boolean.TRUE.equals(MainController.autoMode)) {
                 mode.update(building);
             }
         } catch (Exception e) {
