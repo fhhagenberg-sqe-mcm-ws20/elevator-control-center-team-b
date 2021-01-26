@@ -1,8 +1,5 @@
 package at.fhhagenberg.model;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import lombok.Getter;
 
 import java.util.List;

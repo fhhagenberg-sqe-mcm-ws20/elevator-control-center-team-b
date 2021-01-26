@@ -27,7 +27,7 @@ public class App extends Application {
     @Getter
     private final ElevatorControlSystem elevatorControlSystem;
     private Building building;
-    private static final boolean error = false;
+    private static final boolean ERROR = false;
     private final RemoteExceptionHandler handler = RemoteExceptionHandler.instance();
     private MainController mainController;
 
@@ -82,7 +82,7 @@ public class App extends Application {
             @Override
             @SneakyThrows
             public void run() {
-                while (!error) {
+                while (!ERROR) {
                     if (elevatorControlSystem.getSystemConnected().get()) {
                         Platform.runLater(() -> elevatorControlSystem.update(building, mainController));
                     }
@@ -95,7 +95,7 @@ public class App extends Application {
             @Override
             @SneakyThrows
             public void run() {
-                while (!error) {
+                while (!ERROR) {
                     if (elevatorControlSystem.getSystemConnected().get()) {
                         Platform.runLater(() -> elevatorControlSystem.updateMode(building, mainController));
                     }

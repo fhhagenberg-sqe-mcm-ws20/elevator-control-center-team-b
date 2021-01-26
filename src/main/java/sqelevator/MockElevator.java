@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 public class MockElevator implements IElevator, Serializable {
     private final ArrayList<IBuildingElevator> elevators = new ArrayList<>();
     private final ArrayList<IFloor> floors = new ArrayList<>();
-    private final Long clockTick = 1L;
+    private static final Long clockTick = 1L;
 
     public MockElevator() {
         ArrayList<Integer> floorButtons = new ArrayList<>(IntStream.range(0, 2).boxed().collect(Collectors.toList()));

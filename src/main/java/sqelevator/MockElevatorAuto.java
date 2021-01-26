@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 public class MockElevatorAuto implements IElevator {
     private final ArrayList<IBuildingElevator> elevators = new ArrayList<>();
     private final ArrayList<IFloor> floors = new ArrayList<>();
-    private final Long clockTick = 1L;
+    private static final Long clockTick = 1L;
 
     public MockElevatorAuto() {
         ArrayList<Integer> floorButtons = IntStream.range(1, 2).boxed().collect(Collectors.toCollection(ArrayList::new));

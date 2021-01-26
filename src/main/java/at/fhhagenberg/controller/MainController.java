@@ -28,7 +28,7 @@ public class MainController {
     public VBox warningBox;
     public VBox errorBox;
     public VBox floorListRight;
-    public Boolean autoMode = true;
+    public static Boolean autoMode = true;
 
     private Building building;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
