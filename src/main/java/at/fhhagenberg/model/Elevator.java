@@ -225,7 +225,8 @@ public class Elevator implements IBuildingElevator {
         floorTarget = elevator.getFloorTarget();
         floorTargetProperty.set(floorTarget);
         acceleration = elevator.getAcceleration();
-        floorButtons = FXCollections.observableArrayList(elevator.getFloorButtons());
+        floorButtons.clear();
+        floorButtons.addAll(elevator.getFloorButtons());
         doorState = elevator.getDoorState();
         doorStateProperty.set(Door_State.getDoorStateString(doorState));
         positionFromGround = elevator.getPositionFromGround();
