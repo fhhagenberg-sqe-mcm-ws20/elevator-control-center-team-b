@@ -114,13 +114,13 @@ public class ElevatorController {
                 if (change.wasAdded()) {
                     // Get only the first integer of the change as this one is the one we need
                     change.getAddedSubList().forEach(item -> {
-                        JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BTN_ID_PREFIX + change.getAddedSubList().get(item));
+                        JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BTN_ID_PREFIX + item);
                         currentFloorBtn.getStyleClass().add(CLICKED_STYLE);
                     });
 
                 } else if (change.wasRemoved()) {
                     change.getRemoved().forEach(item -> {
-                        JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BTN_ID_PREFIX + change.getRemoved().get(item));
+                        JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BTN_ID_PREFIX + item);
                         currentFloorBtn.getStyleClass().remove(CLICKED_STYLE);
                         if (targetField.getItems().isEmpty()) {
                             targetField.getSelectionModel().clearSelection();

@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
@@ -55,7 +56,7 @@ class GuiApplicationTest {
         FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/Main.fxml"));
         Parent root = mainLoader.load();
         stage.setTitle("Elevator System");
-        Scene scene = new Scene(root, 640, 480);
+        Scene scene = new Scene(root, 800, 600);
         stage.setScene(scene);
         stage.show();
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
@@ -96,6 +97,43 @@ class GuiApplicationTest {
     void testShowWarningMessageInLeftMenu(FxRobot robot) {
         Assertions.assertThat(robot.lookup("#" + PAYLOAD_ID_PREFIX + "7").queryAs(Label.class)).hasText("Elevator 7: Warning payload on a high level.");
     }
+
+    /**
+     * @param robot - Will be injected by the test runner.
+     */
+    @Test
+    void testManualModeWork(FxRobot robot) throws RemoteException {
+        // Given
+        JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
+        Assertions.assertThat(firstElevator.isDisabled()).isTrue();
+        Assertions.assertThat(firstElevator.getValue().intValue()).isEqualTo(2);
+
+        //When
+        Platform.runLater(() -> robot.lookup("#modeButton").queryAs(JFXToggleButton.class).setSelected(false));
+        Platform.runLater(() -> assertFalse(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected()));
+        Assertions.assertThat(firstElevator.isDisabled()).isTrue();
+
+        robot.clickOn(firstElevator);
+        // Click on the first entry
+        robot.press(KeyCode.UP);
+
+        robot.release(KeyCode.UP);
+        robot.press(KeyCode.UP);
+        robot.release(KeyCode.UP);
+        robot.press(KeyCode.ENTER);
+
+        //Then
+        Assertions.assertThat(firstElevator.getValue().intValue()).isEqualTo(0);
+
+        Platform.runLater(() -> robot.lookup("#modeButton").queryAs(JFXToggleButton.class).setSelected(true));
+        Platform.runLater(() -> assertTrue(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected()));
+
+        // Check if everything in the Backend has changed
+        Assertions.assertThat(testBuilding.getElevator(1).getFloorTarget()).isEqualTo(0);
+        Assertions.assertThat(elevatorConnection.getTarget(1)).isEqualTo(0);
+    }
+
+
 
     /**
      * @param robot - Will be injected by the test runner.

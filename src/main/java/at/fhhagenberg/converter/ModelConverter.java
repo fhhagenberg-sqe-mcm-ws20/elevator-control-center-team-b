@@ -49,20 +49,20 @@ public class ModelConverter {
         int numberOfElevators = elevatorConnection.getElevatorNum();
 
         for (int i = 0; i < numberOfElevators; i++) {
-            ArrayList<Integer> floorButtonsTest = new ArrayList<>();
-            ArrayList<Integer> servicedFloorsTest = new ArrayList<>();
+            ArrayList<Integer> floorButtons = new ArrayList<>();
+            ArrayList<Integer> servicedFloors = new ArrayList<>();
 
             for (IFloor currentFloor : floors) {
                 if (elevatorConnection.getElevatorButton(i, currentFloor.getNumber())) {
-                    floorButtonsTest.add(currentFloor.getNumber());
+                    floorButtons.add(currentFloor.getNumber());
                 }
                 if (elevatorConnection.getServicesFloors(i, currentFloor.getNumber())) {
-                    servicedFloorsTest.add(currentFloor.getNumber());
+                    servicedFloors.add(currentFloor.getNumber());
                 }
             }
-            elevators.add(new Elevator(i, elevatorConnection.getCommittedDirection(i), elevatorConnection.getElevatorAccel(i), floorButtonsTest, elevatorConnection.getElevatorDoorStatus(i),
+            elevators.add(new Elevator(i, elevatorConnection.getCommittedDirection(i), elevatorConnection.getElevatorAccel(i), floorButtons, elevatorConnection.getElevatorDoorStatus(i),
                     elevatorConnection.getElevatorFloor(i), elevatorConnection.getElevatorPosition(i), elevatorConnection.getElevatorSpeed(i), elevatorConnection.getElevatorWeight(i),
-                    elevatorConnection.getElevatorCapacity(i), servicedFloorsTest, elevatorConnection.getTarget(i), this));
+                    elevatorConnection.getElevatorCapacity(i), servicedFloors, elevatorConnection.getTarget(i), this));
         }
         return elevators;
     }

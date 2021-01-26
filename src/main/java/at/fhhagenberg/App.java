@@ -66,8 +66,8 @@ public class App extends Application {
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
                 if (Boolean.TRUE.equals(newValue)) {
-                    building = elevatorControlSystem.initBuilding();
                     setStatusUI(true);
+                    building = elevatorControlSystem.initBuilding();
                     ((MainController) mainLoader.getController()).setModel(building);
                 } else {
                     setStatusUI(false);
