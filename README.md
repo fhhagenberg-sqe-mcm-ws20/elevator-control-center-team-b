@@ -1,4 +1,10 @@
-# Graphical User Interface with JavaFx
+# Elevator Control Center of Team B 
+![Build](https://github.com/fhhagenberg-sqe-mcm-ws20/elevator-control-center-team-b/workflows/Build/badge.svg) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fhhagenberg-sqe-mcm-ws20_elevator-control-center-team-b&metric=alert_status)](https://sonarcloud.io/dashboard?id=fhhagenberg-sqe-mcm-ws20_elevator-control-center-team-b) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fhhagenberg-sqe-mcm-ws20_elevator-control-center-team-b&metric=coverage)](https://sonarcloud.io/dashboard?id=fhhagenberg-sqe-mcm-ws20_elevator-control-center-team-b)
+
+Team Members:
+- Andreas Roither
+- Maike Rieger
+- Clemens Tögel
 
 ### Prerequisites
 
@@ -18,20 +24,12 @@ Default locale: en_GB, platform encoding: Cp1252
 OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
 ```
 
-### Instructions
+## Instructions
 
-This maven project is already set up for JavaFx based GUI applications. It also contains a small example application - `App.java`.
+> Run the latests pre-built `.jar` file [latest release](https://github.com/fhhagenberg-sqe-mcm-ws20/elevator-control-center-team-b/releases/latest) with `java -jar FILENAME.jar`
 
-1. Import this git repository into your favourite IDE.
+### Run .jar with Maven
+- Build application with `mvn clean package`
 
-1. Make sure, you can run the sample application without errors.
-	- Either run it in your IDE
-	- Via command line, run it with `mvn clean javafx:run`.
-
-You can build your project with maven with
-
-```
-mvn clean package
-```
-
-The resulting archive (`.jar` file) is in the `target` directory.
+### Run application with Maven
+- Run application with `mvn clean javafx:run`

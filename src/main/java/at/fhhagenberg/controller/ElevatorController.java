@@ -8,6 +8,7 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.Property;
 import javafx.collections.ListChangeListener;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
@@ -15,6 +16,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import static at.fhhagenberg.controller.GuiConstants.*;
 
@@ -59,7 +63,6 @@ public class ElevatorController {
         this.leftMenu = leftMenu;
         this.id = id;
         setupIds();
-
         setupGuiProperties(floorCount);
     }
 
@@ -70,8 +73,6 @@ public class ElevatorController {
         // Set nearest floor component
         String floorFormat = "Current floor: %d";
         nearestFloor.textProperty().bind(this.buildingElevator.nearestFloorProperty.asString(floorFormat));
-        // TODO: This line is only for testing, remove it!
-        nearestFloor.setOnMouseClicked(mouseEvent -> buildingElevator.setWeight(350));
 
         // Bind Combobox to pressed buttons
         targetField.setItems(this.buildingElevator.getFloorServices());
@@ -84,27 +85,17 @@ public class ElevatorController {
 
         // Set door state component
         doorStatusField.textProperty().bind(this.buildingElevator.doorStateProperty);
-        // TODO: This line is only for testing, remove it!
-        doorStatusField.setOnMouseClicked(mouseEvent -> buildingElevator.setWeight(250));
 
         // Set speed component
         String speedFormat = "%d m/s";
         speedField.textProperty().bind(this.buildingElevator.speedProperty.asString(speedFormat));
-        // TODO: This line is only for testing, remove it!
-        speedField.setOnMouseClicked(mouseEvent -> createInfo(WARNING, "test" + this.id, "Elevator " + this.id + ": Hey"));
 
         // Set payload component
         String weightFormat = "%d kg";
-        payloadField.textProperty().bind(this.buildingElevator.payloadProperty.asString(weightFormat));
-        // TODO: This line is only for testing, remove it!
-        payloadField.setOnMouseClicked(mouseEvent -> buildingElevator.setWeight(450));
+        payloadField.textProperty().bind(this.buildingElevator.weightProperty.asString(weightFormat));
 
-        checkPayload(this.buildingElevator.getPayloadProperty().getValue());
-        this.buildingElevator.payloadProperty.addListener((observableValue, oldValue, newValue) -> {
-            if (oldValue.intValue() > buildingElevator.getCapacity()) {
-                checkPayload(newValue.intValue());
-            }
-        });
+        checkPayload(this.buildingElevator.getWeightProperty().getValue());
+        this.buildingElevator.weightProperty.addListener((observableValue, oldValue, newValue) -> checkPayload(newValue.intValue()));
 
         setupButtons(floorCount);
     }
@@ -122,14 +113,19 @@ public class ElevatorController {
             while (change.next()) {
                 if (change.wasAdded()) {
                     // Get only the first integer of the change as this one is the one we need
-                    JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BTN_ID_PREFIX + change.getAddedSubList().get(0));
-                    currentFloorBtn.getStyleClass().add(CLICKED_STYLE);
+                    change.getAddedSubList().forEach(item -> {
+                        JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BTN_ID_PREFIX + item);
+                        currentFloorBtn.getStyleClass().add(CLICKED_STYLE);
+                    });
+
                 } else if (change.wasRemoved()) {
-                    JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BTN_ID_PREFIX + change.getRemoved().get(0));
-                    currentFloorBtn.getStyleClass().remove(CLICKED_STYLE);
-                    if (targetField.getItems().isEmpty()) {
-                        targetField.getSelectionModel().clearSelection();
-                    }
+                    change.getRemoved().forEach(item -> {
+                        JFXButton currentFloorBtn = (JFXButton) floorButtonPane.lookup("#" + FLOOR_BTN_ID_PREFIX + item);
+                        currentFloorBtn.getStyleClass().remove(CLICKED_STYLE);
+                        if (targetField.getItems().isEmpty()) {
+                            targetField.getSelectionModel().clearSelection();
+                        }
+                    });
                 }
             }
         });
@@ -216,7 +212,6 @@ public class ElevatorController {
                 infoBox = (VBox) leftMenu.lookup("#" + WARNING_BOX_ID);
             } else {
                 infoBox = (VBox) leftMenu.lookup("#" + ERROR_BOX_ID);
-                infoBox = (VBox) leftMenu.lookup("#" + ERROR_BOX_ID);
             }
             infoBox.getChildren().add(newInfoLabel);
         } else {
@@ -263,6 +258,7 @@ public class ElevatorController {
     public void deleteInfo(String infoId) {
         warningList.remove(infoId);
         errorList.remove(infoId);
+
         if (!errorList.isEmpty()) {
             updateTopIcon(ERROR);
         } else if (!warningList.isEmpty()) {
@@ -270,21 +266,28 @@ public class ElevatorController {
         } else {
             infoPane.getChildren().clear();
         }
-        VBox parent = (VBox) leftMenu.lookup("#" + infoId).getParent();
-        parent.getChildren().remove(leftMenu.lookup("#" + infoId));
+
+        Node infoToDelete = leftMenu.lookup("#" + infoId);
+        // If the info exists we delete it
+        if (infoToDelete != null) {
+            VBox parent = (VBox) infoToDelete.getParent();
+            parent.getChildren().remove(leftMenu.lookup("#" + infoId));
+        }
     }
 
     /**
      * Method to check if payload is in capacity
+     * as we receive the maximum number of people possible in an elevator as the capacity,
+     * we multiply with an average weight of 90 per person to have the capacity in kg
      *
      * @param payload of the current elevator
      */
     private void checkPayload(int payload) {
-        int payloadCheck = this.buildingElevator.getCapacity() - payload;
-        if (payloadCheck < 0 && payloadCheck > -150) {
+        int payloadCheck = (buildingElevator.getCapacity() * 90) - payload;
+        if (payloadCheck < 100 && payloadCheck > 0) {
             errorList.remove(payloadInfoId);
             createInfo(WARNING, payloadInfoId, String.format("Elevator %d: Warning payload on a high level.", id));
-        } else if (payloadCheck <= -150) {
+        } else if (payloadCheck <= 0) {
             warningList.remove(payloadInfoId);
             createInfo(ERROR, payloadInfoId, String.format("Elevator %d: Error payload too high.", id));
         } else {
@@ -307,5 +310,17 @@ public class ElevatorController {
         }
         floorButton.setOnMouseClicked(mouseEvent -> buildingElevator.addPressedFloorButton(floorNumber));
         return floorButton;
+    }
+
+    /**
+     * Method to clear all notifications
+     */
+    public void clearNotifications() {
+        Set<String> set = new LinkedHashSet<>(warningList);
+        set.addAll(errorList);
+        List<String> combinedList = new ArrayList<>(set);
+        for (String infoToDeleteId : combinedList) {
+            deleteInfo(infoToDeleteId);
+        }
     }
 }

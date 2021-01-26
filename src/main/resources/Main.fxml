@@ -10,7 +10,7 @@
             fx:controller="at.fhhagenberg.controller.MainController">
     <left>
         <VBox fx:id="leftMenu" maxWidth="200.0">
-            <JFXToggleButton fx:id="mode_button" maxWidth="1.7976931348623157E308" selected="true" text="Auto"/>
+            <JFXToggleButton fx:id="modeButton" maxWidth="1.7976931348623157E308" selected="true" text="Auto"/>
             <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                 <VBox>
                     <TitledPane collapsible="false" text="Errors">
@@ -28,7 +28,8 @@
     </left>
     <bottom>
         <AnchorPane style="-fx-background-color: lightgrey;" BorderPane.alignment="CENTER">
-            <Label fx:id="status_label" text="System connected" AnchorPane.leftAnchor="10.0"/>
+            <Label fx:id="statusLabel" AnchorPane.leftAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
         </AnchorPane>
     </bottom>
     <top>

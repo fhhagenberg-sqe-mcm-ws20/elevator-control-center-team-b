@@ -142,6 +142,13 @@ public interface IBuildingElevator {
     int getDirection();
 
     /**
+     * Direction of the elevator
+     *
+     * @return direction state
+     */
+    int getLastDirection();
+
+    /**
      * Acceleration of the elevator
      *
      * @return acceleration

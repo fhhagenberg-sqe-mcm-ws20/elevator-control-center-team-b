@@ -1,5 +1,6 @@
 package at.fhhagenberg.model;
 
+import at.fhhagenberg.RemoteExceptionHandler;
 import at.fhhagenberg.converter.ModelConverter;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -29,6 +30,8 @@ public class Elevator implements IBuildingElevator {
     @Getter
     private int direction;
     @Getter
+    public int lastDirection;
+    @Getter
     private int acceleration;
     @Getter
     private int doorState;
@@ -55,7 +58,7 @@ public class Elevator implements IBuildingElevator {
     @Getter
     public SimpleStringProperty doorStateProperty;
     @Getter
-    public SimpleIntegerProperty payloadProperty;
+    public SimpleIntegerProperty weightProperty;
     @Getter
     public SimpleIntegerProperty nearestFloorProperty;
     @Getter
@@ -83,6 +86,7 @@ public class Elevator implements IBuildingElevator {
         this.positionFromGround = 0;
         this.positionFromGround = 0;
         this.speed = 0;
+        this.floorTarget = 0;
         floorButtons = FXCollections.observableArrayList();
         floorServices = FXCollections.observableArrayList(IntStream.range(0, floorCount).boxed().collect(Collectors.toList()));
         setGuiProperties();
@@ -121,9 +125,7 @@ public class Elevator implements IBuildingElevator {
         if (floorButtons.contains(nearestFloor)) {
             floorButtons.remove(Integer.valueOf(nearestFloor));
         }
-        if (nearestFloor != floorTarget) {
-            this.floorTarget = floorTarget;
-        }
+        this.floorTarget = floorTarget;
         this.modelConverter = modelConverter;
         setGuiProperties();
     }
@@ -136,25 +138,29 @@ public class Elevator implements IBuildingElevator {
                 try {
                     modelConverter.setCommittedDirection(number, newValue.intValue());
                 } catch (RemoteException e) {
-                    //TODO add error handling when system is not connected
-                    e.printStackTrace();
+                    RemoteExceptionHandler.instance().update();
                 }
             }
 
         });
-        setFloorTarget(floorTarget);
+        setFloorButtons();
         floorTargetProperty.addListener((observableValue, oldValue, newValue) -> {
             if (floorTarget != newValue.intValue()) {
                 setFloorTarget(newValue.intValue());
             }
         });
+        floorTargetProperty.setValue(floorTarget);
         speedProperty = new SimpleIntegerProperty(speed);
         doorStateProperty = new SimpleStringProperty(IBuildingElevator.Door_State.getDoorStateString(doorState));
-        payloadProperty = new SimpleIntegerProperty(weight);
+        weightProperty = new SimpleIntegerProperty(weight);
         nearestFloorProperty = new SimpleIntegerProperty(nearestFloor);
     }
 
     public void setDirection(int direction) {
+        if (this.direction != Direction_State.UNCOMMITTED.value()) {
+            lastDirection = this.direction;
+        }
+
         if (direction < Direction_State.UP.value() || direction > Direction_State.UNCOMMITTED.value())
             this.direction = Direction_State.UNCOMMITTED.value();
         else
@@ -182,12 +188,9 @@ public class Elevator implements IBuildingElevator {
         int newDirection = nearestFloor - floor;
         floorTarget = floor;
         floorTargetProperty.setValue(floor);
-        if (!floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
-            floorButtons.add(0, floorTarget);
-        } else if (floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
-            floorButtons.remove(Integer.valueOf(floorTarget));
-            floorButtons.add(0, floorTarget);
-        }
+
+        setFloorButtons();
+
         if (newDirection == 0) {
             setDirection(Direction_State.UNCOMMITTED.value());
         } else if (newDirection < 0) {
@@ -195,14 +198,23 @@ public class Elevator implements IBuildingElevator {
         } else {
             setDirection(Direction_State.DOWN.value());
         }
+
         // ModelConverter might be null due to test classes
         if (modelConverter != null) {
             try {
                 modelConverter.setTarget(number, floorTarget);
             } catch (RemoteException e) {
-                //TODO add error handling when system is not connected
-                e.printStackTrace();
+                RemoteExceptionHandler.instance().update();
             }
+        }
+    }
+
+    private void setFloorButtons() {
+        if (!floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
+            floorButtons.add(0, floorTarget);
+        } else if (floorButtons.contains(floorTarget) && floorTarget != nearestFloor) {
+            floorButtons.remove(Integer.valueOf(floorTarget));
+            floorButtons.add(0, floorTarget);
         }
     }
 
@@ -210,21 +222,35 @@ public class Elevator implements IBuildingElevator {
     public void update(IBuildingElevator elevator) {
         number = elevator.getNumber();
         setDirection(elevator.getDirection());
-        setFloorTarget(elevator.getFloorTarget());
+        floorTarget = elevator.getFloorTarget();
+        floorTargetProperty.set(floorTarget);
         acceleration = elevator.getAcceleration();
-        floorButtons = FXCollections.observableArrayList(elevator.getFloorButtons());
+        floorButtons.clear();
+        floorButtons.addAll(elevator.getFloorButtons());
         doorState = elevator.getDoorState();
-        nearestFloor = elevator.getNearestFloor();
+        doorStateProperty.set(Door_State.getDoorStateString(doorState));
         positionFromGround = elevator.getPositionFromGround();
-        speed = elevator.getSpeed();
-        weight = elevator.getWeight();
+        setSpeed(elevator.getSpeed());
+        setWeight(elevator.getWeight());
+        setNearestFloor(elevator.getNearestFloor());
         capacity = elevator.getCapacity();
         floorServices = FXCollections.observableArrayList(elevator.getFloorServices());
+        setFloorButtons();
+    }
+
+    private void setSpeed(int speed) {
+        this.speed = speed;
+        speedProperty.set(speed);
+    }
+
+    public void setNearestFloor(int nearestFloor) {
+        this.nearestFloor = nearestFloor;
+        nearestFloorProperty.set(nearestFloor);
     }
 
     public void setWeight(int weight) {
         this.weight = weight;
-        payloadProperty.setValue(weight);
+        weightProperty.setValue(weight);
     }
 
     /**

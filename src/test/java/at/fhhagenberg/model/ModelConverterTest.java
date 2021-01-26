@@ -39,7 +39,7 @@ class ModelConverterTest {
 
         converter.update(testBuilding);
         assertEquals(2, testBuilding.getElevator(1).getFloorTarget());
-        assertTrue(testBuilding.getFloors().get(1).isDownButtonActive());
+        assertTrue(testBuilding.getFloors().get(1).isUpButtonActive());
     }
 
     @Test

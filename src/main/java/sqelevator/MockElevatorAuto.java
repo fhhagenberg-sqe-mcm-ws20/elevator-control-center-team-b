@@ -5,36 +5,30 @@ import at.fhhagenberg.model.Floor;
 import at.fhhagenberg.model.IBuildingElevator;
 import at.fhhagenberg.model.IFloor;
 
-import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class MockElevator implements IElevator, Serializable {
+public class MockElevatorAuto implements IElevator {
     private final ArrayList<IBuildingElevator> elevators = new ArrayList<>();
     private final ArrayList<IFloor> floors = new ArrayList<>();
     private static final Long CLOCK_TICK = 1L;
 
-    public MockElevator() {
-        ArrayList<Integer> floorButtons = new ArrayList<>(IntStream.range(0, 2).boxed().collect(Collectors.toList()));
-        ArrayList<Integer> servicedFloors = new ArrayList<>(IntStream.range(0, 5).boxed().collect(Collectors.toList()));
+    public MockElevatorAuto() {
+        ArrayList<Integer> floorButtons = IntStream.range(1, 2).boxed().collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Integer> floorButtons2 = IntStream.range(4, 4).boxed().collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<Integer> servicedFloors = IntStream.range(0, 5).boxed().collect(Collectors.toCollection(ArrayList::new));
 
         floors.add(new Floor(0, true, false));
-        floors.add(new Floor(1, false, false));
-        floors.add(new Floor(2, true, false));
-        floors.add(new Floor(3, false, false));
-        floors.add(new Floor(4, true, true));
+        floors.add(new Floor(1, true, false));
+        floors.add(new Floor(2, false, false));
+        floors.add(new Floor(3, true, false));
+        floors.add(new Floor(4, false, true));
 
-        elevators.add(new Elevator(0, 5, 200, 6));
-        elevators.add(new Elevator(1, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 1000, 10, servicedFloors, 2, null));
-        elevators.add(new Elevator(2, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, floorButtons, IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 800, 10, servicedFloors, 0, null));
-        elevators.add(new Elevator(3, 5, 250, 6));
-        elevators.add(new Elevator(4, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 780, 10, servicedFloors, 4, null));
-        elevators.add(new Elevator(5, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, floorButtons, IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 970, 10, servicedFloors, 0, null));
-        elevators.add(new Elevator(6, 5, 150, 6));
-        elevators.add(new Elevator(7, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons, IBuildingElevator.Door_State.CLOSED.value(), 3, 30, 2, 400, 5, servicedFloors, 2, null));
-        elevators.add(new Elevator(8, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, floorButtons, IBuildingElevator.Door_State.OPEN.value(), 1, 10, 0, 420, 8, servicedFloors, 0, null));
+        elevators.add(new Elevator(0, IBuildingElevator.Direction_State.UP.value(), 2, floorButtons, IBuildingElevator.Door_State.OPEN.value(), 0, 10, 2, 100, 10, servicedFloors, 0, null));
+        elevators.add(new Elevator(1, IBuildingElevator.Direction_State.UNCOMMITTED.value(), 2, new ArrayList<>(), IBuildingElevator.Door_State.OPEN.value(), 2, 20, 2, 100, 10, servicedFloors, 2, null));
+        elevators.add(new Elevator(2, IBuildingElevator.Direction_State.DOWN.value(), 2, floorButtons2, IBuildingElevator.Door_State.OPEN.value(), 4, 10, 0, 800, 10, servicedFloors, 4, null));
     }
 
     private void checkElevatorBounds(int elevator) throws RemoteException {
@@ -166,9 +160,5 @@ public class MockElevator implements IElevator, Serializable {
     @Override
     public long getClockTick() throws RemoteException {
         return CLOCK_TICK + 1;
-    }
-
-    public void setFloorButtonUp(int floor, boolean upActive) {
-        floors.get(floor).setUpButtonActive(upActive);
     }
 }

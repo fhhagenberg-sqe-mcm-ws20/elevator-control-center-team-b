@@ -6,26 +6,30 @@ import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXToggleButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static at.fhhagenberg.controller.GuiConstants.*;
 
 public class MainController {
-    public Label status_label;
-    public JFXToggleButton mode_button;
+    public Label statusLabel;
+    public JFXToggleButton modeButton;
     public JFXMasonryPane elevatorView;
     public VBox leftMenu;
     public VBox warningBox;
     public VBox errorBox;
     public VBox floorListRight;
+    public boolean autoMode = true;
 
     private Building building;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
@@ -35,11 +39,13 @@ public class MainController {
     }
 
     public void initialize() {
-        mode_button.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+        modeButton.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
-                mode_button.setText("Auto");
+                modeButton.setText("Auto");
+                autoMode = true;
             } else {
-                mode_button.setText("Manual");
+                modeButton.setText("Manual");
+                autoMode = false;
             }
             for (ElevatorController elevatorController : elevatorControllers) {
                 elevatorController.setAutoMode(newValue);
@@ -48,17 +54,34 @@ public class MainController {
     }
 
     /**
-     * Method to initialize the model
+     * Method to set the model
      *
      * @param building the data
      */
-    public void initModel(Building building) throws IOException {
-        if (this.building != null) {
-            throw new IllegalStateException("Model can only be initialized once");
-        }
-
+    public void setModel(Building building) {
         this.building = building;
-        displayElevatorControllers();
+        Platform.runLater(new Runnable() {
+            @Override
+            @SneakyThrows
+            public void run() {
+                if (!floorListRight.getChildren().isEmpty()) {
+                    floorListRight.getChildren().removeAll(floorListRight.getChildren());
+                }
+                if (!elevatorView.getChildren().isEmpty()) {
+                    elevatorView.getChildren().removeAll(elevatorView.getChildren());
+                }
+                if (!modeButton.isSelected()) {
+                    modeButton.setSelected(true);
+                }
+                if (!errorBox.getChildren().isEmpty()) {
+                    errorBox.getChildren().removeAll(errorBox.getChildren());
+                }
+                if (!warningBox.getChildren().isEmpty()) {
+                    warningBox.getChildren().removeAll(warningBox.getChildren());
+                }
+                displayElevatorControllers();
+            }
+        });
     }
 
     /**
@@ -127,5 +150,14 @@ public class MainController {
 
         gridPane.getStyleClass().add(ROUND_BUTTON_STYLE);
         return gridPane;
+    }
+
+    public void systemCanBeChanged(boolean systemIsConnected) {
+        elevatorView.setDisable(!systemIsConnected);
+        modeButton.setDisable(!systemIsConnected);
+    }
+
+    public void clearNotifications() {
+        elevatorControllers.forEach(ElevatorController::clearNotifications);
     }
 }
