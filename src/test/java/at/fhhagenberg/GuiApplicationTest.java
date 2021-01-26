@@ -110,8 +110,8 @@ class GuiApplicationTest {
 
         //When
         Platform.runLater(() -> robot.lookup("#modeButton").queryAs(JFXToggleButton.class).setSelected(false));
-        Platform.runLater(() -> assertFalse(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected()));
-        Assertions.assertThat(firstElevator.isDisabled()).isTrue();
+        Platform.runLater(() -> Assertions.assertThat(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected()).isFalse());
+        Assertions.assertThat(firstElevator.isDisabled()).isFalse();
 
         robot.clickOn(firstElevator);
         // Click on the first entry
