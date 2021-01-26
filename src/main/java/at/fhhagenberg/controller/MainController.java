@@ -29,7 +29,7 @@ public class MainController {
     public VBox warningBox;
     public VBox errorBox;
     public VBox floorListRight;
-    public static final AtomicReference<Boolean> autoMode = new AtomicReference<>(true);
+    public boolean autoMode = true;
 
     private Building building;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
@@ -42,10 +42,10 @@ public class MainController {
         modeButton.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
                 modeButton.setText("Auto");
-                MainController.autoMode.set(true);
+                autoMode = true;
             } else {
                 modeButton.setText("Manual");
-                MainController.autoMode.set(false);
+                autoMode = false;
             }
             for (ElevatorController elevatorController : elevatorControllers) {
                 elevatorController.setAutoMode(newValue);
