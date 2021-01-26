@@ -17,6 +17,7 @@ import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static at.fhhagenberg.controller.GuiConstants.*;
 
@@ -28,7 +29,7 @@ public class MainController {
     public VBox warningBox;
     public VBox errorBox;
     public VBox floorListRight;
-    public static Boolean autoMode = true;
+    public static final AtomicReference<Boolean> autoMode = new AtomicReference<>(true);
 
     private Building building;
     private final ArrayList<ElevatorController> elevatorControllers = new ArrayList<>();
@@ -41,10 +42,10 @@ public class MainController {
         modeButton.selectedProperty().addListener(((observable, oldValue, newValue) -> {
             if (newValue) {
                 modeButton.setText("Auto");
-                MainController.autoMode = true;
+                MainController.autoMode.set(true);
             } else {
                 modeButton.setText("Manual");
-                MainController.autoMode = false;
+                MainController.autoMode.set(false);
             }
             for (ElevatorController elevatorController : elevatorControllers) {
                 elevatorController.setAutoMode(newValue);
