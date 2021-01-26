@@ -28,4 +28,5 @@ public class GuiConstants {
     public static final String MSG_IS_CONNECTED = "System is connected.";
     public static final String MSG_CONNECTING = "System tries to connect..";
 
+    private GuiConstants() {}
 }

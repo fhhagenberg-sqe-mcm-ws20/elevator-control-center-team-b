@@ -57,10 +57,7 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
 
     public void reconnectToSimulator() {
         systemConnected.set(false);
-        if (connectionThread == null) {
-            connectionThread = createConnectionThread();
-            connectionThread.start();
-        } else if (!connectionThread.isAlive()) {
+        if (connectionThread == null || !connectionThread.isAlive()) {
             connectionThread = createConnectionThread();
             connectionThread.start();
         }
@@ -76,7 +73,7 @@ public class ElevatorControlSystem implements RemoteExceptionListener {
         }
 
         try {
-            if (mainController.autoMode) {
+            if (Boolean.TRUE.equals(mainController.autoMode)) {
                 mode.update(building);
             }
         } catch (Exception e) {

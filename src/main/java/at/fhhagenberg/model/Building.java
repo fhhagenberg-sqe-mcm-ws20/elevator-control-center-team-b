@@ -22,10 +22,6 @@ public class Building {
     @Getter
     private final List<IFloor> floors;
 
-    private final ObservableList<SimpleBooleanProperty> upButtonList = FXCollections.observableArrayList();
-    private final ObservableList<SimpleBooleanProperty> downButtonList = FXCollections.observableArrayList();
-
-
     public Building(int elevatorCount, int floorHeight, int floorCount, List<IBuildingElevator> elevators, List<IFloor> floors) {
         this.elevatorCount = elevatorCount;
         this.floorHeight = floorHeight;

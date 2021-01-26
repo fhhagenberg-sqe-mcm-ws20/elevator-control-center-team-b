@@ -8,7 +8,7 @@ interface RemoteExceptionListener {
 
 public final class RemoteExceptionHandler {
 
-    private static RemoteExceptionHandler INSTANCE;
+    private static RemoteExceptionHandler instance;
     private final ArrayList<RemoteExceptionListener> observers = new ArrayList<>();
 
     private RemoteExceptionHandler() {
@@ -20,11 +20,11 @@ public final class RemoteExceptionHandler {
      * @return RemoteExceptionHandler
      */
     public static RemoteExceptionHandler instance() {
-        if (INSTANCE == null) {
-            INSTANCE = new RemoteExceptionHandler();
+        if (instance == null) {
+            instance = new RemoteExceptionHandler();
         }
 
-        return INSTANCE;
+        return instance;
     }
 
     /**

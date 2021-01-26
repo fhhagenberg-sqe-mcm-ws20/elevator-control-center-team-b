@@ -95,11 +95,7 @@ public class ElevatorController {
         payloadField.textProperty().bind(this.buildingElevator.weightProperty.asString(weightFormat));
 
         checkPayload(this.buildingElevator.getWeightProperty().getValue());
-        this.buildingElevator.weightProperty.addListener((observableValue, oldValue, newValue) -> {
-            //if (oldValue.intValue() > buildingElevator.getCapacity()) {
-            checkPayload(newValue.intValue());
-            //}
-        });
+        this.buildingElevator.weightProperty.addListener((observableValue, oldValue, newValue) -> checkPayload(newValue.intValue()));
 
         setupButtons(floorCount);
     }

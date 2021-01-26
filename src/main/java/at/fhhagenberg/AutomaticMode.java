@@ -25,9 +25,7 @@ public class AutomaticMode {
 
     private void updateElevatorQueues(Building building) {
         // get nearest elevator button
-        building.getElevators().forEach(elevator -> {
-            updateTarget(elevator, requestedFloors.stream().map(Floor::getNumber).filter(elevator::servesFloor).collect(Collectors.toList()));
-        });
+        building.getElevators().forEach(elevator -> updateTarget(elevator, requestedFloors.stream().map(Floor::getNumber).filter(elevator::servesFloor).collect(Collectors.toList())));
     }
 
     private void removeAlreadyServicedFloor(int servicedFloor) {
@@ -51,7 +49,6 @@ public class AutomaticMode {
         }
 
         var currentFloor = elevator.getNearestFloor();
-        var targetFloor = elevator.getFloorTarget();
         var doorStatus = elevator.getDoorState();
 
         if (doorStatus != IBuildingElevator.Door_State.OPEN.value()) {
@@ -87,7 +84,6 @@ public class AutomaticMode {
         int largestFloor = -1;
         int nextFloor = 0;
         int currentFloor = elevator.getNearestFloor();
-        int target = elevator.getFloorTarget();
 
         if (!elevator.getFloorButtons().isEmpty()) {
             largestElevatorButton = Collections.max(elevator.getFloorButtons());
@@ -120,7 +116,6 @@ public class AutomaticMode {
         int smallestFloor = -1;
         int nextFloor = 0;
         int currentFloor = elevator.getNearestFloor();
-        int target = elevator.getFloorTarget();
 
         if (!elevator.getFloorButtons().isEmpty()) {
             smallestElevatorButton = Collections.min(elevator.getFloorButtons());

@@ -57,25 +57,25 @@ public class MainController {
      *
      * @param building the data
      */
-    public void setModel(Building building) throws IOException {
+    public void setModel(Building building) {
         this.building = building;
         Platform.runLater(new Runnable() {
             @Override
             @SneakyThrows
             public void run() {
-                if (floorListRight.getChildren().size() > 0) {
+                if (!floorListRight.getChildren().isEmpty()) {
                     floorListRight.getChildren().removeAll(floorListRight.getChildren());
                 }
-                if (elevatorView.getChildren().size() > 0) {
+                if (!elevatorView.getChildren().isEmpty()) {
                     elevatorView.getChildren().removeAll(elevatorView.getChildren());
                 }
                 if (!modeButton.isSelected()) {
                     modeButton.setSelected(true);
                 }
-                if (errorBox.getChildren().size() > 0) {
+                if (!errorBox.getChildren().isEmpty()) {
                     errorBox.getChildren().removeAll(errorBox.getChildren());
                 }
-                if (warningBox.getChildren().size() > 0) {
+                if (!warningBox.getChildren().isEmpty()) {
                     warningBox.getChildren().removeAll(warningBox.getChildren());
                 }
                 displayElevatorControllers();

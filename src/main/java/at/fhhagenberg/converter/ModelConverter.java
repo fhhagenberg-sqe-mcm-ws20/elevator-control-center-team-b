@@ -74,7 +74,5 @@ public class ModelConverter {
     public void setCommittedDirection(int elevatorNumber, int direction) throws RemoteException {
         elevatorConnection.setCommittedDirection(elevatorNumber, direction);
     }
-
-    //TODO set services floor
 }
 

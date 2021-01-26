@@ -27,7 +27,7 @@ public class App extends Application {
     @Getter
     private final ElevatorControlSystem elevatorControlSystem;
     private Building building;
-    private final boolean error = false;
+    private static final boolean error = false;
     private final RemoteExceptionHandler handler = RemoteExceptionHandler.instance();
     private MainController mainController;
 
@@ -65,7 +65,7 @@ public class App extends Application {
             @SneakyThrows
             @Override
             public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
+                if (Boolean.TRUE.equals(newValue)) {
                     building = elevatorControlSystem.initBuilding();
                     setStatusUI(true);
                     ((MainController) mainLoader.getController()).setModel(building);
@@ -90,8 +90,6 @@ public class App extends Application {
                 }
             }
         });
-        dataUpdateThread.setDaemon(true);
-        dataUpdateThread.start();
 
         Thread autoUpdateThread = new Thread(new Runnable() {
             @Override
@@ -101,11 +99,14 @@ public class App extends Application {
                     if (elevatorControlSystem.getSystemConnected().get()) {
                         Platform.runLater(() -> elevatorControlSystem.updateMode(building, mainController));
                     }
-                    Thread.sleep(500);
+                    Thread.sleep(1250);
                 }
             }
         });
+
+        dataUpdateThread.setDaemon(true);
         autoUpdateThread.setDaemon(true);
+        dataUpdateThread.start();
         autoUpdateThread.start();
     }
 
