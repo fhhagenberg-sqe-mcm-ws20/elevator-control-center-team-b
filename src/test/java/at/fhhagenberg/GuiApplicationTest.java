@@ -102,43 +102,6 @@ class GuiApplicationTest {
      * @param robot - Will be injected by the test runner.
      */
     @Test
-    void testManualModeWork(FxRobot robot) throws RemoteException {
-        // Given
-        JFXComboBox<Integer> firstElevator = robot.lookup("#elevator1").lookup("#targetField").queryAs(JFXComboBox.class);
-        Assertions.assertThat(firstElevator.isDisabled()).isTrue();
-        Assertions.assertThat(firstElevator.getValue().intValue()).isEqualTo(2);
-
-        //When
-        Platform.runLater(() -> robot.lookup("#modeButton").queryAs(JFXToggleButton.class).setSelected(false));
-        Platform.runLater(() -> Assertions.assertThat(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected()).isFalse());
-        Assertions.assertThat(firstElevator.isDisabled()).isFalse();
-
-        robot.clickOn(firstElevator);
-        // Click on the first entry
-        robot.press(KeyCode.UP);
-
-        robot.release(KeyCode.UP);
-        robot.press(KeyCode.UP);
-        robot.release(KeyCode.UP);
-        robot.press(KeyCode.ENTER);
-
-        //Then
-        Assertions.assertThat(firstElevator.getValue().intValue()).isEqualTo(0);
-
-        Platform.runLater(() -> robot.lookup("#modeButton").queryAs(JFXToggleButton.class).setSelected(true));
-        Platform.runLater(() -> assertTrue(robot.lookup("#modeButton").queryAs(JFXToggleButton.class).isSelected()));
-
-        // Check if everything in the Backend has changed
-        Assertions.assertThat(testBuilding.getElevator(1).getFloorTarget()).isEqualTo(0);
-        Assertions.assertThat(elevatorConnection.getTarget(1)).isEqualTo(0);
-    }
-
-
-
-    /**
-     * @param robot - Will be injected by the test runner.
-     */
-    @Test
     void testCancelWarning(FxRobot robot) {
         // Given
         Assertions.assertThat(robot.lookup("#" + PAYLOAD_ID_PREFIX + "7").queryAs(Label.class)).hasText("Elevator 7: Warning payload on a high level.");
